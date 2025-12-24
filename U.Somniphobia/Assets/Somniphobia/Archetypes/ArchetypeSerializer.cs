@@ -22,10 +22,23 @@ namespace FulcrumGames.Somniphobia.Archetypes
             Formatting = Formatting.Indented,
         };
 
-        public static GameObject SpawnArchetype()
+        public static GameObject SpawnArchetype(GameObjectState state)
         {
+            var gameObject = new GameObject
+            {
+                name = state.Name
+            };
+            gameObject.SetActive(state.ActiveSelf);
+            gameObject.layer = state.Layer;
 
-            return null;
+            var position = new Vector3(state.PositionX, state.PositionY, state.PositionZ);
+            gameObject.transform.localPosition = position;
+            var rotation = new Vector3(state.RotationX, state.RotationY, state.RotationZ);
+            gameObject.transform.localRotation = Quaternion.Euler(rotation);
+            var scale = new Vector3(state.ScaleX, state.ScaleY, state.ScaleZ);
+            gameObject.transform.localScale = scale;
+
+            return gameObject;
         }
 
         public void Save()
