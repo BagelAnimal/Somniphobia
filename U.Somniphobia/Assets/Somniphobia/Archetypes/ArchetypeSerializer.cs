@@ -22,32 +22,62 @@ namespace FulcrumGames.Somniphobia.Archetypes
             Formatting = Formatting.Indented,
         };
 
+        public static GameObject SpawnArchetype()
+        {
+
+            return null;
+        }
+
         public void Save()
         {
-            var directory = $"{Application.persistentDataPath}/Archetypes";
-            if (!Directory.Exists(directory))
+            try
             {
-                Directory.CreateDirectory(directory);
+                var directory = $"{Application.persistentDataPath}/Archetypes";
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                var name = gameObject.name;
+                var filePath = $"{directory}/{name}_Archetype.json";
+                if (!File.Exists(filePath))
+                {
+                    File.CreateText(filePath).Close();
+                }
+
+                var rotationEuler = gameObject.transform.rotation.eulerAngles;
+                var objectState = new GameObjectState()
+                {
+                    Name = name,
+                    PrefabGuid = string.Empty,
+                    InstanceGuid = string.Empty,
+                    ParentGuid = string.Empty,
+                    ActiveSelf = gameObject.activeSelf,
+                    Layer = gameObject.layer,
+                    PositionX = gameObject.transform.position.x,
+                    PositionY = gameObject.transform.position.y,
+                    PositionZ = gameObject.transform.position.z,
+                    RotationX = rotationEuler.x,
+                    RotationY = rotationEuler.y,
+                    RotationZ = rotationEuler.z,
+                    ScaleX = gameObject.transform.localScale.x,
+                    ScaleY = gameObject.transform.localScale.y,
+                    ScaleZ = gameObject.transform.localScale.z,
+                    StatelyComponents = new ISerializableState[] { },
+                };
+
+                var filePlainText = JsonConvert.SerializeObject(objectState, JsonSerializerSettings);
+
+                var writer = new StreamWriter(filePath, append: false);
+                writer.Write(filePlainText);
+                writer.Close();
+
+                Debug.Log($"Successfully serialized archetype {name} to {filePath}.");
             }
-
-            var name = gameObject.name;
-            var filePath = $"{directory}/{name}.json";
-            if (!File.Exists(filePath))
+            catch (Exception e)
             {
-                File.CreateText(filePath).Close();
+                Debug.LogException(e);
             }
-
-            var archetype = new Archetype()
-            {
-                Name = name,
-                Version = 1
-            };
-
-            var filePlainText = JsonConvert.SerializeObject(archetype, JsonSerializerSettings);
-
-            var writer = new StreamWriter(filePath, append: false);
-            writer.Write(filePlainText);
-            writer.Close();
         }
     }
 }
