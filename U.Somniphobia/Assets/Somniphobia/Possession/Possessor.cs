@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Somniphobia
+namespace FulcrumGames.Possession
 {
     /// <summary>
     ///     A possessor is responsible for delegating inputs to some number of
@@ -50,7 +50,7 @@ namespace Assets.Somniphobia
             if (_possessables.Contains(possessable))
             {
                 Debug.LogWarning($"{name} was told to possess {possessable.name}, but it believes " +
-                    $"that it was already possessing it!");
+                    $"that it was already possessing it!", this);
                 return;
             }
 
@@ -71,7 +71,7 @@ namespace Assets.Somniphobia
             if (!_possessables.Contains(possessable))
             {
                 Debug.LogWarning($"{name} was told to unpossess {possessable.name}, but it believes " +
-                    $"that it was already NOT possessing it!");
+                    $"that it was already NOT possessing it!", this);
                 return;
             }
 
@@ -89,7 +89,7 @@ namespace Assets.Somniphobia
             if (_boundPlayers.Contains(player))
             {
                 Debug.LogWarning($"{name} was told to bind to {player.Name}, but it " +
-                    $"believes that they are already bound!");
+                    $"believes that they are already bound!", this);
                 return;
             }
 
@@ -101,7 +101,7 @@ namespace Assets.Somniphobia
             if (!_boundPlayers.Contains(player))
             {
                 Debug.LogWarning($"{name} was told to unbind from {player.Name}, but it " +
-                    $"believes that they are NOT already bound!");
+                    $"believes that they are NOT already bound!", this);
                 return;
             }
 

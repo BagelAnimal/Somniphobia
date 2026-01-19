@@ -1,5 +1,8 @@
+using FulcrumGames.Levels;
+using FulcrumGames.Possession;
+using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
-using FulcrumGames.Somniphobia.Levels;
 
 namespace FulcrumGames.Somniphobia
 {
@@ -18,11 +21,22 @@ namespace FulcrumGames.Somniphobia
         [SerializeField]
         private Level _levelPrefab;
 
-        private Level _currentLevel;
+        [SerializeField]
+        private GameObject _playerCharacterPrefab;
+
+        [SerializeField]
+        private GameObject _playerSoulPrefab;
 
         [SerializeField]
         private bool _initializeOnAwake = false;
 
+        public readonly List<Player> _players = new();
+        public IReadOnlyList<Player> Players => _players;
+        public Player HostPlayer => _players[0];
+
+        private Level _levelInstance;
+        private Possessor _playerSoulInstance;
+        private Possessable _playerCharacterInstance;
         private bool _isInitialized = false;
 
         private void Awake()
@@ -46,17 +60,56 @@ namespace FulcrumGames.Somniphobia
         {
             if (_isInitialized)
             {
-                Debug.LogWarning("Attempted to initialize the game a second time! Request cancelled.");
+                Debug.LogWarning("Attempted to initialize the game a second time!", this);
                 return;
             }
 
             if (!_levelPrefab)
             {
-                Debug.LogWarning("Null level prefab encountered when initializing! No level will be loaded.", this);
+                Debug.LogWarning("Null level prefab encountered when initializing!", this);
                 return;
             }
 
-            _currentLevel = Instantiate(_levelPrefab);
+            if (!_playerSoulPrefab)
+            {
+                Debug.LogWarning("Null player soul prefab encountered when initializing!", this);
+                return;
+            }
+
+            if (!_playerCharacterPrefab)
+            {
+                Debug.LogWarning("Null player character prefab encountered when initializing!", this);
+                return;
+            }
+
+            // Create the level.
+            _levelInstance = Instantiate(_levelPrefab);
+
+            // Create the player character within the level.
+            var playerCharacterObject = Instantiate(_playerCharacterPrefab);
+            if (!playerCharacterObject.TryGetComponent<Possessable>(out var possessable))
+            {
+                Debug.LogWarning($"{playerCharacterObject.name} does not have a possessable component!");
+                return;
+            }
+            _playerCharacterInstance = possessable;
+
+            // Create the player soul, then possess the character in the level.
+            var playerSoulObject = Instantiate(_playerSoulPrefab);
+            if (!playerSoulObject.TryGetComponent<Possessor>(out var possessor))
+            {
+                Debug.LogWarning($"{playerSoulObject.name} does not have a possessor component!");
+                return;
+            }
+            _playerSoulInstance = possessor;
+            _playerSoulInstance.Possess(_playerCharacterInstance);
+
+            // Initialize player, bind to the soul that possesses character in the level.
+            var hostPlayer = new Player();
+            var playerName = "Host";
+            hostPlayer.Initialize(name: playerName);
+            hostPlayer.BindPossessor(_playerSoulInstance);
+
             _isInitialized = true;
         }
 
@@ -68,8 +121,12 @@ namespace FulcrumGames.Somniphobia
                 return;
             }
 
-            Destroy(_currentLevel.gameObject);
-            _currentLevel = null;
+            Destroy(_levelInstance.gameObject);
+            Destroy(_playerSoulInstance.gameObject);
+            Destroy(_playerCharacterInstance.gameObject);
+            _players.Clear();
+
+            _levelInstance = null;
             _isInitialized = false;
         }
     }

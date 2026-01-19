@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
-namespace Assets.Somniphobia
+namespace FulcrumGames.Possession
 {
     /// <summary>
     ///     Represents a player in the game. A player delegates input actions

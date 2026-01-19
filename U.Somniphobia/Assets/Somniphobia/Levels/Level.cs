@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FulcrumGames.Somniphobia.Levels
+namespace FulcrumGames.Levels
 {
     /// <summary>
     ///     A script associated to be attached to gameobjects intended
