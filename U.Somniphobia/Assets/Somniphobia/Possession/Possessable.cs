@@ -16,17 +16,6 @@ namespace FulcrumGames.Possession
         private readonly List<Possessor> _possessors = new();
         public IReadOnlyList<Possessor> Possessors => _possessors;
 
-        private void OnDestroy()
-        {
-            foreach (var possessor in _possessors)
-            {
-                if (!possessor)
-                    continue;
-
-                possessor.Unpossess(this);
-            }
-        }
-
         public void OnPossessedBy(Possessor possessor)
         {
             if (_possessors.Contains(possessor))
@@ -38,6 +27,7 @@ namespace FulcrumGames.Possession
             }
 
             _possessors.Add(possessor);
+            _possessors.RemoveAll(item => item == null);
         }
 
         public void OnUnpossessedBy(Possessor possessor)
@@ -51,6 +41,7 @@ namespace FulcrumGames.Possession
             }
 
             _possessors.Remove(possessor);
+            _possessors.RemoveAll(item => item == null);
         }
 
         public void OnJumpPressed()

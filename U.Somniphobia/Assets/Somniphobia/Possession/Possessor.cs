@@ -16,34 +16,14 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Possessor : MonoBehaviour
     {
+        private readonly List<InputProvider> _boundInputProviders = new();
+        public IReadOnlyList<InputProvider> BoundInputProviders => _boundInputProviders;
+
         private readonly List<Possessable> _possessables = new();
         public IReadOnlyList<Possessable> Possessables => _possessables;
 
-        // TECH DEBT: CPUs and players should share an interface for owning possessors.
-        private readonly List<Player> _boundPlayers = new();
-        public IReadOnlyList<Player> BoundPlayers => _boundPlayers;
-
         private Possessable _perspectivePossessable;
         public Possessable PerspectivePossessable => _perspectivePossessable;
-
-        private void OnDestroy()
-        {
-            foreach (var player in _boundPlayers)
-            {
-                if (player == null)
-                    continue;
-
-                player.UnbindPossessor(this);
-            }
-
-            foreach (var possessable in _possessables)
-            {
-                if (!possessable)
-                    continue;
-
-                Unpossess(possessable);
-            }
-        }
 
         public void Possess(Possessable possessable)
         {
@@ -64,6 +44,8 @@ namespace FulcrumGames.Possession
                 transform.parent = potentialPerspective.transform;
                 transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             }
+
+            _possessables.RemoveAll(item => item == null);
         }
 
         public void Unpossess(Possessable possessable)
@@ -82,30 +64,34 @@ namespace FulcrumGames.Possession
             {
                 transform.parent = null;
             }
+
+            _possessables.RemoveAll(item => item == null);
         }
 
-        public void OnBoundToPlayer(Player player)
+        public void OnBoundToPlayer(InputProvider inputProvider)
         {
-            if (_boundPlayers.Contains(player))
+            if (_boundInputProviders.Contains(inputProvider))
             {
-                Debug.LogWarning($"{name} was told to bind to {player.Name}, but it " +
+                Debug.LogWarning($"{name} was told to bind to {inputProvider.Name}, but it " +
                     $"believes that they are already bound!", this);
                 return;
             }
 
-            _boundPlayers.Add(player);
+            _boundInputProviders.Add(inputProvider);
+            _boundInputProviders.RemoveAll(item => item == null);
         }
 
-        public void OnUnboundFromPlayer(Player player)
+        public void OnUnboundFromPlayer(InputProvider inputProvider)
         {
-            if (!_boundPlayers.Contains(player))
+            if (!_boundInputProviders.Contains(inputProvider))
             {
-                Debug.LogWarning($"{name} was told to unbind from {player.Name}, but it " +
+                Debug.LogWarning($"{name} was told to unbind from {inputProvider.Name}, but it " +
                     $"believes that they are NOT already bound!", this);
                 return;
             }
 
-            _boundPlayers.Remove(player);
+            _boundInputProviders.Remove(inputProvider);
+            _boundInputProviders.RemoveAll(item => item == null);
         }
 
         public void OnJumpPressed()

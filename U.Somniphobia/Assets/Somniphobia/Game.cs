@@ -1,7 +1,6 @@
 using FulcrumGames.Levels;
 using FulcrumGames.Possession;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 namespace FulcrumGames.Somniphobia
@@ -108,7 +107,7 @@ namespace FulcrumGames.Somniphobia
             var hostPlayer = new Player();
             var playerName = "Host";
             hostPlayer.Initialize(name: playerName);
-            hostPlayer.BindPossessor(_playerSoulInstance);
+            hostPlayer.BindToPossessor(_playerSoulInstance);
 
             _isInitialized = true;
         }
