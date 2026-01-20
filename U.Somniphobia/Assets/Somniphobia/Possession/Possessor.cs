@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace FulcrumGames.Possession
@@ -38,9 +39,7 @@ namespace FulcrumGames.Possession
 
             if (!_perspectivePossessable)
             {
-                _perspectivePossessable = toPossess;
-                transform.parent = _perspectivePossessable.transform;
-                transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+                SetPerspective(toPossess);
             }
         }
 
@@ -62,6 +61,12 @@ namespace FulcrumGames.Possession
             {
                 _perspectivePossessable = null;
                 transform.parent = null;
+
+                if (_possessables.Count > 0)
+                {
+                    var newPerspective = _possessables.First();
+                    SetPerspective(newPerspective);
+                }
             }
         }
 
@@ -96,6 +101,13 @@ namespace FulcrumGames.Possession
             {
                 possessable.OnJumpPressed();
             }
+        }
+
+        private void SetPerspective(Possessable newPespective)
+        {
+            _perspectivePossessable = newPespective;
+            transform.parent = _perspectivePossessable.transform;
+            transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         }
     }
 }

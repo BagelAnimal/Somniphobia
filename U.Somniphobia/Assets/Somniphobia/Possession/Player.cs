@@ -13,6 +13,9 @@ namespace FulcrumGames.Possession
 
         public void Initialize(string name)
         {
+            if (_inputActions != null)
+                return;
+
             SetName(name);
 
             _inputActions = new();
@@ -28,9 +31,13 @@ namespace FulcrumGames.Possession
 
         public void Teardown()
         {
+            if (_inputActions == null)
+                return;
+
             _inputActions.World.Jump.performed -= OnJumpInputProvided;
             _inputActions.World.Disable();
             _inputActions.Disable();
+            _inputActions.Dispose();
             _inputActions = null;
         }
     }
