@@ -120,7 +120,11 @@ namespace FulcrumGames.Possession
             }
 
             _perspectivePossessable = newPespective;
-            transform.parent = _perspectivePossessable.transform;
+
+            var anchor = _perspectivePossessable.GetComponentInChildren<PossessorAnchor>();
+            var parent = anchor ? anchor.transform : _perspectivePossessable.transform;
+            transform.parent = parent;
+
             transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             if (rigidbody)
             {
