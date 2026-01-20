@@ -105,9 +105,28 @@ namespace FulcrumGames.Possession
 
         private void SetPerspective(Possessable newPespective)
         {
+            var rigidbody = GetComponent<Rigidbody>();
+            var collider = GetComponent<Collider>();
+
+            if (!newPespective)
+            {
+                _perspectivePossessable = null;
+                transform.parent = null;
+                if (rigidbody)
+                {
+                    rigidbody.isKinematic = false;
+                    collider.enabled = true;
+                }
+            }
+
             _perspectivePossessable = newPespective;
             transform.parent = _perspectivePossessable.transform;
             transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            if (rigidbody)
+            {
+                rigidbody.isKinematic = true;
+                collider.enabled = false;
+            }
         }
     }
 }
