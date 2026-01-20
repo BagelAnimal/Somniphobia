@@ -109,12 +109,12 @@ namespace FulcrumGames.Possession
             _possessables.Remove(null);
         }
 
-        private void SetPerspective(Possessable newPespective)
+        private void SetPerspective(Possessable newPerspective)
         {
             var rigidbody = GetComponent<Rigidbody>();
             var collider = GetComponent<Collider>();
 
-            if (!newPespective)
+            if (!newPerspective)
             {
                 _perspectivePossessable = null;
                 transform.parent = null;
@@ -130,7 +130,7 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            _perspectivePossessable = newPespective;
+            _perspectivePossessable = newPerspective;
 
             var anchor = _perspectivePossessable.GetComponentInChildren<PossessorAnchor>();
             var parent = anchor ? anchor.transform : _perspectivePossessable.transform;
