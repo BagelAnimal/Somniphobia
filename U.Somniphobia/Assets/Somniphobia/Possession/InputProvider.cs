@@ -52,6 +52,17 @@ namespace FulcrumGames.Possession
             toUnbindFrom.OnUnboundFromInputProvider(this);
         }
 
+        public void UnbindAll()
+        {
+            _possessors.Remove(null);
+            foreach (var possessor in _possessors)
+            {
+                possessor.OnUnboundFromInputProvider(this);
+            }
+
+            _possessors.Clear();
+        }
+
         internal void JumpPressed()
         {
             _possessors.Remove(null);

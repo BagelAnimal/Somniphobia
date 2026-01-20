@@ -25,7 +25,7 @@ namespace FulcrumGames.Possession
 
         public void Possess(Possessable toPossess)
         {
-            _possessables.Remove(null);
+            PruneNulls();
             if (!toPossess)
             {
                 Debug.LogWarning($"{name} was given a null possessable to possess!", this);
@@ -45,7 +45,7 @@ namespace FulcrumGames.Possession
 
         public void Unpossess(Possessable toUnpossess)
         {
-            _possessables.Remove(null);
+            PruneNulls();
             if (!toUnpossess)
             {
                 Debug.LogWarning($"{name} was given a null possessable to unpossess!", this);
@@ -72,7 +72,7 @@ namespace FulcrumGames.Possession
 
         public void OnBoundToInputProvider(InputProvider inputProvider)
         {
-            _boundInputProviders.Remove(null);
+            PruneNulls();
             if (inputProvider == null)
             {
                 Debug.LogWarning($"{name} was given a null input provider to bind to!", this);
@@ -84,7 +84,7 @@ namespace FulcrumGames.Possession
 
         public void OnUnboundFromInputProvider(InputProvider inputProvider)
         {
-            _boundInputProviders.Remove(null);
+            PruneNulls();
             if (inputProvider == null)
             {
                 Debug.LogWarning($"{name} was given a null input provider to unbind from!", this);
@@ -96,11 +96,17 @@ namespace FulcrumGames.Possession
 
         public void OnJumpPressed()
         {
-            _possessables.Remove(null);
+            PruneNulls();
             foreach (var possessable in _possessables)
             {
                 possessable.OnJumpPressed();
             }
+        }
+
+        private void PruneNulls()
+        {
+            _boundInputProviders.Remove(null);
+            _possessables.Remove(null);
         }
 
         private void SetPerspective(Possessable newPespective)
@@ -115,8 +121,13 @@ namespace FulcrumGames.Possession
                 if (rigidbody)
                 {
                     rigidbody.isKinematic = false;
+                }
+                if (collider)
+                {
                     collider.enabled = true;
                 }
+
+                return;
             }
 
             _perspectivePossessable = newPespective;
@@ -129,6 +140,9 @@ namespace FulcrumGames.Possession
             if (rigidbody)
             {
                 rigidbody.isKinematic = true;
+            }
+            if (collider)
+            {
                 collider.enabled = false;
             }
         }

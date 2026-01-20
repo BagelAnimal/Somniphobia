@@ -34,6 +34,8 @@ namespace FulcrumGames.Possession
             if (_inputActions == null)
                 return;
 
+            UnbindAll();
+
             _inputActions.World.Jump.performed -= OnJumpInputProvided;
             _inputActions.World.Disable();
             _inputActions.Disable();

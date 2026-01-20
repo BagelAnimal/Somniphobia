@@ -121,14 +121,15 @@ namespace FulcrumGames.Somniphobia
                 return;
             }
 
-            Destroy(_levelInstance.gameObject);
-            Destroy(_playerSoulInstance.gameObject);
-            Destroy(_playerCharacterInstance.gameObject);
             foreach (var player in _players)
             {
                 player.Teardown();
             }
             _players.Clear();
+
+            Destroy(_levelInstance.gameObject);
+            Destroy(_playerSoulInstance.gameObject);
+            Destroy(_playerCharacterInstance.gameObject);
 
             _levelInstance = null;
             _isInitialized = false;
