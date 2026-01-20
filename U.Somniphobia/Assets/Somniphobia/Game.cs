@@ -107,6 +107,7 @@ namespace FulcrumGames.Somniphobia
             var hostPlayer = new Player();
             var playerName = "Host";
             hostPlayer.Initialize(name: playerName);
+            _players.Add(hostPlayer);
             hostPlayer.BindToPossessor(_playerSoulInstance);
 
             _isInitialized = true;
@@ -123,6 +124,10 @@ namespace FulcrumGames.Somniphobia
             Destroy(_levelInstance.gameObject);
             Destroy(_playerSoulInstance.gameObject);
             Destroy(_playerCharacterInstance.gameObject);
+            foreach (var player in _players)
+            {
+                player.Teardown();
+            }
             _players.Clear();
 
             _levelInstance = null;

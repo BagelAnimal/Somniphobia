@@ -16,91 +16,84 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Possessor : MonoBehaviour
     {
-        private readonly List<InputProvider> _boundInputProviders = new();
-        public IReadOnlyList<InputProvider> BoundInputProviders => _boundInputProviders;
-
-        private readonly List<Possessable> _possessables = new();
-        public IReadOnlyList<Possessable> Possessables => _possessables;
+        private readonly HashSet<InputProvider> _boundInputProviders = new();
+        private readonly HashSet<Possessable> _possessables = new();
 
         private Possessable _perspectivePossessable;
         public Possessable PerspectivePossessable => _perspectivePossessable;
 
-        public void Possess(Possessable possessable)
+        public void Possess(Possessable toPossess)
         {
-            if (_possessables.Contains(possessable))
+            _possessables.Remove(null);
+            if (!toPossess)
             {
-                Debug.LogWarning($"{name} was told to possess {possessable.name}, but it believes " +
-                    $"that it was already possessing it!", this);
+                Debug.LogWarning($"{name} was given a null possessable to possess!", this);
                 return;
             }
 
-            _possessables.Add(possessable);
-            possessable.OnPossessedBy(this);
-
-            var potentialPerspective = _possessables[0];
-            if (potentialPerspective)
-            {
-                _perspectivePossessable = potentialPerspective;
-                transform.parent = potentialPerspective.transform;
-                transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            }
-
-            _possessables.RemoveAll(item => item == null);
-        }
-
-        public void Unpossess(Possessable possessable)
-        {
-            if (!_possessables.Contains(possessable))
-            {
-                Debug.LogWarning($"{name} was told to unpossess {possessable.name}, but it believes " +
-                    $"that it was already NOT possessing it!", this);
+            if (!_possessables.Add(toPossess))
                 return;
-            }
 
-            _possessables.Remove(possessable);
-            possessable.OnUnpossessedBy(this);
+            toPossess.OnPossessedBy(this);
 
             if (!_perspectivePossessable)
             {
-                transform.parent = null;
+                _perspectivePossessable = toPossess;
+                transform.parent = _perspectivePossessable.transform;
+                transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             }
-
-            _possessables.RemoveAll(item => item == null);
         }
 
-        public void OnBoundToPlayer(InputProvider inputProvider)
+        public void Unpossess(Possessable toUnpossess)
         {
-            if (_boundInputProviders.Contains(inputProvider))
+            _possessables.Remove(null);
+            if (!toUnpossess)
             {
-                Debug.LogWarning($"{name} was told to bind to {inputProvider.Name}, but it " +
-                    $"believes that they are already bound!", this);
+                Debug.LogWarning($"{name} was given a null possessable to unpossess!", this);
+                return;
+            }
+
+            if (!_possessables.Remove(toUnpossess))
+                return;
+
+            toUnpossess.OnUnpossessedBy(this);
+
+            if (_perspectivePossessable == toUnpossess)
+            {
+                _perspectivePossessable = null;
+                transform.parent = null;
+            }
+        }
+
+        public void OnBoundToInputProvider(InputProvider inputProvider)
+        {
+            _boundInputProviders.Remove(null);
+            if (inputProvider == null)
+            {
+                Debug.LogWarning($"{name} was given a null input provider to bind to!", this);
                 return;
             }
 
             _boundInputProviders.Add(inputProvider);
-            _boundInputProviders.RemoveAll(item => item == null);
         }
 
-        public void OnUnboundFromPlayer(InputProvider inputProvider)
+        public void OnUnboundFromInputProvider(InputProvider inputProvider)
         {
-            if (!_boundInputProviders.Contains(inputProvider))
+            _boundInputProviders.Remove(null);
+            if (inputProvider == null)
             {
-                Debug.LogWarning($"{name} was told to unbind from {inputProvider.Name}, but it " +
-                    $"believes that they are NOT already bound!", this);
+                Debug.LogWarning($"{name} was given a null input provider to unbind from!", this);
                 return;
             }
 
             _boundInputProviders.Remove(inputProvider);
-            _boundInputProviders.RemoveAll(item => item == null);
         }
 
         public void OnJumpPressed()
         {
+            _possessables.Remove(null);
             foreach (var possessable in _possessables)
             {
-                if (!possessable)
-                    continue;
-
                 possessable.OnJumpPressed();
             }
         }

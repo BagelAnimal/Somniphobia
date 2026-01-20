@@ -2,54 +2,61 @@
 
 namespace FulcrumGames.Possession
 {
+    /// <summary>
+    ///     Objects like CPUs and players are meant to inherit from or use objects that
+    ///     inherit from this, where this class's intent is to serve as a consistent
+    ///     interface for owning <see cref="Possessor"/>s, and for passing inputs to
+    ///     those <see cref="Possessor"/>s so that they can mutate state on their
+    ///     corresponding <see cref="Possessable"/>s.
+    /// </summary>
     public abstract class InputProvider
     {
         private string _name = "CPU";
         public string Name => _name;
 
-        private readonly List<Possessor> _possessors = new();
-        public IReadOnlyList<Possessor> Possessors => _possessors;
+        private readonly HashSet<Possessor> _possessors = new();
 
         public void SetName(string name)
         {
             _name = name;
         }
 
-        public void BindToPossessor(Possessor possessor)
+        public void BindToPossessor(Possessor toBindTo)
         {
-            if (_possessors.Contains(possessor))
+            _possessors.Remove(null);
+            if (!toBindTo)
             {
-                UnityEngine.Debug.LogWarning($"{_name} was told to add {possessor.name} to " +
-                    $"its possessor list, but it thinks that it's already possessing it!");
+                UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to bind to!");
                 return;
             }
 
-            _possessors.Add(possessor);
+            if (!_possessors.Add(toBindTo))
+                return;
 
-            possessor.OnBoundToPlayer(this);
+            toBindTo.OnBoundToInputProvider(this);
         }
 
-        public void UnbindFromPossessor(Possessor possessor)
+        public void UnbindFromPossessor(Possessor toUnbindFrom)
         {
-            if (!_possessors.Contains(possessor))
+            _possessors.Remove(null);
+            if (!toUnbindFrom)
             {
-                UnityEngine.Debug.LogWarning($"{_name} was told to remove {possessor.name} " +
-                    $"from its possessor list, but it thinks that it's already NOT possessing it!");
+                UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to unbind" +
+                    $"from!");
                 return;
             }
 
-            _possessors.Remove(possessor);
+            if (!_possessors.Remove(toUnbindFrom))
+                return;
 
-            possessor.OnUnboundFromPlayer(this);
+            toUnbindFrom.OnUnboundFromInputProvider(this);
         }
 
         internal void JumpPressed()
         {
+            _possessors.Remove(null);
             foreach (var possessor in _possessors)
             {
-                if (!possessor)
-                    continue;
-
                 possessor.OnJumpPressed();
             }
         }
