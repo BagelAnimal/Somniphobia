@@ -7,11 +7,8 @@ namespace FulcrumGames.Possession
     /// <summary>
     ///     A possessor is responsible for delegating inputs to some number of
     ///     possessed <see cref="Possessable"/>s. Possessors make their gameobject
-    ///     a child of the first possessable that they have possessed. If the first
-    ///     possession is cleared, it graps any available existing possessable as a new
-    ///     parent.
-    ///     
-    ///     Note that either a possessor or a possessable can initiate the process of
+    ///     a child of the oldest possessable that they have possessed. Note that
+    ///     either a possessor or a possessable can initiate the process of
     ///     pairing or unpairing a possessor/possessable pair, though the codepath
     ///     will always route through the possessor's Possess() and Unpossess methods.
     ///     
@@ -112,12 +109,12 @@ namespace FulcrumGames.Possession
             _possessables.Remove(null);
         }
 
-        private void SetPerspective(Possessable newPerspective)
+        private void SetPerspective(Possessable newPespective)
         {
             var rigidbody = GetComponent<Rigidbody>();
             var collider = GetComponent<Collider>();
 
-            if (!newPerspective)
+            if (!newPespective)
             {
                 _perspectivePossessable = null;
                 transform.parent = null;
@@ -133,7 +130,7 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            _perspectivePossessable = newPerspective;
+            _perspectivePossessable = newPespective;
 
             var anchor = _perspectivePossessable.GetComponentInChildren<PossessorAnchor>();
             var parent = anchor ? anchor.transform : _perspectivePossessable.transform;

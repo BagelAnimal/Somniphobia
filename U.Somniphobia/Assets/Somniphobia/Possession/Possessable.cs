@@ -8,40 +8,52 @@ namespace FulcrumGames.Possession
     ///     and then parse input from those possessors into actions that can be
     ///     delegated to a series of components, i.e., a jump input into force.
     ///     
-    ///     <see cref="Possessor"/>s are expected to be controlled by <see cref="Player"/>s
-    ///     or CPUs.
+    ///     <see cref="Possessor"/>s are expected to be controlled by <see cref="InputProvider"/>s.
     /// </summary>
     public class Possessable : MonoBehaviour
     {
-        private readonly List<Possessor> _possessors = new();
-        public IReadOnlyList<Possessor> Possessors => _possessors;
+        private readonly HashSet<Possessor> _possessors = new();
+        private bool _isBeingDestroyed = false;
+
+        private void OnDestroy()
+        {
+            _isBeingDestroyed = true;
+            _possessors.Remove(null);
+            foreach (var possessor in _possessors)
+            {
+                possessor.Unpossess(this);
+            }
+        }
 
         public void OnPossessedBy(Possessor possessor)
         {
-            if (_possessors.Contains(possessor))
+            _possessors.Remove(null);
+            if (!possessor)
             {
-                Debug.LogWarning($"{nameof(Possessor)} {name} was notifieid that " +
-                    $"it was possessed by {possessor.name}, but it believes that it " +
-                    $"was already being possessed by it.", this);
+                Debug.LogWarning($"{name} was given a null possessor to be possessed by!",
+                    this);
                 return;
             }
 
             _possessors.Add(possessor);
-            _possessors.RemoveAll(item => item == null);
         }
 
         public void OnUnpossessedBy(Possessor possessor)
         {
-            if (!_possessors.Contains(possessor))
+            // When this is in the process of being destroyed, avoid modifying the
+            // possessors collection since we're iterating over it.
+            if (_isBeingDestroyed)
+                return;
+
+            _possessors.Remove(null);
+            if (!possessor)
             {
-                Debug.LogWarning($"{nameof(Possessor)} {name} was notifieid that " +
-                    $"it was unpossessed by {possessor.name}, but it believes that it " +
-                    $"was already NOT being possessed by it.", this);
+                Debug.LogWarning($"{name} was given a null possessor to be unpossessed from!",
+                    this);
                 return;
             }
 
             _possessors.Remove(possessor);
-            _possessors.RemoveAll(item => item == null);
         }
 
         public void OnJumpPressed()

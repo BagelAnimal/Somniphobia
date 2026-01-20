@@ -31,7 +31,7 @@ namespace FulcrumGames.Somniphobia
 
         public readonly List<Player> _players = new();
         public IReadOnlyList<Player> Players => _players;
-        public Player HostPlayer => _players[0];
+        public Player HostPlayer => _players.Count <= 0 ? null : _players[0];
 
         private Level _levelInstance;
         private Possessor _playerSoulInstance;
@@ -107,6 +107,7 @@ namespace FulcrumGames.Somniphobia
             var hostPlayer = new Player();
             var playerName = "Host";
             hostPlayer.Initialize(name: playerName);
+            _players.Add(hostPlayer);
             hostPlayer.BindToPossessor(_playerSoulInstance);
 
             _isInitialized = true;
@@ -120,10 +121,15 @@ namespace FulcrumGames.Somniphobia
                 return;
             }
 
+            foreach (var player in _players)
+            {
+                player.Teardown();
+            }
+            _players.Clear();
+
             Destroy(_levelInstance.gameObject);
             Destroy(_playerSoulInstance.gameObject);
             Destroy(_playerCharacterInstance.gameObject);
-            _players.Clear();
 
             _levelInstance = null;
             _isInitialized = false;
