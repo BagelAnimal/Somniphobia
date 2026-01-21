@@ -16,11 +16,18 @@ namespace FulcrumGames.Possession
 
         private readonly HashSet<Possessor> _possessors = new();
 
+        /// <summary>
+        ///     Give this guy a name.
+        /// </summary>
         public void SetName(string name)
         {
             _name = name;
         }
 
+        /// <summary>
+        ///     Begin routing all inputs associated with this provider to the
+        ///     <see cref="Possessor"/>.
+        /// </summary>
         public void BindToPossessor(Possessor toBindTo)
         {
             _possessors.Remove(null);
@@ -36,6 +43,10 @@ namespace FulcrumGames.Possession
             toBindTo.OnBoundToInputProvider(this);
         }
 
+        /// <summary>
+        ///     Cease routing all inputs associated with this provider to the
+        ///     <see cref="Possessor"/>.
+        /// </summary>
         public void UnbindFromPossessor(Possessor toUnbindFrom)
         {
             _possessors.Remove(null);
@@ -52,6 +63,10 @@ namespace FulcrumGames.Possession
             toUnbindFrom.OnUnboundFromInputProvider(this);
         }
 
+        /// <summary>
+        ///     Cease routing all inputs associated with this provider to all
+        ///     bound <see cref="Possessor"/>.
+        /// </summary>
         public void UnbindAll()
         {
             _possessors.Remove(null);

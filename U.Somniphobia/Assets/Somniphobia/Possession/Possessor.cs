@@ -23,6 +23,22 @@ namespace FulcrumGames.Possession
         private Possessable _perspectivePossessable;
         public Possessable PerspectivePossessable => _perspectivePossessable;
 
+        // used to avoid modifying collections while unhooking input providers on destroy
+        private bool _isBeingDestroyed = false;
+
+        private void OnDestroy()
+        {
+            _isBeingDestroyed = true;
+
+            foreach (var inputProvider in _boundInputProviders)
+            {
+                inputProvider.UnbindFromPossessor(this);
+            }
+        }
+
+        /// <summary>
+        ///     Begin routing inputs to the provided <see cref="Possessable"/>.
+        /// </summary>
         public void Possess(Possessable toPossess)
         {
             PruneNulls();
@@ -43,6 +59,9 @@ namespace FulcrumGames.Possession
             }
         }
 
+        /// <summary>
+        ///     Cease routing inputs to the provided <see cref="Possessable"/>.
+        /// </summary>
         public void Unpossess(Possessable toUnpossess)
         {
             PruneNulls();
@@ -60,7 +79,11 @@ namespace FulcrumGames.Possession
             if (_perspectivePossessable == toUnpossess)
             {
                 _perspectivePossessable = null;
-                transform.parent = null;
+
+                if (!_isBeingDestroyed)
+                {
+                    transform.parent = null;
+                }
 
                 if (_possessables.Count > 0)
                 {
@@ -70,8 +93,14 @@ namespace FulcrumGames.Possession
             }
         }
 
+        /// <summary>
+        ///     Track an input provider so this can let it know when it is being destroyed.
+        /// </summary>
         public void OnBoundToInputProvider(InputProvider inputProvider)
         {
+            if (_isBeingDestroyed)
+                return;
+
             PruneNulls();
             if (inputProvider == null)
             {
@@ -82,8 +111,15 @@ namespace FulcrumGames.Possession
             _boundInputProviders.Add(inputProvider);
         }
 
+        /// <summary>
+        ///     Track when an input provider stops caring about this so we don't tell them
+        ///     when we are being destroyed.
+        /// </summary>
         public void OnUnboundFromInputProvider(InputProvider inputProvider)
         {
+            if (_isBeingDestroyed)
+                return;
+
             PruneNulls();
             if (inputProvider == null)
             {
@@ -94,6 +130,10 @@ namespace FulcrumGames.Possession
             _boundInputProviders.Remove(inputProvider);
         }
 
+        /// <summary>
+        ///     Delegate a jump input from a provider down to all possessed
+        ///     <see cref="Possessable"/>s.
+        /// </summary>
         public void OnJumpPressed()
         {
             PruneNulls();

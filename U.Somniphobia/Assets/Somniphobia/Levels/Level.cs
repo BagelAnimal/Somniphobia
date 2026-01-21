@@ -11,7 +11,12 @@ namespace FulcrumGames.Levels
     public class Level : MonoBehaviour
     {
         [SerializeField]
-        private string _name = string.Empty;
+        private string _name = "Unnamed Level";
         public string Name => _name;
+
+        private void Awake()
+        {
+            gameObject.name = _name;
+        }
     }
 }
