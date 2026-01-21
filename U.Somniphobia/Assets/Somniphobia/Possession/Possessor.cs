@@ -80,16 +80,9 @@ namespace FulcrumGames.Possession
             {
                 _perspectivePossessable = null;
 
-                // In rare cases, if we get here because the possessable is being destroyed,
-                // we might also be mid-destruction, and null checking transform also results
-                // in a null ref being thrown.
-                try
+                if (!_isBeingDestroyed)
                 {
                     transform.parent = null;
-                }
-                catch
-                {
-                    return;
                 }
 
                 if (_possessables.Count > 0)
