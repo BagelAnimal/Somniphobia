@@ -36,6 +36,9 @@ namespace FulcrumGames.Possession
             }
         }
 
+        /// <summary>
+        ///     Begin routing inputs to the provided <see cref="Possessable"/>.
+        /// </summary>
         public void Possess(Possessable toPossess)
         {
             PruneNulls();
@@ -56,6 +59,9 @@ namespace FulcrumGames.Possession
             }
         }
 
+        /// <summary>
+        ///     Cease routing inputs to the provided <see cref="Possessable"/>.
+        /// </summary>
         public void Unpossess(Possessable toUnpossess)
         {
             PruneNulls();
@@ -88,6 +94,9 @@ namespace FulcrumGames.Possession
             }
         }
 
+        /// <summary>
+        ///     Track an input provider so this can let it know when it is being destroyed.
+        /// </summary>
         public void OnBoundToInputProvider(InputProvider inputProvider)
         {
             if (_isBeingDestroyed)
@@ -103,6 +112,10 @@ namespace FulcrumGames.Possession
             _boundInputProviders.Add(inputProvider);
         }
 
+        /// <summary>
+        ///     Track when an input provider stops caring about this so we don't tell them
+        ///     when we are being destroyed.
+        /// </summary>
         public void OnUnboundFromInputProvider(InputProvider inputProvider)
         {
             if (_isBeingDestroyed)
@@ -118,6 +131,10 @@ namespace FulcrumGames.Possession
             _boundInputProviders.Remove(inputProvider);
         }
 
+        /// <summary>
+        ///     Delegate a jump input from a provider down to all possessed
+        ///     <see cref="Possessable"/>s.
+        /// </summary>
         public void OnJumpPressed()
         {
             PruneNulls();

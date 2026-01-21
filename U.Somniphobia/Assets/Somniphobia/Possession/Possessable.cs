@@ -25,6 +25,11 @@ namespace FulcrumGames.Possession
             }
         }
 
+        /// <summary>
+        ///     Call when adding a <see cref="Possessor"/> to a given possessable.
+        ///     Lets the possessable track it, thus giving it the opportunity to let
+        ///     the <see cref="Possessor"/> know that it is being destroyed.
+        /// </summary>
         public void OnPossessedBy(Possessor possessor)
         {
             _possessors.Remove(null);
@@ -38,6 +43,12 @@ namespace FulcrumGames.Possession
             _possessors.Add(possessor);
         }
 
+        /// <summary>
+        ///     Call when removing a <see cref="Possessor"/> from a given possessable.
+        ///     Lets the possessable track it, thus helping it avoid a case where it
+        ///     tries to let an uncaring or null <see cref="Possessor"/> know that
+        ///     it is being destroyed.
+        /// </summary>
         public void OnUnpossessedBy(Possessor possessor)
         {
             // When this is in the process of being destroyed, avoid modifying the
@@ -56,6 +67,9 @@ namespace FulcrumGames.Possession
             _possessors.Remove(possessor);
         }
 
+        /// <summary>
+        ///     Mutation of game state reflecting a jump action on a possessable entity.
+        /// </summary>
         public void OnJumpPressed()
         {
             Debug.Log("Jumped!");
