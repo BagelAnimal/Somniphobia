@@ -1,5 +1,6 @@
 using FulcrumGames.Levels;
 using FulcrumGames.Possession;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,8 +15,22 @@ namespace FulcrumGames.Somniphobia
     /// </summary>
     public class Game : MonoBehaviour
     {
+        private enum LifetimeEvent
+        {
+            None,
+            OnAwake,
+            OnStart,
+            OnEnable,
+            OnDisable,
+            OnDestroy,
+        }
+
         private static Game s_instance;
         public static Game Instance => s_instance;
+
+        public readonly List<Player> _players = new();
+        public IReadOnlyList<Player> Players => _players;
+        public Player Player => _players.Count <= 0 ? null : _players[0];
 
         [SerializeField]
         private Level _levelPrefab;
@@ -27,11 +42,10 @@ namespace FulcrumGames.Somniphobia
         private GameObject _playerSoulPrefab;
 
         [SerializeField]
-        private bool _initializeOnAwake = false;
+        private LifetimeEvent _initializeOn;
 
-        public readonly List<Player> _players = new();
-        public IReadOnlyList<Player> Players => _players;
-        public Player HostPlayer => _players.Count <= 0 ? null : _players[0];
+        [SerializeField]
+        private LifetimeEvent _teardownOn;
 
         private Level _levelInstance;
         private Possessor _playerSoulInstance;
@@ -49,90 +63,140 @@ namespace FulcrumGames.Somniphobia
             s_instance = this;
             DontDestroyOnLoad(s_instance.gameObject);
 
-            if (_initializeOnAwake)
-            {
-                Initialize();
-            }
+            OnLifetimeEvent(LifetimeEvent.OnAwake);
+        }
+
+        private void Start()
+        {
+            OnLifetimeEvent(LifetimeEvent.OnStart);
+        }
+
+        private void OnEnable()
+        {
+            OnLifetimeEvent(LifetimeEvent.OnEnable);
+        }
+
+
+        private void OnDisable()
+        {
+            OnLifetimeEvent(LifetimeEvent.OnDisable);
+        }
+
+        private void OnDestroy()
+        {
+            OnLifetimeEvent(LifetimeEvent.OnDestroy);
         }
 
         private void Initialize()
         {
-            if (_isInitialized)
+            try
             {
-                Debug.LogWarning("Attempted to initialize the game a second time!", this);
-                return;
-            }
+                if (_isInitialized)
+                    return;
 
-            if (!_levelPrefab)
+                _isInitialized = true;
+
+                if (!_levelPrefab)
+                {
+                    Debug.LogWarning("Null level prefab in game!", this);
+                    return;
+                }
+
+                if (!_playerSoulPrefab)
+                {
+                    Debug.LogWarning("Null player soul prefab in game!", this);
+                    return;
+                }
+
+                if (!_playerCharacterPrefab)
+                {
+                    Debug.LogWarning("Null player character prefab in game!", this);
+                    return;
+                }
+
+                // Create the level.
+                _levelInstance = Instantiate(_levelPrefab);
+
+                // Create the player character within the level.
+                var playerCharacterObject = Instantiate(_playerCharacterPrefab);
+                if (!playerCharacterObject.TryGetComponent<Possessable>(out var possessable))
+                {
+                    Debug.LogWarning($"Player character instance has no possessable component!");
+                    return;
+                }
+                _playerCharacterInstance = possessable;
+
+                // Create the player soul, then possess the character in the level.
+                var playerSoulObject = Instantiate(_playerSoulPrefab);
+                if (!playerSoulObject.TryGetComponent<Possessor>(out var possessor))
+                {
+                    Debug.LogWarning($"Player soul refab has no possessor component!");
+                    return;
+                }
+                _playerSoulInstance = possessor;
+                _playerSoulInstance.Possess(_playerCharacterInstance);
+
+                // Initialize player, bind to the soul that possesses character in the level.
+                var hostPlayer = new Player();
+                var playerName = "Host";
+                hostPlayer.Initialize(name: playerName);
+                _players.Add(hostPlayer);
+                hostPlayer.BindToPossessor(_playerSoulInstance);
+            }
+            catch (Exception e)
             {
-                Debug.LogWarning("Null level prefab encountered when initializing!", this);
-                return;
+                Debug.LogException(e);
+                Teardown();
             }
-
-            if (!_playerSoulPrefab)
-            {
-                Debug.LogWarning("Null player soul prefab encountered when initializing!", this);
-                return;
-            }
-
-            if (!_playerCharacterPrefab)
-            {
-                Debug.LogWarning("Null player character prefab encountered when initializing!", this);
-                return;
-            }
-
-            // Create the level.
-            _levelInstance = Instantiate(_levelPrefab);
-
-            // Create the player character within the level.
-            var playerCharacterObject = Instantiate(_playerCharacterPrefab);
-            if (!playerCharacterObject.TryGetComponent<Possessable>(out var possessable))
-            {
-                Debug.LogWarning($"{playerCharacterObject.name} does not have a possessable component!");
-                return;
-            }
-            _playerCharacterInstance = possessable;
-
-            // Create the player soul, then possess the character in the level.
-            var playerSoulObject = Instantiate(_playerSoulPrefab);
-            if (!playerSoulObject.TryGetComponent<Possessor>(out var possessor))
-            {
-                Debug.LogWarning($"{playerSoulObject.name} does not have a possessor component!");
-                return;
-            }
-            _playerSoulInstance = possessor;
-            _playerSoulInstance.Possess(_playerCharacterInstance);
-
-            // Initialize player, bind to the soul that possesses character in the level.
-            var hostPlayer = new Player();
-            var playerName = "Host";
-            hostPlayer.Initialize(name: playerName);
-            _players.Add(hostPlayer);
-            hostPlayer.BindToPossessor(_playerSoulInstance);
-
-            _isInitialized = true;
         }
 
         private void Teardown()
         {
-            if (!_isInitialized)
+            try
             {
-                Debug.LogWarning("Attempted to tear down the game when it was not initialized! Request cancelled.");
-                return;
+                if (!_isInitialized)
+                    return;
+
+                _isInitialized = false;
+
+                foreach (var player in _players)
+                {
+                    player.Teardown();
+                }
+                _players.Clear();
+
+                if (_levelInstance.gameObject)
+                {
+                    Destroy(_levelInstance.gameObject);
+                }
+
+                if (_playerSoulInstance.gameObject)
+                {
+                    Destroy(_playerSoulInstance.gameObject);
+                }
+
+                if (_playerCharacterInstance.gameObject)
+                {
+                    Destroy(_playerCharacterInstance.gameObject);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+
+        private void OnLifetimeEvent(LifetimeEvent executionType)
+        {
+            if (_initializeOn == executionType)
+            {
+                Initialize();
             }
 
-            foreach (var player in _players)
+            if (_teardownOn == executionType)
             {
-                player.Teardown();
+                Teardown();
             }
-            _players.Clear();
-
-            Destroy(_levelInstance.gameObject);
-            Destroy(_playerSoulInstance.gameObject);
-            Destroy(_playerCharacterInstance.gameObject);
-
-            _levelInstance = null;
-            _isInitialized = false;
         }
     }
 }

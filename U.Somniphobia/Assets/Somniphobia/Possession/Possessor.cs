@@ -60,7 +60,12 @@ namespace FulcrumGames.Possession
             if (_perspectivePossessable == toUnpossess)
             {
                 _perspectivePossessable = null;
-                transform.parent = null;
+
+                // this can be triggered while this is mid-destruction resulting in null transform
+                if (transform)
+                {
+                    transform.parent = null;
+                }
 
                 if (_possessables.Count > 0)
                 {
