@@ -32,6 +32,9 @@ namespace FulcrumGames.Somniphobia
         public IReadOnlyList<Player> Players => _players;
         public Player Player => _players.Count <= 0 ? null : _players[0];
 
+        private bool _isQuitting = false;
+        public static bool IsQuitting => s_instance ? s_instance._isQuitting : false;
+
         [SerializeField]
         private Level _levelPrefab;
 
@@ -85,6 +88,11 @@ namespace FulcrumGames.Somniphobia
         private void OnDestroy()
         {
             OnLifetimeEvent(LifetimeEvent.OnDestroy);
+        }
+
+        private void OnApplicationQuit()
+        {
+            _isQuitting = true;
         }
 
         private void Initialize()
