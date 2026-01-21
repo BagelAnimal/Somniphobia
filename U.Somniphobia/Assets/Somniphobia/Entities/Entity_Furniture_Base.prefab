@@ -247,7 +247,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 265
+  m_VersionIndex: 274
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -301,7 +301,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c22777d6e868e4f2fb421913386b154e, type: 2}
+  - {fileID: 2100000, guid: dfc08c90188302847afb04f628582097, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -343,11 +343,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_Name
-      value: Entity_Furniture_Base Variant
+      value: Entity_Furniture_Base
       objectReference: {fileID: 0}
     - target: {fileID: 8316171614807759996, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 8316171614807759996, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_LocalPosition.y
