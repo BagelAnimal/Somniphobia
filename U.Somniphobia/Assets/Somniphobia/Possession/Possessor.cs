@@ -23,6 +23,19 @@ namespace FulcrumGames.Possession
         private Possessable _perspectivePossessable;
         public Possessable PerspectivePossessable => _perspectivePossessable;
 
+        // used to avoid modifying collections while unhooking input providers on destroy
+        private bool _isBeingDestroyed = false;
+
+        private void OnDestroy()
+        {
+            _isBeingDestroyed = true;
+
+            foreach (var inputProvider in _boundInputProviders)
+            {
+                inputProvider.UnbindFromPossessor(this);
+            }
+        }
+
         public void Possess(Possessable toPossess)
         {
             PruneNulls();
@@ -77,6 +90,9 @@ namespace FulcrumGames.Possession
 
         public void OnBoundToInputProvider(InputProvider inputProvider)
         {
+            if (_isBeingDestroyed)
+                return;
+
             PruneNulls();
             if (inputProvider == null)
             {
@@ -89,6 +105,9 @@ namespace FulcrumGames.Possession
 
         public void OnUnboundFromInputProvider(InputProvider inputProvider)
         {
+            if (_isBeingDestroyed)
+                return;
+
             PruneNulls();
             if (inputProvider == null)
             {

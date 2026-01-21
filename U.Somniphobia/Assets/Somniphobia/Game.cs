@@ -28,7 +28,7 @@ namespace FulcrumGames.Somniphobia
         private static Game s_instance;
         public static Game Instance => s_instance;
 
-        public readonly List<Player> _players = new();
+        private readonly List<Player> _players = new();
         public IReadOnlyList<Player> Players => _players;
         public Player Player => _players.Count <= 0 ? null : _players[0];
 
@@ -99,18 +99,21 @@ namespace FulcrumGames.Somniphobia
                 if (!_levelPrefab)
                 {
                     Debug.LogWarning("Null level prefab in game!", this);
+                    Teardown();
                     return;
                 }
 
                 if (!_playerSoulPrefab)
                 {
                     Debug.LogWarning("Null player soul prefab in game!", this);
+                    Teardown();
                     return;
                 }
 
                 if (!_playerCharacterPrefab)
                 {
                     Debug.LogWarning("Null player character prefab in game!", this);
+                    Teardown();
                     return;
                 }
 
@@ -122,6 +125,8 @@ namespace FulcrumGames.Somniphobia
                 if (!playerCharacterObject.TryGetComponent<Possessable>(out var possessable))
                 {
                     Debug.LogWarning($"Player character instance has no possessable component!");
+                    Destroy(playerCharacterObject);
+                    Teardown();
                     return;
                 }
                 _playerCharacterInstance = possessable;
@@ -130,7 +135,9 @@ namespace FulcrumGames.Somniphobia
                 var playerSoulObject = Instantiate(_playerSoulPrefab);
                 if (!playerSoulObject.TryGetComponent<Possessor>(out var possessor))
                 {
-                    Debug.LogWarning($"Player soul refab has no possessor component!");
+                    Debug.LogWarning($"Player soul prefab has no possessor component!");
+                    Destroy(playerSoulObject);
+                    Teardown();
                     return;
                 }
                 _playerSoulInstance = possessor;
@@ -165,17 +172,17 @@ namespace FulcrumGames.Somniphobia
                 }
                 _players.Clear();
 
-                if (_levelInstance.gameObject)
+                if (_levelInstance)
                 {
                     Destroy(_levelInstance.gameObject);
                 }
 
-                if (_playerSoulInstance.gameObject)
+                if (_playerSoulInstance)
                 {
                     Destroy(_playerSoulInstance.gameObject);
                 }
 
-                if (_playerCharacterInstance.gameObject)
+                if (_playerCharacterInstance)
                 {
                     Destroy(_playerCharacterInstance.gameObject);
                 }
