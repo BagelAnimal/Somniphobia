@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 455d240d9ced09e4da768a8c32248c5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Somniphobia.Level
-  _name: 
+  _name: Sandbox
 --- !u!1 &5742408436851575589
 GameObject:
   m_ObjectHideFlags: 0
