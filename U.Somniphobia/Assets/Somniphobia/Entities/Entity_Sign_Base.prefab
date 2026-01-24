@@ -934,6 +934,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4200434299136894212, guid: 05529671e7e321c49aa42f53dea4b4d1, type: 3}
+      propertyPath: m_fontSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4200434299136894212, guid: 05529671e7e321c49aa42f53dea4b4d1, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4984486983890964585, guid: 05529671e7e321c49aa42f53dea4b4d1, type: 3}
       propertyPath: m_Name
       value: Label_Base
