@@ -34,7 +34,7 @@ Coding Style Guidelines...
 -
     RULE 4
     All classes and structs in the Somniphobia namespace should have an xml-style
-    header explaining the intent and/or goals of the object.
+    header explaining the goals of the object.
 -
 
 Authoring Guidelines...
@@ -51,8 +51,9 @@ Goal: a compact traversal loop that hits most edge cases in 3-5 minutes.
 [x] Jump Height Tests (blocks of varying heights)
 [x] Physics Object Tests (stacks of crates, crate surface)
 [x] Gaps Test (blocks of varying distances)
-[] Ramp Test (many ramps of many angles with labels)
-[] Ceiling Slope Test (ceilings of many angles with labels)
+[x] Ramp Test (many ramps of many angles with labels)
+[] Wedge Test (triangular wedges with a seam at the top)
+[] Pit Test (concave holes with varying depths ending in a line or a point to test unstuck logic)
 [] Alley (various squeezes between walls)
 [] Crouch Tunnel Tests (test crouch clearance)
 [] Narrow Ledge Tests (thin bridges to test edge snapping and falling)
