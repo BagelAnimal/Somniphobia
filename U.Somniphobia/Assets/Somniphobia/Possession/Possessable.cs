@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace FulcrumGames.Possession
@@ -14,6 +15,9 @@ namespace FulcrumGames.Possession
     {
         private readonly HashSet<Possessor> _possessors = new();
         private bool _isBeingDestroyed = false;
+
+        public bool IsPossessed => _possessors.Count > 0;
+        public Possessor CurrentPossessor => IsPossessed ? _possessors.First() : null;
 
         private void OnDestroy()
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace FulcrumGames.Possession
 {
@@ -14,7 +15,10 @@ namespace FulcrumGames.Possession
         private string _name = "CPU";
         public string Name => _name;
 
-        private readonly HashSet<Possessor> _possessors = new();
+        protected Vector3 _lookInput;
+        public Vector3 LookInput => _lookInput;
+
+        protected readonly HashSet<Possessor> _possessors = new();
 
         /// <summary>
         ///     Give this guy a name.

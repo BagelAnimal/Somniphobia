@@ -23,6 +23,9 @@ namespace FulcrumGames.Possession
         private Possessable _perspectivePossessable;
         public Possessable PerspectivePossessable => _perspectivePossessable;
 
+        public bool HasInputProvider => _boundInputProviders.Count > 0;
+        public InputProvider CurrentInputProvider => _boundInputProviders.First();
+
         // used to avoid modifying collections while unhooking input providers on destroy
         private bool _isBeingDestroyed = false;
 

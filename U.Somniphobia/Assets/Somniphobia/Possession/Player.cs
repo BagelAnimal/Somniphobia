@@ -1,4 +1,6 @@
-﻿using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
+﻿using FulcrumGames.Somniphobia;
+using UnityEngine;
+using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 namespace FulcrumGames.Possession
 {
@@ -8,6 +10,10 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Player : InputProvider
     {
+        private const float MouseLookSensitivity = 1.0f;
+        private const bool VerticalLookInverted = false;
+        private const bool HorizontalLookInverted = false;
+
         private InputActions _inputActions;
         public InputActions InputActions => _inputActions;
 
@@ -22,6 +28,20 @@ namespace FulcrumGames.Possession
             _inputActions.Enable();
             _inputActions.World.Enable();
             _inputActions.World.Jump.performed += OnJumpInputProvided;
+        }
+
+        public void UpdateLookInput()
+        {
+            var rawInput = _inputActions.World.Look.ReadValue<Vector2>();
+
+            var verticalLook = rawInput.y * MouseLookSensitivity;
+            verticalLook = VerticalLookInverted ? verticalLook : -verticalLook;
+
+            var horizontalLook = rawInput.x * MouseLookSensitivity;
+            horizontalLook = HorizontalLookInverted ? -horizontalLook : horizontalLook;
+
+            var processedInput = new Vector3(verticalLook, horizontalLook, 0.0f);
+            _lookInput = processedInput;
         }
 
         private void OnJumpInputProvided(InputContext context)

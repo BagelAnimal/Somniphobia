@@ -99,14 +99,16 @@ and physics-related interactions
 [] Physics Material Tests (step, jump, stair, and slope tests w/ ice & rubber)
 [] Water Volume Test (pool to drop down into water, sphere of water)
 [] Ladder Test (sheer wall with ladder entity)
+[] Slider Test (wedges with script that disallows becoming grounded, i.e., overwatch roofing)
 
 Sandbox Spec Entities:
-[x] Sign: worldspace UI with a short textmeshpro label to label tests.
+[x] Sign: worldspace UI with a short textmeshpro label to name tests.
 [x] Teleporter: on collision enter, return target to a position serialized in the component.
 [] Mover: object that follows a series of waypoints in sequence
 [] Rotator: object that constantly rotates at some rate
 [] Conveyor: object that moves colliding objects?
 [] Water: trigger that represents water, transitions objects to in-water state
 [] Ladder: some vertical climbable object
+[] Roof: wedge that disallows becoming grounded
 
 ---
