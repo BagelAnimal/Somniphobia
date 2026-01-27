@@ -8,6 +8,9 @@ Somniphobia is a first-person roguelike dungeon crawler that makes use of severa
 sandbox mechanics with the intent of creating emergent situations. Mechanics include
 gravity manipulation, dynamic possession systems, and spellcasting.
 
+The goal is to make the player feel the mystery, exploration, and experimentation of Noita,
+the action of ULTRAKILL, and the skill expression of a source-engine game like Half-Life 2.
+
 ---
 
 MECHANICS OVERVIEW
