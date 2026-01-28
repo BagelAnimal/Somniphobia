@@ -66,14 +66,14 @@ namespace FulcrumGames.Possession
             _possessors.Remove(null);
             if (!possessor)
             {
-                UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to unbind" +
+                UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to unbind " +
                     $"from!");
                 return;
             }
 
             if (!_possessors.Contains(possessor))
             {
-                UnityEngine.Debug.LogWarning($"{_name} is already NOT bound to" +
+                UnityEngine.Debug.LogWarning($"{_name} is already NOT bound to " +
                     $"{possessor.name}!", possessor);
                 return;
             }
