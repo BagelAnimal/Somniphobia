@@ -131,7 +131,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5938823359125828733}
-  - component: {fileID: 7099301740696834705}
   m_Layer: 0
   m_Name: Perspective
   m_TagString: Untagged
@@ -155,25 +154,6 @@ Transform:
   - {fileID: 5591599404413532098}
   m_Father: {fileID: 111468570980482371}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7099301740696834705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5731907448561930568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5c5ba8df2d923143b8117e6f8c3908e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.Look
-  _yawPivot: {fileID: 5591599404413532098}
-  _pitchPivot: {fileID: 3287977206781651745}
-  _rollPivot: {fileID: 3895084890897813315}
-  _possessable: {fileID: 6633191544532055592}
-  _maxPitch: 85
-  _minPitch: -110
-  _smoothing: 0.05
 --- !u!1 &6849693258488750902
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,10 +314,24 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6633191544532055592}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8968862901336501186}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5261255328842500919}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2528969883515055279}
   m_SourcePrefab: {fileID: 100100000, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
 --- !u!4 &111468570980482371 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8316171614807759996, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+  m_PrefabInstance: {fileID: 8279021389468721471}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &2081376056067139919 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7928154384134195312, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
   m_PrefabInstance: {fileID: 8279021389468721471}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2101267298329975814 stripped
@@ -380,6 +374,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c6bc869ec19b54293d8a8e4452cb4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.Possessable
+--- !u!114 &8968862901336501186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02d3d326068c5934d9bba1a7c352878d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Glue.PossessorToCharacterControl
+  _jump: {fileID: 2528969883515055279}
+  _look: {fileID: 5261255328842500919}
+  _possessable: {fileID: 6633191544532055592}
+--- !u!114 &5261255328842500919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c3c70ee49927b4793b4b731e2c167d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Look
+  _yawPivot: {fileID: 5591599404413532098}
+  _pitchPivot: {fileID: 3287977206781651745}
+  _rollPivot: {fileID: 3895084890897813315}
+  _maxPitch: 85
+  _minPitch: -110
+  _smoothing: 0.05
+--- !u!114 &2528969883515055279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0a9d13b0d963e54d9dfb51d6f15eb41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Jump
+  _rigidbody: {fileID: 2081376056067139919}
+  _force: 350
 --- !u!4 &8405791047097776146 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 451380846487607597, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}

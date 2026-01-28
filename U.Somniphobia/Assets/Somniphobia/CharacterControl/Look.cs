@@ -1,11 +1,11 @@
 using UnityEngine;
 
-namespace FulcrumGames.Possession
+namespace FulcrumGames.CharacterControl
 {
     /// <summary>
     ///     Rotates a target object given an input vector.
     /// </summary>
-    public class RotateWithInput : MonoBehaviour
+    public class Look : MonoBehaviour
     {
         [SerializeField]
         private Transform _yawPivot;
@@ -15,9 +15,6 @@ namespace FulcrumGames.Possession
 
         [SerializeField]
         private Transform _rollPivot;
-
-        [SerializeField]
-        private Possessable _possessable;
 
         [SerializeField]
         private float _maxPitch = 85.0f;
@@ -36,21 +33,20 @@ namespace FulcrumGames.Possession
         private float _roll = 0.0f;
 
         public Quaternion Rotation => Quaternion.Euler(_pitch, _yaw, _roll);
-        public Vector3 Forward => Rotation * transform.forward;
+        public Vector3 Forward => Rotation * _rollPivot.transform.forward;
 
-        private void Update()
+        /// <summary>
+        ///     Updates the orientation of this object given some input vector.
+        /// </summary>
+        public void UpdateLook(Vector3 input)
         {
-            if (!_possessable)
-                return;
-
-            var lookInput = _possessable.GetLookInput();
-            if (lookInput == default)
+            if (input == default)
                 return;
 
             var currentRotation = new Vector3(_pitch, _yaw, _roll);
-            var targetPitch = Mathf.Clamp(_targetRotationEuler.x + lookInput.x, _minPitch, _maxPitch);
-            var targetYaw = _targetRotationEuler.y + lookInput.y;
-            var targetRoll = _targetRotationEuler.z + lookInput.z;
+            var targetPitch = Mathf.Clamp(_targetRotationEuler.x + input.x, _minPitch, _maxPitch);
+            var targetYaw = _targetRotationEuler.y + input.y;
+            var targetRoll = _targetRotationEuler.z + input.z;
             _targetRotationEuler = new Vector3(targetPitch, targetYaw, targetRoll);
 
             var smoothRotation = Vector3.SmoothDamp(currentRotation, _targetRotationEuler,
@@ -64,7 +60,7 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void LookAt(Vector3 position)
         {
-            var delta = position - transform.position;
+            var delta = position - _rollPivot.transform.position;
             var forward = delta.normalized;
             SetForward(forward);
         }

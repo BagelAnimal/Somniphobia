@@ -1,27 +1,19 @@
 ﻿using UnityEngine;
 
-namespace FulcrumGames.Possession
+namespace FulcrumGames.CharacterControl
 {
     /// <summary>
     ///     Basic jump on input to test event delegation from possession system.
     /// </summary>
-    public class JumpOnInput : MonoBehaviour
+    public class Jump : MonoBehaviour
     {
         [SerializeField]
         private Rigidbody _rigidbody;
 
         [SerializeField]
-        private Possessable _possessable;
+        private float _force = 350.0f;
 
-        [SerializeField]
-        private float _force = 100.0f;
-
-        public void Awake()
-        {
-            _possessable.Jump += Jump;
-        }
-
-        public void Jump()
+        public void Execute()
         {
             if (!_rigidbody)
                 return;
