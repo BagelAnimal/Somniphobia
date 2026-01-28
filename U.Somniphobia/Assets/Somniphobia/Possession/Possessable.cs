@@ -47,7 +47,7 @@ namespace FulcrumGames.Possession
             _jumpHandlers.Clear();
 
             _isBeingDestroyed = true;
-            _possessors.Remove(null);
+            _possessors.RemoveAll(p => !p);
             foreach (var possessor in _possessors)
             {
                 possessor.Unpossess(this);
@@ -61,7 +61,7 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void OnPossessedBy(Possessor possessor)
         {
-            _possessors.Remove(null);
+            _possessors.RemoveAll(p => !p);
             if (!possessor)
             {
                 Debug.LogWarning($"{name} was given a null possessor to be possessed by!",

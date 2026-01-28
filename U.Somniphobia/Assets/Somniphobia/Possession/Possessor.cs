@@ -195,8 +195,8 @@ namespace FulcrumGames.Possession
 
         private void PruneNulls()
         {
-            _boundInputProviders.Remove(null);
-            _possessables.Remove(null);
+            _boundInputProviders.RemoveAll(p => p == null);
+            _possessables.RemoveAll(p => !p);
         }
 
         private void SetPerspective(Possessable newPerspective)

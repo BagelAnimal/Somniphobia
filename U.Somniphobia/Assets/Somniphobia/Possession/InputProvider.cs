@@ -39,7 +39,7 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void BindToPossessor(Possessor possessor)
         {
-            _possessors.Remove(null);
+            _possessors.RemoveAll(p => !p);
             if (!possessor)
             {
                 UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to bind to!");
@@ -63,7 +63,7 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void UnbindFromPossessor(Possessor possessor)
         {
-            _possessors.Remove(null);
+            _possessors.RemoveAll(p => !p);
             if (!possessor)
             {
                 UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to unbind " +
@@ -88,7 +88,7 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void UnbindAll()
         {
-            _possessors.Remove(null);
+            _possessors.RemoveAll(p => !p);
             foreach (var possessor in _possessors)
             {
                 possessor.OnUnboundFromInputProvider(this);
