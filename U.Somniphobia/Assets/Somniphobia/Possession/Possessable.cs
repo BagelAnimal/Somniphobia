@@ -72,8 +72,8 @@ namespace FulcrumGames.Possession
             {
                 inputProvider.Jump += Jump;
             }
-            possessor.BoundBy += (inputProvider) => { inputProvider.Jump += Jump; };
-            possessor.UnboundBy += (inputProvider) => { inputProvider.Jump -= Jump; };
+            possessor.BoundBy += OnBoundBy;
+            possessor.UnboundBy += OnUnboundBy;
         }
 
         /// <summary>
@@ -108,8 +108,8 @@ namespace FulcrumGames.Possession
             {
                 inputProvider.Jump -= Jump;
             }
-            possessor.BoundBy -= (inputProvider) => { inputProvider.Jump += Jump; };
-            possessor.UnboundBy -= (inputProvider) => { inputProvider.Jump -= Jump; };
+            possessor.BoundBy -= OnBoundBy;
+            possessor.UnboundBy -= OnUnboundBy;
         }
 
         /// <summary>
@@ -127,6 +127,16 @@ namespace FulcrumGames.Possession
             }
 
             return lookInput;
+        }
+
+        private void OnBoundBy(InputProvider inputProvider)
+        {
+            inputProvider.Jump += Jump;
+        }
+
+        private void OnUnboundBy(InputProvider inputProvider)
+        {
+            inputProvider.Jump -= Jump;
         }
     }
 }
