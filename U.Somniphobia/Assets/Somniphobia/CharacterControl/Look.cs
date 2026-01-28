@@ -81,7 +81,7 @@ namespace FulcrumGames.CharacterControl
         public void SetRotation(Quaternion rotation, bool clearSmoothing = true)
         {
             var rotationEuler = rotation.eulerAngles;
-            SetRotation(rotationEuler);
+            SetRotation(rotationEuler, clearSmoothing);
         }
 
         /// <summary>
