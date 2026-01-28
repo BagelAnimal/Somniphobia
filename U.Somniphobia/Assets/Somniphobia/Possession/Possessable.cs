@@ -84,10 +84,6 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void OnUnpossessedBy(Possessor possessor)
         {
-            if (_isBeingDestroyed)
-                return;
-
-            _possessors.Remove(null);
             if (!possessor)
             {
                 Debug.LogWarning($"{name} was given a null possessor to be unpossessed from!",
@@ -101,7 +97,12 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            _possessors.Remove(possessor);
+            if (!_isBeingDestroyed)
+            {
+                _possessors.Remove(null);
+                _possessors.Remove(possessor);
+            }
+
             UnpossessedBy?.Invoke(possessor);
             foreach (var inputProvider in possessor.BoundInputProviders)
             {
