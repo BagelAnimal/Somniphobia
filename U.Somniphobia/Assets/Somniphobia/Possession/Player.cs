@@ -31,6 +31,11 @@ namespace FulcrumGames.Possession
 
         public override Vector3 GetLookInput()
         {
+            if (_inputActions == null)
+            {
+                return default;
+            }
+
             var rawInput = _inputActions.World.Look.ReadValue<Vector2>();
 
             var verticalLook = rawInput.y * MouseLookSensitivity;
