@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace FulcrumGames.Possession
@@ -17,14 +16,27 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Possessor : MonoBehaviour
     {
-        private readonly HashSet<InputProvider> _boundInputProviders = new();
-        private readonly HashSet<Possessable> _possessables = new();
+        private readonly List<InputProvider> _boundInputProviders = new();
+        /// <summary>
+        ///     The providers currently delegating inputs to this possessor.
+        ///     Cannot contain duplicates.
+        /// </summary>
+        public IReadOnlyList<InputProvider> BoundInputProviders => _boundInputProviders;
+
+        private readonly List<Possessable> _possessables = new();
+        /// <summary>
+        ///     The possessables currently receiving inputs delegated to this possessor.
+        ///     Cannot contain duplicates.
+        /// </summary>
+        public IReadOnlyList<Possessable> Possessables => _possessables;
 
         private Possessable _perspectivePossessable;
+        /// <summary>
+        ///     The first <see cref="Possessable"/> used as a parent. Useful when this
+        ///     possessor is an inworld object like a soul and it needs a place to live.
+        ///     Will always be set as long as at least one possessable is bound.
+        /// </summary>
         public Possessable PerspectivePossessable => _perspectivePossessable;
-
-        public bool HasInputProvider => _boundInputProviders.Count > 0;
-        public InputProvider CurrentInputProvider => _boundInputProviders.First();
 
         // used to avoid modifying collections while unhooking input providers on destroy
         private bool _isBeingDestroyed = false;
@@ -51,9 +63,13 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            if (!_possessables.Add(toPossess))
+            if (_possessables.Contains(toPossess))
+            {
+                Debug.LogWarning($"{name} is already possessing {toPossess.name}!", this);
                 return;
+            }
 
+            _possessables.Add(toPossess);
             toPossess.OnPossessedBy(this);
 
             if (!_perspectivePossessable)
@@ -74,15 +90,20 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            if (!_possessables.Remove(toUnpossess))
+            if (!_possessables.Contains(toUnpossess))
+            {
+                Debug.LogWarning($"{name} is already NOT possessing {toUnpossess.name}!", this);
                 return;
+            }
 
+            _possessables.Remove(toUnpossess);
             toUnpossess.OnUnpossessedBy(this);
 
             if (_perspectivePossessable == toUnpossess)
             {
                 _perspectivePossessable = null;
 
+                // Transform might be null if we are in the process of being destroyed.
                 if (!_isBeingDestroyed)
                 {
                     transform.parent = null;
@@ -90,7 +111,7 @@ namespace FulcrumGames.Possession
 
                 if (_possessables.Count > 0)
                 {
-                    var newPerspective = _possessables.First();
+                    var newPerspective = _possessables[0];
                     SetPerspective(newPerspective);
                 }
             }
@@ -111,6 +132,12 @@ namespace FulcrumGames.Possession
                 return;
             }
 
+            if (_boundInputProviders.Contains(inputProvider))
+            {
+                Debug.LogWarning($"{name} is already bound to {inputProvider.Name}!", this);
+                return;
+            }
+
             _boundInputProviders.Add(inputProvider);
         }
 
@@ -127,6 +154,12 @@ namespace FulcrumGames.Possession
             if (inputProvider == null)
             {
                 Debug.LogWarning($"{name} was given a null input provider to unbind from!", this);
+                return;
+            }
+
+            if (!_boundInputProviders.Contains(inputProvider))
+            {
+                Debug.LogWarning($"{name} is already NOT bound to {inputProvider.Name}!", this);
                 return;
             }
 
@@ -159,6 +192,7 @@ namespace FulcrumGames.Possession
 
             if (!newPerspective)
             {
+                // unparent, then enable physics on this.
                 _perspectivePossessable = null;
                 transform.parent = null;
                 if (rigidbody)
@@ -175,6 +209,7 @@ namespace FulcrumGames.Possession
 
             _perspectivePossessable = newPerspective;
 
+            // parent, then disable physics on this.
             var anchor = _perspectivePossessable.GetComponentInChildren<PossessorAnchor>();
             var parent = anchor ? anchor.transform : _perspectivePossessable.transform;
             transform.parent = parent;

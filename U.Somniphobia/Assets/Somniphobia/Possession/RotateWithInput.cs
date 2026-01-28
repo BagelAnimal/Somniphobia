@@ -39,21 +39,17 @@ namespace FulcrumGames.Possession
             if (!_possessable)
                 return;
 
-            if (!_possessable.IsPossessed)
-                return;
+            Vector3 lookInput = default;
+            foreach (var possessor in _possessable.Possessors)
+            {
+                foreach (var inputProvider in possessor.BoundInputProviders)
+                {
+                    lookInput += inputProvider.GetLookInput();
+                }
+            }
 
-            var possessor = _possessable.CurrentPossessor;
-            if (!possessor)
+            if (lookInput == default)
                 return;
-
-            if (!possessor.HasInputProvider)
-                return;
-
-            var inputProvider = possessor.CurrentInputProvider;
-            if (inputProvider == null)
-                return;
-
-            var lookInput = inputProvider.GetLookInput();
 
             var currentRotation = new Vector3(_pitch, _yaw, _roll);
             var targetPitch = Mathf.Clamp(_targetRotationEuler.x + lookInput.x, _minPitch, _maxPitch);

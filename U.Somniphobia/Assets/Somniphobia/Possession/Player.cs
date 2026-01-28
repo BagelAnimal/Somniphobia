@@ -1,5 +1,4 @@
-﻿using FulcrumGames.Somniphobia;
-using UnityEngine;
+﻿using UnityEngine;
 using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 namespace FulcrumGames.Possession

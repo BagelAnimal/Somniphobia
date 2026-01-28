@@ -15,7 +15,12 @@ namespace FulcrumGames.Possession
         private string _name = "CPU";
         public string Name => _name;
 
-        protected readonly HashSet<Possessor> _possessors = new();
+        protected readonly List<Possessor> _possessors = new();
+        /// <summary>
+        ///     The <see cref="Possessor"/>s currently receiving inputs from this provider.
+        ///     Cannot contain duplicates.
+        /// </summary>
+        public IReadOnlyList<Possessor> Possessors => _possessors;
 
         /// <summary>
         ///     Give this guy a name.
@@ -38,9 +43,14 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            if (!_possessors.Add(toBindTo))
+            if (_possessors.Contains(toBindTo))
+            {
+                UnityEngine.Debug.LogWarning($"{_name} is already bound to" +
+                    $"{toBindTo.name}!", toBindTo);
                 return;
+            }
 
+            _possessors.Add(toBindTo);
             toBindTo.OnBoundToInputProvider(this);
         }
 
@@ -58,9 +68,14 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            if (!_possessors.Remove(toUnbindFrom))
+            if (!_possessors.Contains(toUnbindFrom))
+            {
+                UnityEngine.Debug.LogWarning($"{_name} is already NOT bound to" +
+                    $"{toUnbindFrom.name}!", toUnbindFrom);
                 return;
+            }
 
+            _possessors.Remove(toUnbindFrom);
             toUnbindFrom.OnUnboundFromInputProvider(this);
         }
 
@@ -79,6 +94,9 @@ namespace FulcrumGames.Possession
             _possessors.Clear();
         }
 
+        /// <summary>
+        ///     Polls look input for this provider.
+        /// </summary>
         public abstract Vector3 GetLookInput();
 
         internal void JumpPressed()

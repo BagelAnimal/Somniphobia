@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace FulcrumGames.Possession
@@ -13,11 +12,15 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Possessable : MonoBehaviour
     {
-        private readonly HashSet<Possessor> _possessors = new();
-        private bool _isBeingDestroyed = false;
+        private readonly List<Possessor> _possessors = new();
+        /// <summary>
+        ///     The <see cref="Possessor"/>s currently delegating inputs to this possessable.
+        ///     Cannot contain duplicates.
+        /// </summary>
+        public IReadOnlyList<Possessor> Possessors => _possessors;
 
-        public bool IsPossessed => _possessors.Count > 0;
-        public Possessor CurrentPossessor => IsPossessed ? _possessors.First() : null;
+        // Used to avoid reacting to unbinding when we're the one invoking it in loop.
+        private bool _isBeingDestroyed = false;
 
         private void OnDestroy()
         {
@@ -44,6 +47,12 @@ namespace FulcrumGames.Possession
                 return;
             }
 
+            if (_possessors.Contains(possessor))
+            {
+                Debug.LogWarning($"{name} is already bound to {possessor.name}!", this);
+                return;
+            }
+
             _possessors.Add(possessor);
         }
 
@@ -55,8 +64,6 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void OnUnpossessedBy(Possessor possessor)
         {
-            // When this is in the process of being destroyed, avoid modifying the
-            // possessors collection since we're iterating over it.
             if (_isBeingDestroyed)
                 return;
 
@@ -65,6 +72,12 @@ namespace FulcrumGames.Possession
             {
                 Debug.LogWarning($"{name} was given a null possessor to be unpossessed from!",
                     this);
+                return;
+            }
+
+            if (!_possessors.Contains(possessor))
+            {
+                Debug.LogWarning($"{name} is already NOT bound to {possessor.name}!", this);
                 return;
             }
 
