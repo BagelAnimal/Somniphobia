@@ -9,7 +9,7 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Player : InputProvider
     {
-        private const float MouseLookSensitivity = 1.0f;
+        private const float MouseLookSensitivity = 0.2f;
         private const bool VerticalLookInverted = false;
         private const bool HorizontalLookInverted = false;
 
