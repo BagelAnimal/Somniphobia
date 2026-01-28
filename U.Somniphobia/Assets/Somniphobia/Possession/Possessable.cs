@@ -32,11 +32,20 @@ namespace FulcrumGames.Possession
         /// </summary>
         public IReadOnlyList<Possessor> Possessors => _possessors;
 
+        // Used to keep track of input provider and action bindings.
+        private readonly Dictionary<InputProvider, Action> _jumpHandlers = new();
+
         // Used to avoid reacting to unbinding when we're the one invoking it in loop.
         private bool _isBeingDestroyed = false;
 
         private void OnDestroy()
         {
+            foreach (var kvp in _jumpHandlers)
+            {
+                kvp.Key.Jump -= kvp.Value;
+            }
+            _jumpHandlers.Clear();
+
             _isBeingDestroyed = true;
             _possessors.Remove(null);
             foreach (var possessor in _possessors)
@@ -68,12 +77,13 @@ namespace FulcrumGames.Possession
 
             _possessors.Add(possessor);
             PossessedBy?.Invoke(possessor);
+
             foreach (var inputProvider in possessor.BoundInputProviders)
             {
-                inputProvider.Jump += Jump;
+                WireJump(inputProvider);
             }
-            possessor.BoundBy += OnBoundBy;
-            possessor.UnboundBy += OnUnboundBy;
+            possessor.BoundBy += WireJump;
+            possessor.UnboundBy += UnwireJump;
         }
 
         /// <summary>
@@ -85,11 +95,7 @@ namespace FulcrumGames.Possession
         public void OnUnpossessedBy(Possessor possessor)
         {
             if (!possessor)
-            {
-                Debug.LogWarning($"{name} was given a null possessor to be unpossessed from!",
-                    this);
                 return;
-            }
 
             if (!_possessors.Contains(possessor))
             {
@@ -97,19 +103,19 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            if (!_isBeingDestroyed)
-            {
-                _possessors.Remove(null);
-                _possessors.Remove(possessor);
-            }
-
             UnpossessedBy?.Invoke(possessor);
+
             foreach (var inputProvider in possessor.BoundInputProviders)
             {
-                inputProvider.Jump -= Jump;
+                UnwireJump(inputProvider);
             }
-            possessor.BoundBy -= OnBoundBy;
-            possessor.UnboundBy -= OnUnboundBy;
+            possessor.BoundBy -= WireJump;
+            possessor.UnboundBy -= UnwireJump;
+
+            if (!_isBeingDestroyed)
+            {
+                _possessors.Remove(possessor);
+            }
         }
 
         /// <summary>
@@ -129,14 +135,34 @@ namespace FulcrumGames.Possession
             return lookInput;
         }
 
-        private void OnBoundBy(InputProvider inputProvider)
+        private void WireJump(InputProvider provider)
         {
-            inputProvider.Jump += Jump;
+            if (provider == null)
+                return;
+
+            if (_jumpHandlers.ContainsKey(provider))
+                return;
+
+            Action handler = OnJumpInput;
+            _jumpHandlers.Add(provider, handler);
+            provider.Jump += handler;
         }
 
-        private void OnUnboundBy(InputProvider inputProvider)
+        private void UnwireJump(InputProvider provider)
         {
-            inputProvider.Jump -= Jump;
+            if (provider == null)
+                return;
+
+            if (!_jumpHandlers.TryGetValue(provider, out var handler))
+                return;
+
+            provider.Jump -= handler;
+            _jumpHandlers.Remove(provider);
+        }
+
+        private void OnJumpInput()
+        {
+            Jump?.Invoke();
         }
     }
 }
