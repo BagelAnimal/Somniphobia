@@ -24,7 +24,7 @@ namespace FulcrumGames.Glue
             if (!_possessable)
                 return;
 
-            _possessable.Jump += () => { if (_jump) { _jump.Execute(); } };
+            _possessable.Jump += Jump;
         }
 
         private void Update()
@@ -37,6 +37,14 @@ namespace FulcrumGames.Glue
 
             var lookInput = _possessable.GetLookInput();
             _look.UpdateLook(lookInput);
+        }
+
+        private void Jump()
+        {
+            if (!_jump)
+                return;
+
+            _jump.Execute();
         }
     }
 }
