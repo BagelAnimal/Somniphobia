@@ -96,7 +96,10 @@ namespace FulcrumGames.CharacterControl
             _yaw = rotationEuler.y;
             _roll = rotationEuler.z;
 
-            _targetRotationEuler = rotationEuler;
+            if (clearSmoothing)
+            {
+                _targetRotationEuler = new Vector3(_pitch, _yaw, _roll);
+            }
 
             _pitchPivot.transform.localRotation = Quaternion.Euler(Vector3.right * _pitch);
             _yawPivot.transform.localRotation = Quaternion.Euler(Vector3.up * _yaw);
