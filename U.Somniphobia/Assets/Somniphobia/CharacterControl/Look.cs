@@ -58,6 +58,9 @@ namespace FulcrumGames.CharacterControl
         public void LookAt(Vector3 position)
         {
             var delta = position - _rollPivot.transform.position;
+            if (delta.sqrMagnitude < Mathf.Epsilon)
+                return;
+
             var forward = delta.normalized;
             SetForward(forward);
         }
