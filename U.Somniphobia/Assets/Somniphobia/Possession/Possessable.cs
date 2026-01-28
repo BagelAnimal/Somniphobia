@@ -126,6 +126,9 @@ namespace FulcrumGames.Possession
             Vector3 lookInput = default;
             foreach (var possessor in Possessors)
             {
+                if (!possessor)
+                    continue;
+
                 foreach (var inputProvider in possessor.BoundInputProviders)
                 {
                     lookInput += inputProvider.GetLookInput();
