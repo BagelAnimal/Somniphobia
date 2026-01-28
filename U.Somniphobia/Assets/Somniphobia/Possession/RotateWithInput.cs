@@ -53,7 +53,7 @@ namespace FulcrumGames.Possession
             if (inputProvider == null)
                 return;
 
-            var lookInput = inputProvider.LookInput;
+            var lookInput = inputProvider.GetLookInput();
 
             var currentRotation = new Vector3(_pitch, _yaw, _roll);
             var targetPitch = Mathf.Clamp(_targetRotationEuler.x + lookInput.x, _minPitch, _maxPitch);

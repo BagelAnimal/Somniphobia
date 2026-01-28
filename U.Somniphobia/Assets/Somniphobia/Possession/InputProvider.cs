@@ -15,9 +15,6 @@ namespace FulcrumGames.Possession
         private string _name = "CPU";
         public string Name => _name;
 
-        protected Vector3 _lookInput;
-        public Vector3 LookInput => _lookInput;
-
         protected readonly HashSet<Possessor> _possessors = new();
 
         /// <summary>
@@ -81,6 +78,8 @@ namespace FulcrumGames.Possession
 
             _possessors.Clear();
         }
+
+        public abstract Vector3 GetLookInput();
 
         internal void JumpPressed()
         {

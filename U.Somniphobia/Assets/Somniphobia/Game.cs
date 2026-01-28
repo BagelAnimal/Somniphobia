@@ -95,14 +95,6 @@ namespace FulcrumGames.Somniphobia
             _isQuitting = true;
         }
 
-        private void Update()
-        {
-            foreach (var player in _players)
-            {
-                player.UpdateLookInput();
-            }
-        }
-
         private void Initialize()
         {
             try

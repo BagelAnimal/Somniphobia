@@ -30,7 +30,7 @@ namespace FulcrumGames.Possession
             _inputActions.World.Jump.performed += OnJumpInputProvided;
         }
 
-        public void UpdateLookInput()
+        public override Vector3 GetLookInput()
         {
             var rawInput = _inputActions.World.Look.ReadValue<Vector2>();
 
@@ -41,7 +41,7 @@ namespace FulcrumGames.Possession
             horizontalLook = HorizontalLookInverted ? -horizontalLook : horizontalLook;
 
             var processedInput = new Vector3(verticalLook, horizontalLook, 0.0f);
-            _lookInput = processedInput;
+            return processedInput;
         }
 
         private void OnJumpInputProvided(InputContext context)
