@@ -27,6 +27,14 @@ namespace FulcrumGames.Glue
             _possessable.Jump += Jump;
         }
 
+        private void OnDestroy()
+        {
+            if (_possessable)
+            {
+                _possessable.Jump -= Jump;
+            }
+        }
+
         private void Update()
         {
             if (!_possessable)
