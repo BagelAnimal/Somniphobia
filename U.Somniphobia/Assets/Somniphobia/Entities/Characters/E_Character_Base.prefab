@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1594598685152017574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3895084890897813315}
+  m_Layer: 0
+  m_Name: RollAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3895084890897813315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1594598685152017574}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5123048842240492146}
+  m_Father: {fileID: 3287977206781651745}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2288106314136425877
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,9 +131,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5938823359125828733}
-  - component: {fileID: 4744441303030761194}
   m_Layer: 0
-  m_Name: PossessorAnchor
+  m_Name: Perspective
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119,21 +150,118 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5591599404413532098}
   m_Father: {fileID: 111468570980482371}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4744441303030761194
+--- !u!1 &6849693258488750902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3287977206781651745}
+  m_Layer: 0
+  m_Name: PitchAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3287977206781651745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6849693258488750902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3895084890897813315}
+  m_Father: {fileID: 5591599404413532098}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7192342643050653482
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5591599404413532098}
+  m_Layer: 0
+  m_Name: YawAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5591599404413532098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7192342643050653482}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 3287977206781651745}
+  m_Father: {fileID: 5938823359125828733}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7337643401045094652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5123048842240492146}
+  - component: {fileID: 8720756553860531093}
+  m_Layer: 0
+  m_Name: PossessorAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5123048842240492146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7337643401045094652}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3895084890897813315}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8720756553860531093
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5731907448561930568}
+  m_GameObject: {fileID: 7337643401045094652}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8d7dc134bf5875439766e07e7d7d804, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.PerspectivePoint
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.PossessorAnchor
 --- !u!1001 &8279021389468721471
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -146,9 +274,13 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 68
       objectReference: {fileID: 0}
+    - target: {fileID: 7928154384134195312, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_Name
-      value: Entity_Character_Base
+      value: E_Character_Base
       objectReference: {fileID: 0}
     - target: {fileID: 8316171614807759996, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_LocalRotation.w
@@ -182,10 +314,24 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6633191544532055592}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8968862901336501186}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5261255328842500919}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2528969883515055279}
   m_SourcePrefab: {fileID: 100100000, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
 --- !u!4 &111468570980482371 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8316171614807759996, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+  m_PrefabInstance: {fileID: 8279021389468721471}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &2081376056067139919 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 7928154384134195312, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
   m_PrefabInstance: {fileID: 8279021389468721471}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2101267298329975814 stripped
@@ -228,6 +374,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0c6bc869ec19b54293d8a8e4452cb4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.Possessable
+--- !u!114 &8968862901336501186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02d3d326068c5934d9bba1a7c352878d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Glue.PossessorToCharacterControl
+  _jump: {fileID: 2528969883515055279}
+  _look: {fileID: 5261255328842500919}
+  _possessable: {fileID: 6633191544532055592}
+--- !u!114 &5261255328842500919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44c3c70ee49927b4793b4b731e2c167d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Look
+  _yawPivot: {fileID: 5591599404413532098}
+  _pitchPivot: {fileID: 3287977206781651745}
+  _rollPivot: {fileID: 3895084890897813315}
+  _maxPitch: 85
+  _minPitch: -110
+  _smoothing: 0.05
+--- !u!114 &2528969883515055279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0a9d13b0d963e54d9dfb51d6f15eb41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Jump
+  _rigidbody: {fileID: 2081376056067139919}
+  _force: 350
 --- !u!4 &8405791047097776146 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 451380846487607597, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}

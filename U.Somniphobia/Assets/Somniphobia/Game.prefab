@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Somniphobia.Game
   _levelPrefab: {fileID: 3003079543692062045, guid: 1e5afc66a00bd0340aa50c8b1c2fd4ec, type: 3}
-  _playerCharacterPrefab: {fileID: 2101267298329975814, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+  _playerCharacterPrefab: {fileID: 5971514980778690050, guid: 748c23d6b521cfc4aa5a5f826bfd100a, type: 3}
   _playerSoulPrefab: {fileID: 1316833651055544553, guid: 20ed74dd4d86c76499da1ba6495a1bf0, type: 3}
   _initializeOn: 3
   _teardownOn: 4

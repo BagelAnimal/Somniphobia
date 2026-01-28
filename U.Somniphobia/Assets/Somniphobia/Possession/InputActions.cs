@@ -102,6 +102,15 @@ namespace FulcrumGames.Possession
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""d187aafd-b9ba-4df9-a126-19f37855860e"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -115,6 +124,39 @@ namespace FulcrumGames.Possession
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a1e7fac8-bd0f-4002-8b97-1cbad6d6cdce"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d60b53fe-13e0-4528-9743-7a5627d96058"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4cf96c3f-7c73-4896-ad8a-e0f5dcaf9593"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -124,6 +166,7 @@ namespace FulcrumGames.Possession
             // World
             m_World = asset.FindActionMap("World", throwIfNotFound: true);
             m_World_Jump = m_World.FindAction("Jump", throwIfNotFound: true);
+            m_World_Look = m_World.FindAction("Look", throwIfNotFound: true);
         }
 
         ~@InputActions()
@@ -205,6 +248,7 @@ namespace FulcrumGames.Possession
         private readonly InputActionMap m_World;
         private List<IWorldActions> m_WorldActionsCallbackInterfaces = new List<IWorldActions>();
         private readonly InputAction m_World_Jump;
+        private readonly InputAction m_World_Look;
         /// <summary>
         /// Provides access to input actions defined in input action map "World".
         /// </summary>
@@ -220,6 +264,10 @@ namespace FulcrumGames.Possession
             /// Provides access to the underlying input action "World/Jump".
             /// </summary>
             public InputAction @Jump => m_Wrapper.m_World_Jump;
+            /// <summary>
+            /// Provides access to the underlying input action "World/Look".
+            /// </summary>
+            public InputAction @Look => m_Wrapper.m_World_Look;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -249,6 +297,9 @@ namespace FulcrumGames.Possession
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
             }
 
             /// <summary>
@@ -263,6 +314,9 @@ namespace FulcrumGames.Possession
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
+                @Look.started -= instance.OnLook;
+                @Look.performed -= instance.OnLook;
+                @Look.canceled -= instance.OnLook;
             }
 
             /// <summary>
@@ -310,6 +364,13 @@ namespace FulcrumGames.Possession
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnJump(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnLook(InputAction.CallbackContext context);
         }
     }
 }

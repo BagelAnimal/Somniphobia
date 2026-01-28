@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FulcrumGames.Possession
@@ -12,13 +13,41 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Possessable : MonoBehaviour
     {
-        private readonly HashSet<Possessor> _possessors = new();
+        /// <summary>
+        ///     Invoked when a possessor possesses this.
+        /// </summary>
+        public event Action<Possessor> PossessedBy;
+
+        /// <summary>
+        ///     Invoked when a possessor unpossesses this.
+        /// </summary>
+        public event Action<Possessor> UnpossessedBy;
+
+        public event Action Jump;
+
+        private readonly List<Possessor> _possessors = new();
+        /// <summary>
+        ///     The <see cref="Possessor"/>s currently delegating inputs to this possessable.
+        ///     Cannot contain duplicates.
+        /// </summary>
+        public IReadOnlyList<Possessor> Possessors => _possessors;
+
+        // Used to keep track of input provider and action bindings.
+        private readonly Dictionary<InputProvider, Action> _jumpHandlers = new();
+
+        // Used to avoid reacting to unbinding when we're the one invoking it in loop.
         private bool _isBeingDestroyed = false;
 
         private void OnDestroy()
         {
+            foreach (var kvp in _jumpHandlers)
+            {
+                kvp.Key.Jump -= kvp.Value;
+            }
+            _jumpHandlers.Clear();
+
             _isBeingDestroyed = true;
-            _possessors.Remove(null);
+            _possessors.RemoveAll(p => !p);
             foreach (var possessor in _possessors)
             {
                 possessor.Unpossess(this);
@@ -32,7 +61,7 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void OnPossessedBy(Possessor possessor)
         {
-            _possessors.Remove(null);
+            _possessors.RemoveAll(p => !p);
             if (!possessor)
             {
                 Debug.LogWarning($"{name} was given a null possessor to be possessed by!",
@@ -40,7 +69,21 @@ namespace FulcrumGames.Possession
                 return;
             }
 
+            if (_possessors.Contains(possessor))
+            {
+                Debug.LogWarning($"{name} is already bound to {possessor.name}!", this);
+                return;
+            }
+
             _possessors.Add(possessor);
+            PossessedBy?.Invoke(possessor);
+
+            foreach (var inputProvider in possessor.BoundInputProviders)
+            {
+                WireJump(inputProvider);
+            }
+            possessor.BoundBy += WireJump;
+            possessor.UnboundBy += UnwireJump;
         }
 
         /// <summary>
@@ -51,28 +94,78 @@ namespace FulcrumGames.Possession
         /// </summary>
         public void OnUnpossessedBy(Possessor possessor)
         {
-            // When this is in the process of being destroyed, avoid modifying the
-            // possessors collection since we're iterating over it.
-            if (_isBeingDestroyed)
+            if (!possessor)
                 return;
 
-            _possessors.Remove(null);
-            if (!possessor)
+            if (!_possessors.Contains(possessor))
             {
-                Debug.LogWarning($"{name} was given a null possessor to be unpossessed from!",
-                    this);
+                Debug.LogWarning($"{name} is already NOT bound to {possessor.name}!", this);
                 return;
             }
 
-            _possessors.Remove(possessor);
+            UnpossessedBy?.Invoke(possessor);
+
+            foreach (var inputProvider in possessor.BoundInputProviders)
+            {
+                UnwireJump(inputProvider);
+            }
+            possessor.BoundBy -= WireJump;
+            possessor.UnboundBy -= UnwireJump;
+
+            if (!_isBeingDestroyed)
+            {
+                _possessors.Remove(possessor);
+            }
         }
 
         /// <summary>
-        ///     Mutation of game state reflecting a jump action on a possessable entity.
+        ///     Returns the sum of all look input provided by possessors.
         /// </summary>
-        public void OnJumpPressed()
+        public Vector3 GetLookInput()
         {
-            Debug.Log("Jumped!");
+            Vector3 lookInput = default;
+            foreach (var possessor in Possessors)
+            {
+                if (!possessor)
+                    continue;
+
+                foreach (var inputProvider in possessor.BoundInputProviders)
+                {
+                    lookInput += inputProvider.GetLookInput();
+                }
+            }
+
+            return lookInput;
+        }
+
+        private void WireJump(InputProvider provider)
+        {
+            if (provider == null)
+                return;
+
+            if (_jumpHandlers.ContainsKey(provider))
+                return;
+
+            Action handler = OnJumpInput;
+            _jumpHandlers.Add(provider, handler);
+            provider.Jump += handler;
+        }
+
+        private void UnwireJump(InputProvider provider)
+        {
+            if (provider == null)
+                return;
+
+            if (!_jumpHandlers.TryGetValue(provider, out var handler))
+                return;
+
+            provider.Jump -= handler;
+            _jumpHandlers.Remove(provider);
+        }
+
+        private void OnJumpInput()
+        {
+            Jump?.Invoke();
         }
     }
 }

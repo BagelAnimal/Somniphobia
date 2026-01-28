@@ -1,4 +1,5 @@
-﻿using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
+﻿using UnityEngine;
+using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
 
 namespace FulcrumGames.Possession
 {
@@ -8,6 +9,10 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Player : InputProvider
     {
+        private const float MouseLookSensitivity = 0.2f;
+        private const bool VerticalLookInverted = false;
+        private const bool HorizontalLookInverted = false;
+
         private InputActions _inputActions;
         public InputActions InputActions => _inputActions;
 
@@ -24,9 +29,28 @@ namespace FulcrumGames.Possession
             _inputActions.World.Jump.performed += OnJumpInputProvided;
         }
 
+        public override Vector3 GetLookInput()
+        {
+            if (_inputActions == null)
+            {
+                return default;
+            }
+
+            var rawInput = _inputActions.World.Look.ReadValue<Vector2>();
+
+            var verticalLook = rawInput.y * MouseLookSensitivity;
+            verticalLook = VerticalLookInverted ? verticalLook : -verticalLook;
+
+            var horizontalLook = rawInput.x * MouseLookSensitivity;
+            horizontalLook = HorizontalLookInverted ? -horizontalLook : horizontalLook;
+
+            var processedInput = new Vector3(verticalLook, horizontalLook, 0.0f);
+            return processedInput;
+        }
+
         private void OnJumpInputProvided(InputContext context)
         {
-            JumpPressed();
+            InvokeJump();
         }
 
         public void Teardown()
