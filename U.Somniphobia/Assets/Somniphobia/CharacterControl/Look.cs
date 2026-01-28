@@ -40,9 +40,6 @@ namespace FulcrumGames.CharacterControl
         /// </summary>
         public void UpdateLook(Vector3 input)
         {
-            if (input == default)
-                return;
-
             var currentRotation = new Vector3(_pitch, _yaw, _roll);
             var targetPitch = Mathf.Clamp(_targetRotationEuler.x + input.x, _minPitch, _maxPitch);
             var targetYaw = _targetRotationEuler.y + input.y;
