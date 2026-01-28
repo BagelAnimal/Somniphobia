@@ -3,7 +3,7 @@
 namespace FulcrumGames.CharacterControl
 {
     /// <summary>
-    ///     Basic jump on input to test event delegation from possession system.
+    ///     Applies force upward when executed.
     /// </summary>
     public class Jump : MonoBehaviour
     {
