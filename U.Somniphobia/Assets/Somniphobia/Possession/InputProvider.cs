@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FulcrumGames.Possession
@@ -12,6 +13,8 @@ namespace FulcrumGames.Possession
     /// </summary>
     public abstract class InputProvider
     {
+        public event Action Jump;
+
         private string _name = "CPU";
         public string Name => _name;
 
@@ -34,49 +37,49 @@ namespace FulcrumGames.Possession
         ///     Begin routing all inputs associated with this provider to the
         ///     <see cref="Possessor"/>.
         /// </summary>
-        public void BindToPossessor(Possessor toBindTo)
+        public void BindToPossessor(Possessor possessor)
         {
             _possessors.Remove(null);
-            if (!toBindTo)
+            if (!possessor)
             {
                 UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to bind to!");
                 return;
             }
 
-            if (_possessors.Contains(toBindTo))
+            if (_possessors.Contains(possessor))
             {
                 UnityEngine.Debug.LogWarning($"{_name} is already bound to" +
-                    $"{toBindTo.name}!", toBindTo);
+                    $"{possessor.name}!", possessor);
                 return;
             }
 
-            _possessors.Add(toBindTo);
-            toBindTo.OnBoundToInputProvider(this);
+            _possessors.Add(possessor);
+            possessor.OnBoundToInputProvider(this);
         }
 
         /// <summary>
         ///     Cease routing all inputs associated with this provider to the
         ///     <see cref="Possessor"/>.
         /// </summary>
-        public void UnbindFromPossessor(Possessor toUnbindFrom)
+        public void UnbindFromPossessor(Possessor possessor)
         {
             _possessors.Remove(null);
-            if (!toUnbindFrom)
+            if (!possessor)
             {
                 UnityEngine.Debug.LogWarning($"{_name} was given a null possessor to unbind" +
                     $"from!");
                 return;
             }
 
-            if (!_possessors.Contains(toUnbindFrom))
+            if (!_possessors.Contains(possessor))
             {
                 UnityEngine.Debug.LogWarning($"{_name} is already NOT bound to" +
-                    $"{toUnbindFrom.name}!", toUnbindFrom);
+                    $"{possessor.name}!", possessor);
                 return;
             }
 
-            _possessors.Remove(toUnbindFrom);
-            toUnbindFrom.OnUnboundFromInputProvider(this);
+            _possessors.Remove(possessor);
+            possessor.OnUnboundFromInputProvider(this);
         }
 
         /// <summary>
@@ -99,13 +102,11 @@ namespace FulcrumGames.Possession
         /// </summary>
         public abstract Vector3 GetLookInput();
 
-        internal void JumpPressed()
+        internal void InvokeJump()
         {
-            _possessors.Remove(null);
-            foreach (var possessor in _possessors)
-            {
-                possessor.OnJumpPressed();
-            }
+            // This event cannot be invoked from inheriting types,
+            // so we have to invoke this method instead. :(
+            Jump?.Invoke();
         }
     }
 }

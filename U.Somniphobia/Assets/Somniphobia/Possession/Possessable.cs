@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace FulcrumGames.Possession
@@ -12,6 +13,18 @@ namespace FulcrumGames.Possession
     /// </summary>
     public class Possessable : MonoBehaviour
     {
+        /// <summary>
+        ///     Invoked when a possessor possesses this.
+        /// </summary>
+        public event Action<Possessor> PossessedBy;
+
+        /// <summary>
+        ///     Invoked when a possessor unpossesses this.
+        /// </summary>
+        public event Action<Possessor> UnpossessedBy;
+
+        public event Action Jump;
+
         private readonly List<Possessor> _possessors = new();
         /// <summary>
         ///     The <see cref="Possessor"/>s currently delegating inputs to this possessable.
@@ -54,6 +67,13 @@ namespace FulcrumGames.Possession
             }
 
             _possessors.Add(possessor);
+            PossessedBy?.Invoke(possessor);
+            foreach (var inputProvider in possessor.BoundInputProviders)
+            {
+                inputProvider.Jump += Jump;
+            }
+            possessor.BoundBy += (inputProvider) => { inputProvider.Jump += Jump; };
+            possessor.UnboundBy += (inputProvider) => { inputProvider.Jump -= Jump; };
         }
 
         /// <summary>
@@ -82,14 +102,30 @@ namespace FulcrumGames.Possession
             }
 
             _possessors.Remove(possessor);
+            UnpossessedBy?.Invoke(possessor);
+            foreach (var inputProvider in possessor.BoundInputProviders)
+            {
+                inputProvider.Jump -= Jump;
+            }
+            possessor.BoundBy -= (inputProvider) => { inputProvider.Jump += Jump; };
+            possessor.UnboundBy -= (inputProvider) => { inputProvider.Jump -= Jump; };
         }
 
         /// <summary>
-        ///     Mutation of game state reflecting a jump action on a possessable entity.
+        ///     Returns the sum of all look input provided by possessors.
         /// </summary>
-        public void OnJumpPressed()
+        public Vector3 GetLookInput()
         {
-            Debug.Log("Jumped!");
+            Vector3 lookInput = default;
+            foreach (var possessor in Possessors)
+            {
+                foreach (var inputProvider in possessor.BoundInputProviders)
+                {
+                    lookInput += inputProvider.GetLookInput();
+                }
+            }
+
+            return lookInput;
         }
     }
 }

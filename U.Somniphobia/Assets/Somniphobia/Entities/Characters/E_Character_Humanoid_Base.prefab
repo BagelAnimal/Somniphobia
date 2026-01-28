@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &5761834851584350724
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 111468570980482371, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2101267298329975814, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      propertyPath: m_Name
+      value: E_Character_Humanoid_Base
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2101267298329975814, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4239524988616741262}
+  m_SourcePrefab: {fileID: 100100000, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+--- !u!114 &1440011506104380460 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6633191544532055592, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+  m_PrefabInstance: {fileID: 5761834851584350724}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5971514980778690050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0c6bc869ec19b54293d8a8e4452cb4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.Possessable
+--- !u!1 &5971514980778690050 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2101267298329975814, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+  m_PrefabInstance: {fileID: 5761834851584350724}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4239524988616741262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5971514980778690050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e164e83c33a8f434792fefc49479dac4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.JumpOnInput
+  _rigidbody: {fileID: 5986601376577499979}
+  _possessable: {fileID: 1440011506104380460}
+  _force: 350
+--- !u!54 &5986601376577499979 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 2081376056067139919, guid: 776539d3836306f41b4357a2ef430298, type: 3}
+  m_PrefabInstance: {fileID: 5761834851584350724}
+  m_PrefabAsset: {fileID: 0}

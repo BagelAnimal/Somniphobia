@@ -294,6 +294,10 @@ PrefabInstance:
       propertyPath: m_Mass
       value: 68
       objectReference: {fileID: 0}
+    - target: {fileID: 7928154384134195312, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_Name
       value: E_Character_Base

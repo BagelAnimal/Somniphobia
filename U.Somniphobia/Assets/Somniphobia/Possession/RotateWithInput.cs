@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace FulcrumGames.Possession
 {
+    /// <summary>
+    ///     Rotates a target object given an input vector.
+    /// </summary>
     public class RotateWithInput : MonoBehaviour
     {
         [SerializeField]
@@ -33,21 +36,14 @@ namespace FulcrumGames.Possession
         private float _roll = 0.0f;
 
         public Quaternion Rotation => Quaternion.Euler(_pitch, _yaw, _roll);
+        public Vector3 Forward => Rotation * transform.forward;
 
         private void Update()
         {
             if (!_possessable)
                 return;
 
-            Vector3 lookInput = default;
-            foreach (var possessor in _possessable.Possessors)
-            {
-                foreach (var inputProvider in possessor.BoundInputProviders)
-                {
-                    lookInput += inputProvider.GetLookInput();
-                }
-            }
-
+            var lookInput = _possessable.GetLookInput();
             if (lookInput == default)
                 return;
 
@@ -61,6 +57,16 @@ namespace FulcrumGames.Possession
                 ref _rotationVelocity, _smoothing);
 
             SetRotation(smoothRotation, clearSmoothing: false);
+        }
+
+        /// <summary>
+        ///     Updates the forward direction to look at the provided position.
+        /// </summary>
+        public void LookAt(Vector3 position)
+        {
+            var delta = position - transform.position;
+            var forward = delta.normalized;
+            SetForward(forward);
         }
 
         /// <summary>

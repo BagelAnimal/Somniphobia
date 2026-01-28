@@ -45,7 +45,7 @@ namespace FulcrumGames.Possession
 
         private void OnJumpInputProvided(InputContext context)
         {
-            JumpPressed();
+            InvokeJump();
         }
 
         public void Teardown()
