@@ -7,11 +7,16 @@ namespace FulcrumGames.Glue
     /// <summary>
     ///     Binds input provided by <see cref="Possessable"/> to behaviors like <see cref="Look"/>
     ///     and <see cref="Jump"/> to reduce interdependency in the project.
+    ///     
+    ///     Very bespoke, not intended to be reused.
     /// </summary>
     public class PossessorToCharacterControl : MonoBehaviour
     {
         [SerializeField]
         private Jump _jump;
+
+        [SerializeField]
+        private Walk _walk;
 
         [SerializeField]
         private Look _look;
@@ -40,11 +45,17 @@ namespace FulcrumGames.Glue
             if (!_possessable)
                 return;
 
-            if (!_look)
-                return;
+            if (_look)
+            {
+                var lookInput = _possessable.GetLookInput();
+                _look.SetInput(lookInput);
+            }
 
-            var lookInput = _possessable.GetLookInput();
-            _look.UpdateLook(lookInput);
+            if (_walk)
+            {
+                var walkInput = _possessable.GetMoveInput();
+                _walk.SetInput(walkInput);
+            }
         }
 
         private void Jump()
@@ -52,7 +63,7 @@ namespace FulcrumGames.Glue
             if (!_jump)
                 return;
 
-            _jump.Execute();
+            _jump.SetInput();
         }
     }
 }

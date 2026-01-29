@@ -102,6 +102,11 @@ namespace FulcrumGames.Possession
         /// </summary>
         public abstract Vector3 GetLookInput();
 
+        /// <summary>
+        ///     Polls move input for this provider.
+        /// </summary>
+        public abstract Vector3 GetMoveInput();
+
         internal void InvokeJump()
         {
             // This event cannot be invoked from inheriting types,

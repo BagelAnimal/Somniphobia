@@ -32,9 +32,7 @@ namespace FulcrumGames.Possession
         public override Vector3 GetLookInput()
         {
             if (_inputActions == null)
-            {
                 return default;
-            }
 
             var rawInput = _inputActions.World.Look.ReadValue<Vector2>();
 
@@ -46,6 +44,15 @@ namespace FulcrumGames.Possession
 
             var processedInput = new Vector3(verticalLook, horizontalLook, 0.0f);
             return processedInput;
+        }
+
+        public override Vector3 GetMoveInput()
+        {
+            if (_inputActions == null)
+                return default;
+
+            var rawInput = _inputActions.World.Move.ReadValue<Vector2>();
+            return rawInput;
         }
 
         private void OnJumpInputProvided(InputContext context)

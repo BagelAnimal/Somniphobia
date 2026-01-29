@@ -5,6 +5,7 @@ namespace FulcrumGames.CharacterControl
     /// <summary>
     ///     Rotates a target object given an input vector.
     /// </summary>
+    [DisallowMultipleComponent]
     public class Look : MonoBehaviour
     {
         [SerializeField]
@@ -25,6 +26,8 @@ namespace FulcrumGames.CharacterControl
         [SerializeField]
         private float _smoothing = 0.05f;
 
+        private Vector3 _input = Vector3.zero;
+
         private Vector3 _rotationVelocity = Vector3.zero;
         private Vector3 _targetRotationEuler = Vector3.zero;
 
@@ -35,21 +38,27 @@ namespace FulcrumGames.CharacterControl
         public Quaternion Rotation => Quaternion.Euler(_pitch, _yaw, _roll);
         public Vector3 Forward => Rotation * _rollPivot.transform.forward;
 
-        /// <summary>
-        ///     Updates the orientation of this object given some input vector.
-        /// </summary>
-        public void UpdateLook(Vector3 input)
+
+        private void Update()
         {
             var currentRotation = new Vector3(_pitch, _yaw, _roll);
-            var targetPitch = Mathf.Clamp(_targetRotationEuler.x + input.x, _minPitch, _maxPitch);
-            var targetYaw = _targetRotationEuler.y + input.y;
-            var targetRoll = _targetRotationEuler.z + input.z;
+            var targetPitch = Mathf.Clamp(_targetRotationEuler.x + _input.x, _minPitch, _maxPitch);
+            var targetYaw = _targetRotationEuler.y + _input.y;
+            var targetRoll = _targetRotationEuler.z + _input.z;
             _targetRotationEuler = new Vector3(targetPitch, targetYaw, targetRoll);
 
             var smoothRotation = Vector3.SmoothDamp(currentRotation, _targetRotationEuler,
                 ref _rotationVelocity, _smoothing);
 
             SetRotation(smoothRotation, clearSmoothing: false);
+        }
+
+        /// <summary>
+        ///     Set the input to then be interpretted by the update loop.
+        /// </summary>
+        public void SetInput(Vector3 input)
+        {
+            _input = input;
         }
 
         /// <summary>

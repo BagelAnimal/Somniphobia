@@ -138,6 +138,26 @@ namespace FulcrumGames.Possession
             return lookInput;
         }
 
+        /// <summary>
+        ///     Returns the sum of all move input provided by possessors.
+        /// </summary>
+        public Vector3 GetMoveInput()
+        {
+            Vector3 moveInput = default;
+            foreach (var possessor in Possessors)
+            {
+                if (!possessor)
+                    continue;
+
+                foreach (var inputProvider in possessor.BoundInputProviders)
+                {
+                    moveInput += inputProvider.GetMoveInput();
+                }
+            }
+
+            return moveInput;
+        }
+
         private void WireJump(InputProvider provider)
         {
             if (provider == null)
