@@ -319,6 +319,9 @@ PrefabInstance:
       addedObject: {fileID: 8968862901336501186}
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 4576751214981001036}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 5261255328842500919}
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
@@ -394,8 +397,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Glue.PossessorToCharacterControl
   _possessable: {fileID: 6633191544532055592}
   _jump: {fileID: 2528969883515055279}
-  _walk: {fileID: 0}
+  _walk: {fileID: 3259374813537879960}
   _look: {fileID: 5261255328842500919}
+--- !u!114 &4576751214981001036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cf2b3a37c9127a41932c7e291b586ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Somniphobia.KinematicsToCharacterControl
+  _gravity: {fileID: 3323517262623692827}
+  _groundDetector: {fileID: 5505830953427711199}
 --- !u!114 &5261255328842500919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,6 +466,7 @@ MonoBehaviour:
     m_Bits: 0
   _maxGroundAngle: 35
   _groundCheckDistance: 0.05
+  _drawDebugLines: 0
 --- !u!114 &3259374813537879960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -471,6 +489,17 @@ MonoBehaviour:
   _airAcceleration: 400
   _airFriction: 20
   _bhopWindowFrames: 4
+--- !u!114 &3323517262623692827 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6700088790422436132, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+  m_PrefabInstance: {fileID: 8279021389468721471}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f7eecf9b33d0214fbcc1bece035a419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Kinematics.Gravity
 --- !u!4 &8405791047097776146 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 451380846487607597, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
