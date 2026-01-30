@@ -35,6 +35,9 @@ namespace FulcrumGames.CharacterControl
         [SerializeField]
         private float _groundCheckDistance = 0.05f;
 
+        [SerializeField]
+        private bool _drawDebugLines = false;
+
         private bool _isGrounded = true;
         /// <summary>
         ///     Whether this object is currently on valid ground.
@@ -106,7 +109,7 @@ namespace FulcrumGames.CharacterControl
                 }
 
                 // Extend the raycast distance a bit to account for the bump performed above.
-                var distance = _groundCheckDistance * (1.0f + CheckHeightBump);
+                var distance = _groundCheckDistance + CheckHeightBump;
                 var direction = -transform.up;
                 var layers = ~_ignoredLayers;
 
@@ -128,6 +131,12 @@ namespace FulcrumGames.CharacterControl
 
                     groundHitCount++;
                     groundHitNormalSum += groundHit.normal;
+                }
+
+                if (_drawDebugLines)
+                {
+                    var end = origin + direction * distance;
+                    Debug.DrawLine(origin, end, Color.yellow);
                 }
             }
 
