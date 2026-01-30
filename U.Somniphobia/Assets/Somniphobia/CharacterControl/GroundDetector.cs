@@ -138,6 +138,11 @@ namespace FulcrumGames.CharacterControl
                     var end = origin + direction * distance;
                     Debug.DrawLine(origin, end, Color.yellow);
                 }
+
+                // If our first ray, the origin, finds the ground, just exit since the ground
+                // angle being derived from the character's center is most intuitive.
+                if (i == 0 && groundHitCount > 0)
+                    break;
             }
 
             _isGrounded = groundHitCount > 0;
