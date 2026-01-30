@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1188363729983613746, guid: dc6b5437678eaa641b0c0530c53990d7, type: 3}
       propertyPath: m_Name
-      value: Entity_Physical_Base
+      value: E_Physical_Base
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -35,6 +35,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1188363729983613746, guid: dc6b5437678eaa641b0c0530c53990d7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7928154384134195312}
+    - targetCorrespondingSourceObject: {fileID: 1188363729983613746, guid: dc6b5437678eaa641b0c0530c53990d7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6700088790422436132}
   m_SourcePrefab: {fileID: 100100000, guid: dc6b5437678eaa641b0c0530c53990d7, type: 3}
 --- !u!1 &8056321186675473721 stripped
 GameObject:
@@ -63,8 +66,22 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &6700088790422436132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8056321186675473721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f7eecf9b33d0214fbcc1bece035a419, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Kinematics.Gravity
+  _rigidbody: {fileID: 7928154384134195312}
+  _vector: {x: -0, y: -1, z: -0}
