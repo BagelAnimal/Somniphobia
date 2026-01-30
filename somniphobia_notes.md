@@ -15,6 +15,8 @@ the action of ULTRAKILL, and the skill expression of a source-engine game like H
 
 MECHANICS OVERVIEW
 
+A high level goal of the game is to enable skill expression in a variety of ways.
+
 Characters are controlled by souls. Souls are controlled by players or CPUs.
 Players or CPUs can have any number of souls. Souls can control any number
 of characters. The goal is to enable emergent behaviors where high level

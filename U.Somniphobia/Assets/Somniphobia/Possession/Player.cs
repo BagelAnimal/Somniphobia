@@ -52,7 +52,8 @@ namespace FulcrumGames.Possession
                 return default;
 
             var rawInput = _inputActions.World.Move.ReadValue<Vector2>();
-            return rawInput;
+            var inputVector3 = new Vector3(rawInput.x, 0.0f, rawInput.y);
+            return inputVector3;
         }
 
         private void OnJumpInputProvided(InputContext context)

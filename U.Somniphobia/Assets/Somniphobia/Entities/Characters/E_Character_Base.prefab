@@ -323,6 +323,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2528969883515055279}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5505830953427711199}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3259374813537879960}
   m_SourcePrefab: {fileID: 100100000, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
 --- !u!4 &111468570980482371 stripped
 Transform:
@@ -387,6 +393,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Glue.PossessorToCharacterControl
   _jump: {fileID: 2528969883515055279}
+  _walk: {fileID: 0}
   _look: {fileID: 5261255328842500919}
   _possessable: {fileID: 6633191544532055592}
 --- !u!114 &5261255328842500919
@@ -421,6 +428,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Jump
   _rigidbody: {fileID: 2081376056067139919}
   _force: 350
+--- !u!114 &5505830953427711199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27809cc941fa2284e92b0444a2ad6d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.GroundDetector
+  _collider: {fileID: 6664679836171545311}
+  _ignoredLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  _slipLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  _maxGroundAngle: 35
+  _groundCheckDistance: 0.05
+--- !u!114 &3259374813537879960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc9ee932c374b5347b9c18afd92a5c91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Walk
+  _directionAnchor: {fileID: 5591599404413532098}
+  _rigidbody: {fileID: 2081376056067139919}
+  _groundDetector: {fileID: 5505830953427711199}
+  _groundSpeed: 5
+  _groundAcceleration: 50
+  _groundFriction: 20
+  _airSpeed: 0.5
+  _airAcceleration: 400
+  _airFriction: 20
+  _bhopWindowFrames: 4
 --- !u!4 &8405791047097776146 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 451380846487607597, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}

@@ -13,6 +13,9 @@ namespace FulcrumGames.Glue
     public class PossessorToCharacterControl : MonoBehaviour
     {
         [SerializeField]
+        private Possessable _possessable;
+
+        [SerializeField]
         private Jump _jump;
 
         [SerializeField]
@@ -21,13 +24,12 @@ namespace FulcrumGames.Glue
         [SerializeField]
         private Look _look;
 
-        [SerializeField]
-        private Possessable _possessable;
-
         private void Awake()
         {
-            if (!_possessable)
-                return;
+            _possessable = !_possessable ? GetComponentInChildren<Possessable>() : _possessable;
+            _walk = !_walk ? GetComponentInChildren<Walk>() : _walk;
+            _jump = !_jump ? GetComponentInChildren<Jump>() : _jump;
+            _look = !_look ? GetComponentInChildren<Look>() : _look;
 
             _possessable.Jump += Jump;
         }
@@ -63,7 +65,7 @@ namespace FulcrumGames.Glue
             if (!_jump)
                 return;
 
-            _jump.SetInput();
+            _jump.SetInput(input: true);
         }
     }
 }

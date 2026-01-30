@@ -13,6 +13,8 @@ namespace FulcrumGames.CharacterControl
     [RequireComponent(typeof(Collider))]
     public class GroundDetector : MonoBehaviour
     {
+        private const float CheckHeightBump = 0.5f;
+
         public event Action Grounded;
         public event Action Ungrounded;
 
@@ -39,17 +41,17 @@ namespace FulcrumGames.CharacterControl
         /// </summary>
         public bool IsGrounded => _isGrounded;
 
-        private int _groundedSteps = 0;
+        private int _groundedFrames = 0;
         /// <summary>
         ///     For how many frames this object has been on valid ground.
         /// </summary>
-        public int GroundedSteps => _groundedSteps;
+        public int GroundedFrames => _groundedFrames;
 
-        private int _ungroundedSteps = 0;
+        private int _ungroundedFrames = 0;
         /// <summary>
         ///     For how many frames this object has been off valid ground.
         /// </summary>
-        public int UngroundedSteps => _ungroundedSteps;
+        public int UngroundedFrames => _ungroundedFrames;
 
         private float _groundAngle = 0.0f;
         /// <summary>
@@ -72,7 +74,7 @@ namespace FulcrumGames.CharacterControl
 
             // We will raycast down in a cross shape.
             // First we grab the center, and add bump it upward a bit.
-            var checkOrigin = transform.position + transform.up * float.Epsilon;
+            var checkOrigin = transform.position + transform.up * CheckHeightBump;
             // Then, we get the distance that each point on the cross should be from the center.
             // We multiply it down a bit to avoid reading being pressed against a wall as grounded.
             var checkOffset = _collider.bounds.extents.x * 0.9f;
@@ -104,12 +106,17 @@ namespace FulcrumGames.CharacterControl
                 }
 
                 // Extend the raycast distance a bit to account for the bump performed above.
-                var distance = _groundCheckDistance * (1.0f + float.Epsilon);
+                var distance = _groundCheckDistance * (1.0f + CheckHeightBump);
                 var direction = -transform.up;
                 var layers = ~_ignoredLayers;
 
                 if (Physics.Raycast(origin, direction, out RaycastHit groundHit, distance, layers))
                 {
+                    // Ensure that we don't consider ourselves a source of ground.
+                    var collider = groundHit.collider;
+                    if (collider == _collider)
+                        continue;
+
                     var layer = groundHit.collider.gameObject.layer;
                     var isSlipLayer = (_slipLayers & layer) != 0;
                     if (isSlipLayer)
@@ -127,8 +134,8 @@ namespace FulcrumGames.CharacterControl
             _isGrounded = groundHitCount > 0;
             if (!_isGrounded)
             {
-                _groundedSteps = 0;
-                _ungroundedSteps++;
+                _groundedFrames = 0;
+                _ungroundedFrames++;
 
                 _groundAngle = 0.0f;
                 _groundNormal = Vector3.zero;
@@ -141,8 +148,8 @@ namespace FulcrumGames.CharacterControl
                 return;
             }
 
-            _ungroundedSteps = 0;
-            _groundedSteps++;
+            _ungroundedFrames = 0;
+            _groundedFrames++;
 
             _groundNormal = groundHitNormalSum.normalized;
             _groundAngle = Vector3.Angle(transform.up, _groundNormal);
