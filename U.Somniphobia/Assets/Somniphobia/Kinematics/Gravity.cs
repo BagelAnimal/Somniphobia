@@ -2,6 +2,10 @@ using UnityEngine;
 
 namespace FulcrumGames.Kinematics
 {
+    /// <summary>
+    ///     Applies gravity to an object. May be favorable over Unity's built-in gravity
+    ///     application because individuals may have their gravitational direction modified.
+    /// </summary>
     public class Gravity : MonoBehaviour
     {
         public const float GravityConstant = 9.81f;
