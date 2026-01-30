@@ -55,6 +55,7 @@ namespace FulcrumGames.Possession
 
             _possessors.Add(possessor);
             possessor.OnBoundToInputProvider(this);
+            OnPossessorBound(possessor);
         }
 
         /// <summary>
@@ -106,6 +107,8 @@ namespace FulcrumGames.Possession
         ///     Polls move input for this provider.
         /// </summary>
         public abstract Vector3 GetMoveInput();
+
+        protected virtual void OnPossessorBound(Possessor possessor) { }
 
         internal void InvokeJump()
         {

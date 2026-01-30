@@ -12,6 +12,7 @@ namespace FulcrumGames.Possession
         private const float MouseLookSensitivity = 0.2f;
         private const bool VerticalLookInverted = false;
         private const bool HorizontalLookInverted = false;
+        private const float FieldOfView = 90.0f;
 
         private InputActions _inputActions;
         public InputActions InputActions => _inputActions;
@@ -54,6 +55,18 @@ namespace FulcrumGames.Possession
             var rawInput = _inputActions.World.Move.ReadValue<Vector2>();
             var inputVector3 = new Vector3(rawInput.x, 0.0f, rawInput.y);
             return inputVector3;
+        }
+
+        protected override void OnPossessorBound(Possessor possessor)
+        {
+            var cameras = possessor.GetComponentsInChildren<Camera>();
+            if (cameras.Length == 0)
+                return;
+
+            foreach (var camera in cameras)
+            {
+                camera.fieldOfView = FieldOfView;
+            }
         }
 
         private void OnJumpInputProvided(InputContext context)
