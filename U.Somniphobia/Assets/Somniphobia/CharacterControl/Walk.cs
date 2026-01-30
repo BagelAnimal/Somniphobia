@@ -83,7 +83,7 @@ namespace FulcrumGames.CharacterControl
             var right = _directionAnchor.right;
 
             _isWalking = _input != Vector3.zero;
-            var desiredDirection = forward * _input.y + right * _input.x;
+            var desiredDirection = forward * _input.z + right * _input.x;
             desiredDirection = desiredDirection.XOZ();
 
             desiredDirection = new Vector3(desiredDirection.x, 0.0f, desiredDirection.z);
