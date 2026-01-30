@@ -352,7 +352,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2101267298329975814}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a0767c8d873c45b4189a70def0b10c68, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -392,10 +392,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02d3d326068c5934d9bba1a7c352878d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Glue.PossessorToCharacterControl
+  _possessable: {fileID: 6633191544532055592}
   _jump: {fileID: 2528969883515055279}
   _walk: {fileID: 0}
   _look: {fileID: 5261255328842500919}
-  _possessable: {fileID: 6633191544532055592}
 --- !u!114 &5261255328842500919
 MonoBehaviour:
   m_ObjectHideFlags: 0
