@@ -1,4 +1,5 @@
 using FulcrumGames.CharacterControl;
+using NUnit.Framework.Interfaces;
 using UnityEngine;
 
 namespace FulcrumGames.Kinematics
@@ -17,8 +18,23 @@ namespace FulcrumGames.Kinematics
         private Rigidbody _rigidbody;
 
         [SerializeField]
-        private Vector3 _scale = -Vector3.up;
-        public Vector3 Scale => _scale;
+        private float _scalar = 1.0f;
+
+        [SerializeField]
+        private Vector3 _vector = -Vector3.up;
+        public Vector3 AsVector => _vector;
+
+        public float Magnitude => _vector.magnitude;
+        public float SqrMagnitude => _vector.sqrMagnitude;
+        public Vector3 Direction
+        {
+            get
+            {
+                var direction = _vector.normalized;
+                direction = direction == Vector3.zero ? -transform.up : direction;
+                return direction;
+            }
+        }
 
         public void FixedUpdate()
         {
@@ -30,7 +46,7 @@ namespace FulcrumGames.Kinematics
                 return;
             }
 
-            var gravity = GravityConstant * _scale;
+            var gravity = _scalar * GravityConstant * _vector;
             _rigidbody.AddForce(gravity, ForceMode.Acceleration);
         }
 
@@ -49,8 +65,8 @@ namespace FulcrumGames.Kinematics
         public void SetDirection(Vector3 vector)
         {
             var direction = vector.normalized;
-            var currentMagnitude = _scale.magnitude;
-            _scale = direction * currentMagnitude;
+            var currentMagnitude = _vector.magnitude;
+            _vector = direction * currentMagnitude;
         }
 
         public void ResetDirection()
@@ -60,8 +76,8 @@ namespace FulcrumGames.Kinematics
 
         public void SetMagnitude(float magnitude)
         {
-            var direction = _scale.normalized;
-            _scale = direction * magnitude;
+            var direction = _vector.normalized;
+            _vector = direction * magnitude;
         }
 
         public void ResetMagnitude()

@@ -22,14 +22,14 @@ namespace FulcrumGames.Glue
         {
             if ( _jump && _gravity)
             {
-                _jump.SetGravity(_gravity.Scale);
+                _jump.SetGravity(_gravity.AsVector);
             }
 
             if (_walk && _gravity)
             {
-                if (_gravity.Scale.sqrMagnitude > float.Epsilon)
+                if (_gravity.SqrMagnitude > float.Epsilon)
                 {
-                    _walk.gameObject.transform.up = -_gravity.Scale;
+                    _walk.gameObject.transform.up = -_gravity.AsVector;
                 }
             }
         }
