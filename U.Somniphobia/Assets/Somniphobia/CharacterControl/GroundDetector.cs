@@ -182,8 +182,8 @@ namespace FulcrumGames.CharacterControl
             }
 
             var speedSquared = _rigidbody.linearVelocity.sqrMagnitude;
-            var maxSpeedSqured = _maxGroundedSpeed * _maxGroundedSpeed;
-            var isBeyondMaxSpeed = speedSquared > maxSpeedSqured;
+            var maxSpeedSquared = _maxGroundedSpeed * _maxGroundedSpeed;
+            var isBeyondMaxSpeed = speedSquared > maxSpeedSquared;
 
             _isGrounded = groundHitCount > 0 && !isBeyondMaxSpeed && _ungroundFramesRemaining <= 0;
             if (!_isGrounded)
