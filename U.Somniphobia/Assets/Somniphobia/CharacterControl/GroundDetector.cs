@@ -44,7 +44,7 @@ namespace FulcrumGames.CharacterControl
         [SerializeField]
         private bool _drawDebugLines = false;
 
-        private bool _isGrounded = true;
+        private bool _isGrounded;
         /// <summary>
         ///     Whether this object is currently on valid ground.
         /// </summary>
