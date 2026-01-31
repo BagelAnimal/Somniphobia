@@ -4,7 +4,7 @@ namespace FulcrumGames.CharacterControl
 {
     /// <summary>
     ///     Gradually applies force to an object based on input while enable quake-style
-    ///     strafing. Works best when combined with a jump script, and decides how much
+    ///     strafing.
     /// </summary>
     [DisallowMultipleComponent]
     public class Walk : MonoBehaviour
