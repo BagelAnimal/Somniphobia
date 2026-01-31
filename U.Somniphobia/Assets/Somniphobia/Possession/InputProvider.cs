@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
+
 namespace FulcrumGames.Possession
 {
     /// <summary>
     ///     Objects like CPUs and players are meant to inherit from or use objects that
     ///     inherit from this, where this class's intent is to serve as a consistent
-    ///     interface for owning <see cref="Possessor"/>s, and for passing inputs to
-    ///     those <see cref="Possessor"/>s so that they can mutate state on their
-    ///     corresponding <see cref="Possessable"/>s.
+    ///     interface for owning possessors, and for passing inputs to
+    ///     those possessors so that they can mutate state on their
+    ///     corresponding possessables.
     /// </summary>
     public abstract class InputProvider
     {
-        public event Action Jump;
+        public event Action<InputContext> Jump;
 
         private string _name = "CPU";
         public string Name => _name;
 
         protected readonly List<Possessor> _possessors = new();
         /// <summary>
-        ///     The <see cref="Possessor"/>s currently receiving inputs from this provider.
+        ///     The possessors currently receiving inputs from this provider.
         ///     Cannot contain duplicates.
         /// </summary>
         public IReadOnlyList<Possessor> Possessors => _possessors;
@@ -35,7 +37,7 @@ namespace FulcrumGames.Possession
 
         /// <summary>
         ///     Begin routing all inputs associated with this provider to the
-        ///     <see cref="Possessor"/>.
+        ///     possessor.
         /// </summary>
         public void BindToPossessor(Possessor possessor)
         {
@@ -60,7 +62,7 @@ namespace FulcrumGames.Possession
 
         /// <summary>
         ///     Cease routing all inputs associated with this provider to the
-        ///     <see cref="Possessor"/>.
+        ///     possessor.
         /// </summary>
         public void UnbindFromPossessor(Possessor possessor)
         {
@@ -85,7 +87,7 @@ namespace FulcrumGames.Possession
 
         /// <summary>
         ///     Cease routing all inputs associated with this provider to all
-        ///     bound <see cref="Possessor"/>.
+        ///     bound possessor.
         /// </summary>
         public void UnbindAll()
         {
@@ -110,11 +112,11 @@ namespace FulcrumGames.Possession
 
         protected virtual void OnPossessorBound(Possessor possessor) { }
 
-        internal void InvokeJump()
+        internal void InvokeJump(InputContext inputContext)
         {
             // This event cannot be invoked from inheriting types,
             // so we have to invoke this method instead. :(
-            Jump?.Invoke();
+            Jump?.Invoke(inputContext);
         }
     }
 }

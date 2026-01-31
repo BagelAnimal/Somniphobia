@@ -8,6 +8,8 @@ namespace FulcrumGames.CharacterControl
     [DisallowMultipleComponent]
     public class Look : MonoBehaviour
     {
+        public float Smoothing = 0.0f;
+
         [SerializeField]
         private Transform _yawPivot;
 
@@ -23,9 +25,6 @@ namespace FulcrumGames.CharacterControl
         [SerializeField]
         private float _minPitch = -110.0f;
 
-        [SerializeField]
-        private float _smoothing = 0.05f;
-
         private Vector3 _input = Vector3.zero;
 
         private Vector3 _rotationVelocity = Vector3.zero;
@@ -38,9 +37,29 @@ namespace FulcrumGames.CharacterControl
         public Quaternion Rotation => Quaternion.Euler(_pitch, _yaw, _roll);
         public Vector3 Forward => Rotation * _rollPivot.transform.forward;
 
-
         private void Update()
         {
+            if (!_yawPivot)
+            {
+                Debug.LogError($"{name}'s {nameof(Look)}" +
+                    $"is missing a {nameof(_yawPivot)}!", this);
+                return;
+            }
+
+            if (!_pitchPivot)
+            {
+                Debug.LogError($"{name}'s {nameof(Look)}" +
+                    $"is missing a {nameof(_pitchPivot)}!", this);
+                return;
+            }
+
+            if (!_rollPivot)
+            {
+                Debug.LogError($"{name}'s {nameof(Look)}" +
+                    $"is missing a {nameof(_rollPivot)}!", this);
+                return;
+            }
+
             var currentRotation = new Vector3(_pitch, _yaw, _roll);
             var targetPitch = Mathf.Clamp(_targetRotationEuler.x + _input.x, _minPitch, _maxPitch);
             var targetYaw = _targetRotationEuler.y + _input.y;
@@ -48,7 +67,7 @@ namespace FulcrumGames.CharacterControl
             _targetRotationEuler = new Vector3(targetPitch, targetYaw, targetRoll);
 
             var smoothRotation = Vector3.SmoothDamp(currentRotation, _targetRotationEuler,
-                ref _rotationVelocity, _smoothing);
+                ref _rotationVelocity, Smoothing);
 
             SetRotation(smoothRotation, clearSmoothing: false);
         }

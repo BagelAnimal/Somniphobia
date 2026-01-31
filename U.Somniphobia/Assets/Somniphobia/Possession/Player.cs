@@ -5,8 +5,9 @@ namespace FulcrumGames.Possession
 {
     /// <summary>
     ///     Represents a player in the game. A player delegates input actions
-    ///     to some number of <see cref="Possessor"/>s in the world.
+    ///     to some number of possessors in the world.
     /// </summary>
+    [DisallowMultipleComponent]
     public class Player : InputProvider
     {
         private const float MouseLookSensitivity = 0.2f;
@@ -28,6 +29,7 @@ namespace FulcrumGames.Possession
             _inputActions.Enable();
             _inputActions.World.Enable();
             _inputActions.World.Jump.performed += OnJumpInputProvided;
+            _inputActions.World.Jump.canceled += OnJumpInputProvided;
         }
 
         public override Vector3 GetLookInput()
@@ -71,7 +73,7 @@ namespace FulcrumGames.Possession
 
         private void OnJumpInputProvided(InputContext context)
         {
-            InvokeJump();
+            InvokeJump(context);
         }
 
         public void Teardown()
@@ -82,6 +84,7 @@ namespace FulcrumGames.Possession
             UnbindAll();
 
             _inputActions.World.Jump.performed -= OnJumpInputProvided;
+            _inputActions.World.Jump.canceled -= OnJumpInputProvided;
             _inputActions.World.Disable();
             _inputActions.Disable();
             _inputActions.Dispose();

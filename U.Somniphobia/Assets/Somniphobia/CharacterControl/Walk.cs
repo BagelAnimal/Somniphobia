@@ -7,8 +7,6 @@ namespace FulcrumGames.CharacterControl
     ///     strafing. Works best when combined with a jump script, and decides how much
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(GroundDetector))]
     public class Walk : MonoBehaviour
     {
         [SerializeField]
@@ -50,31 +48,28 @@ namespace FulcrumGames.CharacterControl
 
         private Vector3 _input = Vector3.zero;
 
-        private void Awake()
-        {
-            if (!_rigidbody)
-            {
-                _rigidbody = GetComponent<Rigidbody>();
-            }
-
-            if (!_groundDetector)
-            {
-                _groundDetector = GetComponent<GroundDetector>();
-            }
-
-            if (!_directionAnchor)
-            {
-                _directionAnchor = transform;
-            }
-        }
-
         private void FixedUpdate()
         {
-            if (!_rigidbody)
+            if (!_directionAnchor)
+            {
+                Debug.LogError($"{name}'s {nameof(Walk)}" +
+                    $"is missing a {nameof(_directionAnchor)}!", this);
                 return;
+            }
+
+            if (!_rigidbody)
+            {
+                Debug.LogError($"{name}'s {nameof(Walk)}" +
+                    $"is missing a {nameof(Rigidbody)}!", this);
+                return;
+            }
 
             if (!_groundDetector)
+            {
+                Debug.LogError($"{name}'s {nameof(Walk)}" +
+                    $"is missing a {nameof(GroundDetector)}!", this);
                 return;
+            }
 
             var currentVelocity = _rigidbody.linearVelocity;
             var desiredVelocity = currentVelocity;
@@ -84,9 +79,7 @@ namespace FulcrumGames.CharacterControl
 
             _isWalking = _input != Vector3.zero;
             var desiredDirection = forward * _input.z + right * _input.x;
-            desiredDirection = desiredDirection.XOZ();
 
-            desiredDirection = new Vector3(desiredDirection.x, 0.0f, desiredDirection.z);
             var isGrounded = _groundDetector.IsGrounded;
             var groundNormal = _groundDetector.GroundNormal;
             var groundedFrames = _groundDetector.GroundedFrames;
@@ -115,10 +108,15 @@ namespace FulcrumGames.CharacterControl
                 friction *= Time.fixedDeltaTime;
                 var newSpeed = _currentSpeed - friction;
                 newSpeed = Mathf.Max(newSpeed, 0.0f);
+
                 if (newSpeed > float.Epsilon)
                 {
                     var frictionScalar = newSpeed / _currentSpeed;
                     desiredVelocity = currentVelocity * frictionScalar;
+                }
+                else
+                {
+                    desiredVelocity *= newSpeed;
                 }
             }
 
@@ -147,7 +145,11 @@ namespace FulcrumGames.CharacterControl
 
             var velocityDelta = desiredVelocity - currentVelocity;
             _rigidbody.AddForce(velocityDelta, ForceMode.VelocityChange);
-            _currentSpeed = desiredVelocity.XOZ().magnitude;
+
+            var up = _directionAnchor.transform.up;
+            var velocityAlongUp = Vector3.Dot(_rigidbody.linearVelocity, up) * up;
+            var flattenedVelocity = _rigidbody.linearVelocity - velocityAlongUp;
+            _currentSpeed = flattenedVelocity.magnitude;
         }
 
         public void SetInput(Vector3 input)

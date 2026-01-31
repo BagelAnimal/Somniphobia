@@ -270,6 +270,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6700088790422436132, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      propertyPath: _scale.y
+      value: -1.15
+      objectReference: {fileID: 0}
     - target: {fileID: 7928154384134195312, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_Mass
       value: 68
@@ -277,6 +281,10 @@ PrefabInstance:
     - target: {fileID: 7928154384134195312, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_Constraints
       value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 7928154384134195312, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      propertyPath: m_AngularDamping
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       propertyPath: m_Name
@@ -309,8 +317,8 @@ PrefabInstance:
       addedObject: {fileID: 943479364391584074}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6664679836171545311}
+      insertIndex: 1
+      addedObject: {fileID: 2745148506441745918}
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6633191544532055592}
@@ -319,10 +327,10 @@ PrefabInstance:
       addedObject: {fileID: 8968862901336501186}
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 4576751214981001036}
+      addedObject: {fileID: 5261255328842500919}
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5261255328842500919}
+      addedObject: {fileID: 3259374813537879960}
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2528969883515055279}
@@ -331,7 +339,7 @@ PrefabInstance:
       addedObject: {fileID: 5505830953427711199}
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3259374813537879960}
+      addedObject: {fileID: 4756548416007746539}
   m_SourcePrefab: {fileID: 100100000, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
 --- !u!4 &111468570980482371 stripped
 Transform:
@@ -348,8 +356,8 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
   m_PrefabInstance: {fileID: 8279021389468721471}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &6664679836171545311
-CapsuleCollider:
+--- !u!65 &2745148506441745918
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -366,10 +374,8 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.4375
-  m_Height: 1.75
-  m_Direction: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.75, z: 1}
   m_Center: {x: 0, y: 0.875, z: 0}
 --- !u!114 &6633191544532055592
 MonoBehaviour:
@@ -399,20 +405,6 @@ MonoBehaviour:
   _jump: {fileID: 2528969883515055279}
   _walk: {fileID: 3259374813537879960}
   _look: {fileID: 5261255328842500919}
---- !u!114 &4576751214981001036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101267298329975814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cf2b3a37c9127a41932c7e291b586ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Somniphobia.KinematicsToCharacterControl
-  _gravity: {fileID: 3323517262623692827}
-  _groundDetector: {fileID: 5505830953427711199}
 --- !u!114 &5261255328842500919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,48 +417,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44c3c70ee49927b4793b4b731e2c167d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Look
+  Smoothing: 0
   _yawPivot: {fileID: 5591599404413532098}
   _pitchPivot: {fileID: 3287977206781651745}
   _rollPivot: {fileID: 3895084890897813315}
   _maxPitch: 85
   _minPitch: -110
-  _smoothing: 0.05
---- !u!114 &2528969883515055279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101267298329975814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0a9d13b0d963e54d9dfb51d6f15eb41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Jump
-  _rigidbody: {fileID: 2081376056067139919}
-  _force: 350
---- !u!114 &5505830953427711199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101267298329975814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27809cc941fa2284e92b0444a2ad6d96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.GroundDetector
-  _collider: {fileID: 6664679836171545311}
-  _ignoredLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  _slipLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  _maxGroundAngle: 35
-  _groundCheckDistance: 0.05
-  _drawDebugLines: 0
 --- !u!114 &3259374813537879960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -482,13 +438,72 @@ MonoBehaviour:
   _directionAnchor: {fileID: 5591599404413532098}
   _rigidbody: {fileID: 2081376056067139919}
   _groundDetector: {fileID: 5505830953427711199}
-  _groundSpeed: 5
+  _groundSpeed: 3.5
   _groundAcceleration: 50
   _groundFriction: 20
   _airSpeed: 0.5
   _airAcceleration: 400
   _airFriction: 20
-  _bhopWindowFrames: 4
+  _bhopWindowFrames: 1
+--- !u!114 &2528969883515055279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0a9d13b0d963e54d9dfb51d6f15eb41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Jump
+  _rigidbody: {fileID: 2081376056067139919}
+  _groundDetector: {fileID: 5505830953427711199}
+  _jumpHeight: 16
+  _autoBhop: 0
+  _jumpMemoryFrames: 6
+  _coyoteTimeFrames: 6
+  _jumpCooldownFrames: 10
+  _forceUngroundedFrames: 8
+--- !u!114 &5505830953427711199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27809cc941fa2284e92b0444a2ad6d96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.GroundDetector
+  _collider: {fileID: 2745148506441745918}
+  _rigidbody: {fileID: 2081376056067139919}
+  _ignoredLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  _slipLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  _maxGroundAngle: 35
+  _groundCheckDistance: 0.05
+  _maxGroundedSpeed: 20
+  _drawDebugLines: 0
+--- !u!114 &4756548416007746539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c41e5ac7e3e2b594ba6e330ebe067380, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Glue.KinematicToCharacterControl
+  _gravity: {fileID: 3323517262623692827}
+  _jump: {fileID: 2528969883515055279}
+  _walk: {fileID: 3259374813537879960}
 --- !u!114 &3323517262623692827 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6700088790422436132, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}

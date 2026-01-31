@@ -9,9 +9,9 @@ namespace FulcrumGames.Somniphobia
     public static class Utilities
     {
         /// <summary>
-        ///     Teleports a <see cref="GameObject"/> to a provided <see cref="Transform"/>.
+        ///     Teleports a gameobject to a provided transform.
         ///     Optionally sets the object's rotation to the transform's and clears its
-        ///     momentum provided that the teleporting object has a <see cref="Rigidbody"/>.
+        ///     momentum provided that the teleporting object has a rigidbody.
         /// </summary>
         public static void TeleportTo(GameObject teleportingObject, Transform teleportTo,
             bool setRotation = true, bool preserveMomentum = true)

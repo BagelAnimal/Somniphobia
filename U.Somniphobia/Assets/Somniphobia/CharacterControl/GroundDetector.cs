@@ -10,7 +10,6 @@ namespace FulcrumGames.CharacterControl
     ///     below and what the normal of that ground is.
     /// </summary>
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(Collider))]
     public class GroundDetector : MonoBehaviour
     {
         private const float CheckHeightBump = 0.5f;
@@ -20,6 +19,9 @@ namespace FulcrumGames.CharacterControl
 
         [SerializeField]
         private Collider _collider;
+
+        [SerializeField]
+        private Rigidbody _rigidbody;
 
         [SerializeField]
         [Tooltip("Layers to be completely ignored")]
@@ -34,6 +36,10 @@ namespace FulcrumGames.CharacterControl
 
         [SerializeField]
         private float _groundCheckDistance = 0.05f;
+
+        [SerializeField]
+        [Tooltip("The speed threshhold at which the object cannot become grounded.")]
+        private float _maxGroundedSpeed = 20.0f;
 
         [SerializeField]
         private bool _drawDebugLines = false;
@@ -68,23 +74,41 @@ namespace FulcrumGames.CharacterControl
         /// </summary>
         public Vector3 GroundNormal => _groundNormal;
 
+        private int _ungroundFramesRemaining = 0;
+
         private void FixedUpdate()
         {
             if (!_collider)
+            {
+                Debug.LogError($"{name}'s {nameof(GroundDetector)}" +
+                    $"is missing a {nameof(Collider)}!", this);
                 return;
+            }
+
+            if (!_rigidbody)
+            {
+                Debug.LogError($"{name}'s {nameof(GroundDetector)}" +
+                    $"is missing a {nameof(Rigidbody)}!", this);
+                return;
+            }
 
             var wasGrounded = _isGrounded;
 
-            // We will raycast down in a cross shape.
+            // We will raycast down in the following shape...
+            // x * x * x
+            // * * * * *
+            // x * x * x
+            // * * * * *
+            // x * x * x
             // First we grab the center, and add bump it upward a bit.
             var checkOrigin = transform.position + transform.up * CheckHeightBump;
-            // Then, we get the distance that each point on the cross should be from the center.
+            // Then, we get the distance that each point on the shape should be from the center.
             // We multiply it down a bit to avoid reading being pressed against a wall as grounded.
             var checkOffset = _collider.bounds.extents.x * 0.9f;
 
             var groundHitCount = 0;
             var groundHitNormalSum = Vector3.zero;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 9; i++)
             {
                 var origin = checkOrigin;
                 switch (i)
@@ -102,6 +126,18 @@ namespace FulcrumGames.CharacterControl
                         break;
                     case 4:
                         origin += -transform.right * checkOffset;
+                        break;
+                    case 5:
+                        origin += (transform.right + transform.forward) * checkOffset;
+                        break;
+                    case 6:
+                        origin += (-transform.right + transform.forward) * checkOffset;
+                        break;
+                    case 7:
+                        origin += (transform.right + -transform.forward) * checkOffset;
+                        break;
+                    case 8:
+                        origin += (-transform.right + -transform.forward) * checkOffset;
                         break;
                     default:
                         Debug.LogError($"{gameObject.name}'s ground check is evil!");
@@ -121,7 +157,7 @@ namespace FulcrumGames.CharacterControl
                         continue;
 
                     var layer = groundHit.collider.gameObject.layer;
-                    var isSlipLayer = (_slipLayers & layer) != 0;
+                    var isSlipLayer = (_slipLayers & (1 << layer)) > 0;
                     if (isSlipLayer)
                         continue;
 
@@ -145,11 +181,20 @@ namespace FulcrumGames.CharacterControl
                     break;
             }
 
-            _isGrounded = groundHitCount > 0;
+            var speedSquared = _rigidbody.linearVelocity.sqrMagnitude;
+            var maxSpeedSqured = _maxGroundedSpeed * _maxGroundedSpeed;
+            var isBeyondMaxSpeed = speedSquared > maxSpeedSqured;
+
+            _isGrounded = groundHitCount > 0 && !isBeyondMaxSpeed && _ungroundFramesRemaining <= 0;
             if (!_isGrounded)
             {
                 _groundedFrames = 0;
                 _ungroundedFrames++;
+
+                if (_ungroundFramesRemaining > 0)
+                {
+                    _ungroundFramesRemaining--;
+                }
 
                 _groundAngle = 0.0f;
                 _groundNormal = Vector3.zero;
@@ -172,6 +217,11 @@ namespace FulcrumGames.CharacterControl
             {
                 Grounded?.Invoke();
             }
+        }
+
+        public void ForceUngroundedForFrames(int frames)
+        {
+            _ungroundFramesRemaining = frames;
         }
     }
 }

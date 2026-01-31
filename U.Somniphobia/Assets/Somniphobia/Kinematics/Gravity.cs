@@ -1,3 +1,4 @@
+using FulcrumGames.CharacterControl;
 using UnityEngine;
 
 namespace FulcrumGames.Kinematics
@@ -6,6 +7,7 @@ namespace FulcrumGames.Kinematics
     ///     Applies gravity to an object. May be favorable over Unity's built-in gravity
     ///     application because individuals may have their gravitational direction modified.
     /// </summary>
+    [DisallowMultipleComponent]
     public class Gravity : MonoBehaviour
     {
         public const float GravityConstant = 9.81f;
@@ -16,14 +18,17 @@ namespace FulcrumGames.Kinematics
 
         [SerializeField]
         private Vector3 _scale = -Vector3.up;
-
-        private void Awake()
-        {
-            _rigidbody = _rigidbody ? GetComponentInChildren<Rigidbody>() : _rigidbody;
-        }
+        public Vector3 Scale => _scale;
 
         public void FixedUpdate()
         {
+            if (!_rigidbody)
+            {
+                Debug.LogError($"{name}'s {nameof(Gravity)}" +
+                    $"is missing a {nameof(Rigidbody)}!", this);
+                return;
+            }
+
             var gravity = GravityConstant * _scale;
             _rigidbody.AddForce(gravity, ForceMode.Acceleration);
         }

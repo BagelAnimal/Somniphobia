@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
+
 namespace FulcrumGames.Possession
 {
     /// <summary>
-    ///     Possessables are targeted by some number of <see cref="Possessor"/>s,
+    ///     Possessables are targeted by some number of possessors,
     ///     and then parse input from those possessors into actions that can be
     ///     delegated to a series of components, i.e., a jump input into force.
     ///     
-    ///     <see cref="Possessor"/>s are expected to be controlled by <see cref="InputProvider"/>s.
+    ///     Possessors are expected to be controlled by input providers.
     /// </summary>
+    [DisallowMultipleComponent]
     public class Possessable : MonoBehaviour
     {
         /// <summary>
@@ -23,17 +26,17 @@ namespace FulcrumGames.Possession
         /// </summary>
         public event Action<Possessor> UnpossessedBy;
 
-        public event Action Jump;
+        public event Action<InputContext> Jump;
 
         private readonly List<Possessor> _possessors = new();
         /// <summary>
-        ///     The <see cref="Possessor"/>s currently delegating inputs to this possessable.
+        ///     The possessors currently delegating inputs to this possessable.
         ///     Cannot contain duplicates.
         /// </summary>
         public IReadOnlyList<Possessor> Possessors => _possessors;
 
         // Used to keep track of input provider and action bindings.
-        private readonly Dictionary<InputProvider, Action> _jumpHandlers = new();
+        private readonly Dictionary<InputProvider, Action<InputContext>> _jumpHandlers = new();
 
         // Used to avoid reacting to unbinding when we're the one invoking it in loop.
         private bool _isBeingDestroyed = false;
@@ -55,9 +58,9 @@ namespace FulcrumGames.Possession
         }
 
         /// <summary>
-        ///     Call when adding a <see cref="Possessor"/> to a given possessable.
+        ///     Call when adding a possessor to a given possessable.
         ///     Lets the possessable track it, thus giving it the opportunity to let
-        ///     the <see cref="Possessor"/> know that it is being destroyed.
+        ///     the possessor know that it is being destroyed.
         /// </summary>
         public void OnPossessedBy(Possessor possessor)
         {
@@ -87,9 +90,9 @@ namespace FulcrumGames.Possession
         }
 
         /// <summary>
-        ///     Call when removing a <see cref="Possessor"/> from a given possessable.
+        ///     Call when removing a possessor from a given possessable.
         ///     Lets the possessable track it, thus helping it avoid a case where it
-        ///     tries to let an uncaring or null <see cref="Possessor"/> know that
+        ///     tries to let an uncaring or null possessor know that
         ///     it is being destroyed.
         /// </summary>
         public void OnUnpossessedBy(Possessor possessor)
@@ -155,7 +158,7 @@ namespace FulcrumGames.Possession
                 }
             }
 
-            return moveInput;
+            return Vector3.ClampMagnitude(moveInput, 1.0f);
         }
 
         private void WireJump(InputProvider provider)
@@ -166,7 +169,7 @@ namespace FulcrumGames.Possession
             if (_jumpHandlers.ContainsKey(provider))
                 return;
 
-            Action handler = OnJumpInput;
+            Action<InputContext> handler = OnJumpInput;
             _jumpHandlers.Add(provider, handler);
             provider.Jump += handler;
         }
@@ -183,9 +186,9 @@ namespace FulcrumGames.Possession
             _jumpHandlers.Remove(provider);
         }
 
-        private void OnJumpInput()
+        private void OnJumpInput(InputContext inputContext)
         {
-            Jump?.Invoke();
+            Jump?.Invoke(inputContext);
         }
     }
 }
