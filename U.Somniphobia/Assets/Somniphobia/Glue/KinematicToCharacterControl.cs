@@ -27,7 +27,10 @@ namespace FulcrumGames.Glue
 
             if (_walk && _gravity)
             {
-                _walk.gameObject.transform.up = -_gravity.Scale;
+                if (_gravity.Scale.sqrMagnitude > float.Epsilon)
+                {
+                    _walk.gameObject.transform.up = -_gravity.Scale;
+                }
             }
         }
 
