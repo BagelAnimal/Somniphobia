@@ -50,6 +50,7 @@ namespace FulcrumGames.Glue
             {
                 Debug.LogError($"{name}'s {nameof(PossessorToCharacterControl)}" +
                     $"is missing a {nameof(Possessable)}!", this);
+                enabled = false;
                 return;
             }
 

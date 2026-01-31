@@ -54,6 +54,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(Walk)}" +
                     $"is missing a {nameof(_directionAnchor)}!", this);
+                enabled = false;
                 return;
             }
 
@@ -61,6 +62,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(Walk)}" +
                     $"is missing a {nameof(Rigidbody)}!", this);
+                enabled = false;
                 return;
             }
 
@@ -68,6 +70,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(Walk)}" +
                     $"is missing a {nameof(GroundDetector)}!", this);
+                enabled = false;
                 return;
             }
 

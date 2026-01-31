@@ -43,6 +43,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(Look)}" +
                     $"is missing a {nameof(_yawPivot)}!", this);
+                enabled = false;
                 return;
             }
 
@@ -50,6 +51,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(Look)}" +
                     $"is missing a {nameof(_pitchPivot)}!", this);
+                enabled = false;
                 return;
             }
 
@@ -57,6 +59,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(Look)}" +
                     $"is missing a {nameof(_rollPivot)}!", this);
+                enabled = false;
                 return;
             }
 

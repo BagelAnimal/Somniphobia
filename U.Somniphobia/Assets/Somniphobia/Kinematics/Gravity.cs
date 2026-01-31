@@ -26,6 +26,7 @@ namespace FulcrumGames.Kinematics
             {
                 Debug.LogError($"{name}'s {nameof(Gravity)}" +
                     $"is missing a {nameof(Rigidbody)}!", this);
+                enabled = false;
                 return;
             }
 

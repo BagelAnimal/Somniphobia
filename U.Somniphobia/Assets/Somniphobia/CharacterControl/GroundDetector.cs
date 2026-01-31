@@ -82,6 +82,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(GroundDetector)}" +
                     $"is missing a {nameof(Collider)}!", this);
+                enabled = false;
                 return;
             }
 
@@ -89,6 +90,7 @@ namespace FulcrumGames.CharacterControl
             {
                 Debug.LogError($"{name}'s {nameof(GroundDetector)}" +
                     $"is missing a {nameof(Rigidbody)}!", this);
+                enabled = false;
                 return;
             }
 
@@ -141,6 +143,7 @@ namespace FulcrumGames.CharacterControl
                         break;
                     default:
                         Debug.LogError($"{gameObject.name}'s ground check is evil!");
+                        enabled = false;
                         break;
                 }
 
