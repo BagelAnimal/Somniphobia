@@ -18,7 +18,8 @@ namespace FulcrumGames.Kinematics
         private Rigidbody _rigidbody;
 
         [SerializeField]
-        private float _scalar = 1.0f;
+        [Tooltip("Used when the object should always have a slight multiplier on gravity.")]
+        private float _multiplier = 1.0f;
 
         [SerializeField]
         private Vector3 _vector = -Vector3.up;
@@ -46,7 +47,7 @@ namespace FulcrumGames.Kinematics
                 return;
             }
 
-            var gravity = _scalar * GravityConstant * _vector;
+            var gravity = _multiplier * GravityConstant * _vector;
             _rigidbody.AddForce(gravity, ForceMode.Acceleration);
         }
 
