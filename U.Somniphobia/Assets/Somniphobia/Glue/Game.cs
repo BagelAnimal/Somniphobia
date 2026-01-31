@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FulcrumGames.Somniphobia
+namespace FulcrumGames.Glue
 {
     /// <summary>
     ///     The intent is to provide a common access point for game state,

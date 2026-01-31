@@ -6,7 +6,7 @@ namespace FulcrumGames.Possession
 {
     /// <summary>
     ///     A possessor is responsible for delegating inputs to some number of
-    ///     possessed <see cref="Possessable"/>s. Possessors make their gameobject
+    ///     possessed possessables. Possessors make their gameobject
     ///     a child of the oldest possessable that they have possessed. Note that
     ///     either a possessor or a possessable can initiate the process of
     ///     pairing or unpairing a possessor/possessable pair, though the codepath
@@ -15,6 +15,7 @@ namespace FulcrumGames.Possession
     ///     These serve as a common interface for both players and CPUs to interpret
     ///     inputs into game actions.
     /// </summary>
+    [DisallowMultipleComponent]
     public class Possessor : MonoBehaviour
     {
         /// <summary>
@@ -53,7 +54,7 @@ namespace FulcrumGames.Possession
 
         private Possessable _perspectivePossessable;
         /// <summary>
-        ///     The first <see cref="Possessable"/> used as a parent. Useful when this
+        ///     The first possessable used as a parent. Useful when this
         ///     possessor is an inworld object like a soul and it needs a place to live.
         ///     Will always be set as long as at least one possessable is bound.
         /// </summary>
@@ -73,7 +74,7 @@ namespace FulcrumGames.Possession
         }
 
         /// <summary>
-        ///     Begin routing inputs to the provided <see cref="Possessable"/>.
+        ///     Begin routing inputs to the provided possessable.
         /// </summary>
         public void Possess(Possessable possessable)
         {
@@ -102,7 +103,7 @@ namespace FulcrumGames.Possession
         }
 
         /// <summary>
-        ///     Cease routing inputs to the provided <see cref="Possessable"/>.
+        ///     Cease routing inputs to the provided possessable.
         /// </summary>
         public void Unpossess(Possessable possessable)
         {

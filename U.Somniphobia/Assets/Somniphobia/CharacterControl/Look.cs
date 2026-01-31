@@ -5,8 +5,11 @@ namespace FulcrumGames.CharacterControl
     /// <summary>
     ///     Rotates a target object given an input vector.
     /// </summary>
+    [DisallowMultipleComponent]
     public class Look : MonoBehaviour
     {
+        public float Smoothing = 0.0f;
+
         [SerializeField]
         private Transform _yawPivot;
 
@@ -22,8 +25,7 @@ namespace FulcrumGames.CharacterControl
         [SerializeField]
         private float _minPitch = -110.0f;
 
-        [SerializeField]
-        private float _smoothing = 0.05f;
+        private Vector3 _input = Vector3.zero;
 
         private Vector3 _rotationVelocity = Vector3.zero;
         private Vector3 _targetRotationEuler = Vector3.zero;
@@ -35,21 +37,50 @@ namespace FulcrumGames.CharacterControl
         public Quaternion Rotation => Quaternion.Euler(_pitch, _yaw, _roll);
         public Vector3 Forward => Rotation * _rollPivot.transform.forward;
 
-        /// <summary>
-        ///     Updates the orientation of this object given some input vector.
-        /// </summary>
-        public void UpdateLook(Vector3 input)
+        private void Update()
         {
+            if (!_yawPivot)
+            {
+                Debug.LogError($"{name}'s {nameof(Look)}" +
+                    $"is missing a {nameof(_yawPivot)}!", this);
+                enabled = false;
+                return;
+            }
+
+            if (!_pitchPivot)
+            {
+                Debug.LogError($"{name}'s {nameof(Look)}" +
+                    $"is missing a {nameof(_pitchPivot)}!", this);
+                enabled = false;
+                return;
+            }
+
+            if (!_rollPivot)
+            {
+                Debug.LogError($"{name}'s {nameof(Look)}" +
+                    $"is missing a {nameof(_rollPivot)}!", this);
+                enabled = false;
+                return;
+            }
+
             var currentRotation = new Vector3(_pitch, _yaw, _roll);
-            var targetPitch = Mathf.Clamp(_targetRotationEuler.x + input.x, _minPitch, _maxPitch);
-            var targetYaw = _targetRotationEuler.y + input.y;
-            var targetRoll = _targetRotationEuler.z + input.z;
+            var targetPitch = Mathf.Clamp(_targetRotationEuler.x + _input.x, _minPitch, _maxPitch);
+            var targetYaw = _targetRotationEuler.y + _input.y;
+            var targetRoll = _targetRotationEuler.z + _input.z;
             _targetRotationEuler = new Vector3(targetPitch, targetYaw, targetRoll);
 
             var smoothRotation = Vector3.SmoothDamp(currentRotation, _targetRotationEuler,
-                ref _rotationVelocity, _smoothing);
+                ref _rotationVelocity, Smoothing);
 
             SetRotation(smoothRotation, clearSmoothing: false);
+        }
+
+        /// <summary>
+        ///     Set the input to then be interpreted by the update loop.
+        /// </summary>
+        public void SetInput(Vector3 input)
+        {
+            _input = input;
         }
 
         /// <summary>

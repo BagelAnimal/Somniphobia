@@ -111,6 +111,15 @@ namespace FulcrumGames.Possession
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""0af07cdb-3507-4926-8738-8920706a454c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -157,6 +166,72 @@ namespace FulcrumGames.Possession
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d5e1e9d-3dd9-4fff-b764-6e0ebfe2000e"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""0f819911-a3d9-4849-90d5-3b08b09cb966"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3eccdd85-06e5-4342-ab3d-46065ea8eb2d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""ef89082f-82d4-451e-ac10-fe54eeb30309"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""3e0e9964-4f99-4111-a8cb-bc9954e37c25"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""abd074ab-5a8b-456d-b0d2-022142713b43"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -167,6 +242,7 @@ namespace FulcrumGames.Possession
             m_World = asset.FindActionMap("World", throwIfNotFound: true);
             m_World_Jump = m_World.FindAction("Jump", throwIfNotFound: true);
             m_World_Look = m_World.FindAction("Look", throwIfNotFound: true);
+            m_World_Move = m_World.FindAction("Move", throwIfNotFound: true);
         }
 
         ~@InputActions()
@@ -249,6 +325,7 @@ namespace FulcrumGames.Possession
         private List<IWorldActions> m_WorldActionsCallbackInterfaces = new List<IWorldActions>();
         private readonly InputAction m_World_Jump;
         private readonly InputAction m_World_Look;
+        private readonly InputAction m_World_Move;
         /// <summary>
         /// Provides access to input actions defined in input action map "World".
         /// </summary>
@@ -268,6 +345,10 @@ namespace FulcrumGames.Possession
             /// Provides access to the underlying input action "World/Look".
             /// </summary>
             public InputAction @Look => m_Wrapper.m_World_Look;
+            /// <summary>
+            /// Provides access to the underlying input action "World/Move".
+            /// </summary>
+            public InputAction @Move => m_Wrapper.m_World_Move;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -300,6 +381,9 @@ namespace FulcrumGames.Possession
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
             }
 
             /// <summary>
@@ -317,6 +401,9 @@ namespace FulcrumGames.Possession
                 @Look.started -= instance.OnLook;
                 @Look.performed -= instance.OnLook;
                 @Look.canceled -= instance.OnLook;
+                @Move.started -= instance.OnMove;
+                @Move.performed -= instance.OnMove;
+                @Move.canceled -= instance.OnMove;
             }
 
             /// <summary>
@@ -371,6 +458,13 @@ namespace FulcrumGames.Possession
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnLook(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Move" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnMove(InputAction.CallbackContext context);
         }
     }
 }

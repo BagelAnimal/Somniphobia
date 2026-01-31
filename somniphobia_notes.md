@@ -15,6 +15,8 @@ the action of ULTRAKILL, and the skill expression of a source-engine game like H
 
 MECHANICS OVERVIEW
 
+A high-level goal of the game is to enable skill expression in a variety of ways.
+
 Characters are controlled by souls. Souls are controlled by players or CPUs.
 Players or CPUs can have any number of souls. Souls can control any number
 of characters. The goal is to enable emergent behaviors where high level
@@ -30,9 +32,8 @@ jump inputs.
 ---
 
 CODING STYLE GUIDELINES
-
 -
-    RULE 1
+    1
     Public accessor properties for private fields will be directly below their corresponding field.
     The goal is to make moving field and property pairs easy.
     ```
@@ -40,7 +41,7 @@ CODING STYLE GUIDELINES
     public GameObject PlayerPrefab => _playerPrefab;
     ```
 -
-    RULE 2
+    2
     Each attribute should be on its own line above the associated field, method, or class.
     ```
     [Header("Example")]
@@ -48,13 +49,21 @@ CODING STYLE GUIDELINES
     private string _name = String.Empty;
     ```
 -
-    RULE 3
+    3
     All lines should remain below 100 characters.
 -
-    RULE 4
+    4
     All classes and structs in the Somniphobia namespace should have an xml-style
     header explaining the goals of the object.
 -
+    5
+    Fail as loudly as possible when encountering null references without throwing
+    exceptions. Avoid these cases from causing side effects, i.e., grabbing the
+    wrong component as a fallback and failing silently.
+-
+    6
+    Avoid using <see> and <seealso> in xml headers as they create additional references
+    when debugging to sift through.
 
 ---
 
