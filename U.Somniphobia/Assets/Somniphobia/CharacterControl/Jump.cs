@@ -70,9 +70,9 @@ namespace FulcrumGames.CharacterControl
             _framesSinceLastInput++;
 
             var gravityDirection = _gravity.normalized;
-            var velocityAlongGravity = Vector3.Dot(_rigidbody.linearVelocity, gravityDirection);
+            var velocityAgainstGravity = -Vector3.Dot(_rigidbody.linearVelocity, gravityDirection);
 
-            var reachedInflection = velocityAlongGravity <= 0.0f;
+            var reachedInflection = velocityAgainstGravity <= 0.0f;
             _isJumping = _isJumping && !reachedInflection && !_groundDetector.IsGrounded;
 
             if (!_input)
