@@ -73,7 +73,7 @@ namespace FulcrumGames.CharacterControl
         }
 
         /// <summary>
-        ///     Set the input to then be interpretted by the update loop.
+        ///     Set the input to then be interpreted by the update loop.
         /// </summary>
         public void SetInput(Vector3 input)
         {
