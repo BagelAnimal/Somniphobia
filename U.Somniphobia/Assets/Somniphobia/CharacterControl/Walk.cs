@@ -3,7 +3,7 @@ using UnityEngine;
 namespace FulcrumGames.CharacterControl
 {
     /// <summary>
-    ///     Gradually applies force to an object based on input while enable quake-style
+    ///     Gradually applies force to an object based on input while enabling quake-style
     ///     strafing.
     /// </summary>
     [DisallowMultipleComponent]
