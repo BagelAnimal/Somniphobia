@@ -262,6 +262,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8d7dc134bf5875439766e07e7d7d804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Possession.PossessorAnchor
+  _collider: {fileID: 2745148506441745918}
+  _maintainRelativeHeight: 1
 --- !u!1001 &8279021389468721471
 PrefabInstance:
   m_ObjectHideFlags: 0

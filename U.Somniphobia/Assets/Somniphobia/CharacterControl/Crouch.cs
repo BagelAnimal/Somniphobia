@@ -147,6 +147,10 @@ namespace FulcrumGames.CharacterControl
             _collider.size = new(_collider.size.x, sizeY, _collider.size.z);
             _collider.center = new(_collider.center.x, sizeY / 2.0f, _collider.center.z);
 
+            // PROBLEM: Crouch doesn't know about the possession system.
+            // SOLUTION: The camera's position should account for changes in scale
+            // being applied to the collider.
+
             // TODO: We need some way to move the pivot of the camera down.
             // If we were to bump the bottom of the collider up and then push the position
             // of the object down that would create this behavior, but that would result in
