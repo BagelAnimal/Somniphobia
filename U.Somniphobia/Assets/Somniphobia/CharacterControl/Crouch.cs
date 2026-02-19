@@ -68,7 +68,7 @@ namespace FulcrumGames.CharacterControl
             _defaultHeight = _collider.bounds.extents.y * 2.0f;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (!_collider)
             {
