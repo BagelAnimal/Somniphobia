@@ -452,12 +452,16 @@ MonoBehaviour:
   _directionAnchor: {fileID: 5591599404413532098}
   _rigidbody: {fileID: 2081376056067139919}
   _groundDetector: {fileID: 5505830953427711199}
+  _crouch: {fileID: 870851342681946696}
   _groundSpeed: 3.5
   _groundAcceleration: 50
   _groundFriction: 20
   _airSpeed: 0.5
   _airAcceleration: 400
   _airFriction: 20
+  _crouchSpeed: 2
+  _crouchAcceleration: 50
+  _crouchFriction: 20
   _bhopWindowFrames: 1
 --- !u!114 &2528969883515055279
 MonoBehaviour:
