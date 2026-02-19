@@ -36,7 +36,7 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            var colliderHeight = _collider.bounds.extents.y * 2.0f;
+            var colliderHeight = _collider.bounds.size.y * 0.5f;
             var currentHeight = transform.position.y - _collider.transform.position.y;
             _distanceFromOrigin = currentHeight / colliderHeight;
         }
@@ -54,7 +54,7 @@ namespace FulcrumGames.Possession
                 return;
             }
 
-            var colliderHeight = _collider.bounds.extents.y * 2.0f;
+            var colliderHeight = _collider.bounds.size.y * 0.5f;
             var desiredHeight = colliderHeight * _distanceFromOrigin;
             transform.position = _collider.transform.position + _collider.transform.up * desiredHeight;
         }

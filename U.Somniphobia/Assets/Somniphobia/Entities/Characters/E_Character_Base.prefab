@@ -541,7 +541,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _crouchHeight: 0.6
-  _crouchTime: 0.3
+  _crouchTime: 0.2
   _crouchCurve:
     serializedVersion: 2
     m_Curve:

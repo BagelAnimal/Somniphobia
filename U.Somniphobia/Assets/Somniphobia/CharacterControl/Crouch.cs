@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace FulcrumGames.CharacterControl
@@ -10,6 +11,9 @@ namespace FulcrumGames.CharacterControl
     [DisallowMultipleComponent]
     public class Crouch : MonoBehaviour
     {
+        public event Action Crouched;
+        public event Action Uncrouched;
+
         // We get specific about the collider type that we're looking for because it's
         // difficult to modify the bounds of the abstract type. Adding support for other
         // collider types should be pretty easy if we want that.
@@ -133,7 +137,6 @@ namespace FulcrumGames.CharacterControl
                 _crouchAmount += Time.deltaTime / _crouchTime;
                 _crouchAmount = Mathf.Min(_crouchAmount, 1.0f);
                 _crouchAmount = _groundDetector.IsGrounded ? _crouchAmount : 1.0f;
-
             }
             else
             {
