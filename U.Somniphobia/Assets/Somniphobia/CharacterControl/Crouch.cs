@@ -64,7 +64,7 @@ namespace FulcrumGames.CharacterControl
             _defaultHeight = _collider.bounds.extents.y * 2.0f;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (!_collider)
             {
@@ -130,14 +130,14 @@ namespace FulcrumGames.CharacterControl
             // crouch jump.
             if (isEnteringCrouch)
             {
-                _crouchAmount += Time.fixedDeltaTime / _crouchTime;
+                _crouchAmount += Time.deltaTime / _crouchTime;
                 _crouchAmount = Mathf.Min(_crouchAmount, 1.0f);
                 _crouchAmount = _groundDetector.IsGrounded ? _crouchAmount : 1.0f;
 
             }
             else
             {
-                _crouchAmount -= Time.fixedDeltaTime / _crouchTime;
+                _crouchAmount -= Time.deltaTime / _crouchTime;
                 _crouchAmount = Mathf.Max(_crouchAmount, 0.0f);
                 _crouchAmount = _groundDetector.IsGrounded ? _crouchAmount : 0.0f;
             }
@@ -146,17 +146,6 @@ namespace FulcrumGames.CharacterControl
             float sizeY = Mathf.Lerp(_defaultHeight, _defaultHeight * _crouchHeight, crouchT);
             _collider.size = new(_collider.size.x, sizeY, _collider.size.z);
             _collider.center = new(_collider.center.x, sizeY / 2.0f, _collider.center.z);
-
-            // PROBLEM: Crouch doesn't know about the possession system.
-            // SOLUTION: The camera's position should account for changes in scale
-            // being applied to the collider.
-
-            // TODO: We need some way to move the pivot of the camera down.
-            // If we were to bump the bottom of the collider up and then push the position
-            // of the object down that would create this behavior, but that would result in
-            // underground character origins which I don't think we want.
-            // _possessable.SetPitchPivotHeight(_possessable.DefaultPitchPivotHeight * (sizeY / _defaultHeight));
-            // _possessable._pitchPivot.localPosition = new(_soulAnchor.localPosition.x, height, _soulAnchor.localPosition.z);
 
             if (!_groundDetector.IsGrounded)
             {
@@ -167,6 +156,12 @@ namespace FulcrumGames.CharacterControl
                 var newPosition = transform.position + bumpAmount;
                 _rigidbody.MovePosition(newPosition);
             }
+
+            // If a character or perspective point is attached to our character, we need to
+            // move it vertically to account for the change in height. This script is and
+            // should continue to be unaware of how this is done, so it has no opinion on
+            // this. Ideally, some script should run in the camera's anchor point that
+            // updates the camera's relative position based on the character's collider height.
         }
 
         public void SetInput(bool input)
