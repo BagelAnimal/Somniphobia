@@ -27,6 +27,7 @@ namespace FulcrumGames.Possession
         public event Action<Possessor> UnpossessedBy;
 
         public event Action<InputContext> Jump;
+        public event Action<InputContext> Crouch;
 
         private readonly List<Possessor> _possessors = new();
         /// <summary>
@@ -37,6 +38,7 @@ namespace FulcrumGames.Possession
 
         // Used to keep track of input provider and action bindings.
         private readonly Dictionary<InputProvider, Action<InputContext>> _jumpHandlers = new();
+        private readonly Dictionary<InputProvider, Action<InputContext>> _crouchHandlers = new();
 
         // Used to avoid reacting to unbinding when we're the one invoking it in loop.
         private bool _isBeingDestroyed = false;
@@ -48,6 +50,12 @@ namespace FulcrumGames.Possession
                 kvp.Key.Jump -= kvp.Value;
             }
             _jumpHandlers.Clear();
+
+            foreach (var kvp in _crouchHandlers)
+            {
+                kvp.Key.Jump -= kvp.Value;
+            }
+            _crouchHandlers.Clear();
 
             _isBeingDestroyed = true;
             _possessors.RemoveAll(p => !p);
@@ -87,6 +95,13 @@ namespace FulcrumGames.Possession
             }
             possessor.BoundBy += WireJump;
             possessor.UnboundBy += UnwireJump;
+
+            foreach (var inputProvider in possessor.BoundInputProviders)
+            {
+                WireCrouch(inputProvider);
+            }
+            possessor.BoundBy += WireCrouch;
+            possessor.UnboundBy -= WireCrouch;
         }
 
         /// <summary>
@@ -114,6 +129,13 @@ namespace FulcrumGames.Possession
             }
             possessor.BoundBy -= WireJump;
             possessor.UnboundBy -= UnwireJump;
+
+            foreach (var inputProvider in possessor.BoundInputProviders)
+            {
+                UnwireCrouch(inputProvider);
+            }
+            possessor.BoundBy -= WireCrouch;
+            possessor.UnboundBy -= UnwireCrouch;
 
             if (!_isBeingDestroyed)
             {
@@ -189,6 +211,36 @@ namespace FulcrumGames.Possession
         private void OnJumpInput(InputContext inputContext)
         {
             Jump?.Invoke(inputContext);
+        }
+
+        private void WireCrouch(InputProvider provider)
+        {
+            if (provider == null)
+                return;
+
+            if (_crouchHandlers.ContainsKey(provider))
+                return;
+
+            Action<InputContext> handler = OnCrouchInput;
+            _crouchHandlers.Add(provider, handler);
+            provider.Crouch += handler;
+        }
+
+        private void UnwireCrouch(InputProvider provider)
+        {
+            if (provider == null)
+                return;
+
+            if (!_crouchHandlers.TryGetValue(provider, out var handler))
+                return;
+
+            provider.Crouch -= handler;
+            _crouchHandlers.Remove(provider);
+        }
+
+        private void OnCrouchInput(InputContext inputContext)
+        {
+            Crouch?.Invoke(inputContext);
         }
     }
 }

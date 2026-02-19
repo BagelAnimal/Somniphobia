@@ -348,6 +348,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4756548416007746539}
+    - targetCorrespondingSourceObject: {fileID: 8056321186675473721, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 870851342681946696}
   m_SourcePrefab: {fileID: 100100000, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}
 --- !u!4 &111468570980482371 stripped
 Transform:
@@ -411,6 +414,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Glue.PossessorToCharacterControl
   _possessable: {fileID: 6633191544532055592}
   _jump: {fileID: 2528969883515055279}
+  _crouch: {fileID: 870851342681946696}
   _walk: {fileID: 3259374813537879960}
   _look: {fileID: 5261255328842500919}
 --- !u!114 &5261255328842500919
@@ -512,6 +516,55 @@ MonoBehaviour:
   _gravity: {fileID: 3323517262623692827}
   _jump: {fileID: 2528969883515055279}
   _walk: {fileID: 3259374813537879960}
+--- !u!114 &870851342681946696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2101267298329975814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7267310f8f5e35142b18e7eae8591f6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.CharacterControl.Crouch
+  _collider: {fileID: 2745148506441745918}
+  _rigidbody: {fileID: 2081376056067139919}
+  _groundDetector: {fileID: 5505830953427711199}
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 1
+  _crouchHeight: 0.6
+  _crouchTime: 0.3
+  _crouchCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _speedScalar: 0.5
+  _accelerationScalar: 0.5
+  _frictionScalar: 1
+  _allowJumpingWhileCrouching: 0
+  _enableDebugDrawing: 1
 --- !u!114 &3323517262623692827 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6700088790422436132, guid: 87e99fa9a581d1b4c86416dc055e8b27, type: 3}

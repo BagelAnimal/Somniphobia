@@ -1,7 +1,5 @@
 using FulcrumGames.CharacterControl;
-using FulcrumGames.Kinematics;
 using FulcrumGames.Possession;
-using System;
 using UnityEngine;
 
 using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
@@ -23,6 +21,9 @@ namespace FulcrumGames.Glue
         private Jump _jump;
 
         [SerializeField]
+        private Crouch _crouch;
+
+        [SerializeField]
         private Walk _walk;
 
         [SerializeField]
@@ -33,6 +34,7 @@ namespace FulcrumGames.Glue
             if (_possessable)
             {
                 _possessable.Jump += OnJumpInput;
+                _possessable.Crouch += OnCrouchInput;
             }
         }
 
@@ -41,6 +43,7 @@ namespace FulcrumGames.Glue
             if (_possessable)
             {
                 _possessable.Jump -= OnJumpInput;
+                _possessable.Crouch -= OnCrouchInput;
             }
         }
 
@@ -79,6 +82,21 @@ namespace FulcrumGames.Glue
             else if (inputContext.canceled)
             {
                 _jump.OnJumpReleased();
+            }
+        }
+
+        private void OnCrouchInput(InputContext inputContext)
+        {
+            if (!_crouch)
+                return;
+
+            if (inputContext.performed)
+            {
+                _crouch.SetInput(true);
+            }
+            else if (inputContext.canceled)
+            {
+                _crouch.SetInput(false);
             }
         }
     }

@@ -114,8 +114,15 @@ namespace FulcrumGames.CharacterControl
                         * 2.0f * checkDirection, Color.green);
                 }
 
-                if (overlaps.Length > 0)
+                // Only early return out of the method if the overlap is not our game object.
+                for (int i = 0; i < overlaps.Length; i++)
+                {
+                    var overlap = overlaps[i];
+                    if (overlap.gameObject == gameObject)
+                        continue;
+
                     return;
+                }
             }
 
             // Update crouch state gradually if grounded, or instantly if ungrounded.

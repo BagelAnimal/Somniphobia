@@ -30,6 +30,8 @@ namespace FulcrumGames.Possession
             _inputActions.World.Enable();
             _inputActions.World.Jump.performed += OnJumpInputProvided;
             _inputActions.World.Jump.canceled += OnJumpInputProvided;
+            _inputActions.World.Crouch.performed += OnCrouchInputProvided;
+            _inputActions.World.Crouch.canceled += OnCrouchInputProvided;
         }
 
         public override Vector3 GetLookInput()
@@ -76,6 +78,11 @@ namespace FulcrumGames.Possession
             InvokeJump(context);
         }
 
+        private void OnCrouchInputProvided(InputContext context)
+        {
+            InvokeCrouch(context);
+        }
+
         public void Teardown()
         {
             if (_inputActions == null)
@@ -85,6 +92,8 @@ namespace FulcrumGames.Possession
 
             _inputActions.World.Jump.performed -= OnJumpInputProvided;
             _inputActions.World.Jump.canceled -= OnJumpInputProvided;
+            _inputActions.World.Crouch.performed -= OnCrouchInputProvided;
+            _inputActions.World.Crouch.canceled -= OnCrouchInputProvided;
             _inputActions.World.Disable();
             _inputActions.Disable();
             _inputActions.Dispose();

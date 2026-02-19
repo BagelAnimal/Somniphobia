@@ -16,6 +16,7 @@ namespace FulcrumGames.Possession
     public abstract class InputProvider
     {
         public event Action<InputContext> Jump;
+        public event Action<InputContext> Crouch;
 
         private string _name = "CPU";
         public string Name => _name;
@@ -117,6 +118,11 @@ namespace FulcrumGames.Possession
             // This event cannot be invoked from inheriting types,
             // so we have to invoke this method instead. :(
             Jump?.Invoke(inputContext);
+        }
+
+        internal void InvokeCrouch(InputContext inputContext)
+        {
+            Crouch?.Invoke(inputContext);
         }
     }
 }
