@@ -47,6 +47,14 @@ namespace FulcrumGames.CharacterControl
 
         private void Awake()
         {
+            if (!_collider)
+            {
+                Debug.LogError($"{name}'s {nameof(Crouch)}" +
+                    $"is missing a {nameof(BoxCollider)}!", this);
+                enabled = false;
+                return;
+            }
+
             // TECH DEBT: Growing/shrinking is an intended mechanic. How do we handle this here?
             _defaultHeight = _collider.bounds.extents.y * 2.0f;
         }
