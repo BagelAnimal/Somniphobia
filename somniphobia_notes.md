@@ -90,7 +90,7 @@ and physics-related interactions
 [x] Seam Test (walk between tiled planes to ensure parallel seams don't cause collsion)
 [x] Pit Test (concave holes with varying depths ending in a line or a point to test unstuck logic)
 [x] Alley Test (various squeezes between walls)
-[] Crouch Tunnel Tests (test crouch clearance)
+[x] Crouch Tunnel Tests (test crouch clearance)
 [] Narrow Ledge Tests (thin bridges to test edge snapping and falling)
 [] Curved Tests (walls, slopes)
 [x] Teleporter Gates (on touch, teleport to another location)

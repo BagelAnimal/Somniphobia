@@ -120,6 +120,15 @@ namespace FulcrumGames.Possession
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""89fc6317-7a11-4ebe-ac17-1d0b71c0daf8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -232,6 +241,28 @@ namespace FulcrumGames.Possession
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3e873f01-46e9-4dc1-8c2c-8d17016abc34"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0720ea00-b05c-41d8-b344-3446e47142e1"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -243,6 +274,7 @@ namespace FulcrumGames.Possession
             m_World_Jump = m_World.FindAction("Jump", throwIfNotFound: true);
             m_World_Look = m_World.FindAction("Look", throwIfNotFound: true);
             m_World_Move = m_World.FindAction("Move", throwIfNotFound: true);
+            m_World_Crouch = m_World.FindAction("Crouch", throwIfNotFound: true);
         }
 
         ~@InputActions()
@@ -326,6 +358,7 @@ namespace FulcrumGames.Possession
         private readonly InputAction m_World_Jump;
         private readonly InputAction m_World_Look;
         private readonly InputAction m_World_Move;
+        private readonly InputAction m_World_Crouch;
         /// <summary>
         /// Provides access to input actions defined in input action map "World".
         /// </summary>
@@ -349,6 +382,10 @@ namespace FulcrumGames.Possession
             /// Provides access to the underlying input action "World/Move".
             /// </summary>
             public InputAction @Move => m_Wrapper.m_World_Move;
+            /// <summary>
+            /// Provides access to the underlying input action "World/Crouch".
+            /// </summary>
+            public InputAction @Crouch => m_Wrapper.m_World_Crouch;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -384,6 +421,9 @@ namespace FulcrumGames.Possession
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
             }
 
             /// <summary>
@@ -404,6 +444,9 @@ namespace FulcrumGames.Possession
                 @Move.started -= instance.OnMove;
                 @Move.performed -= instance.OnMove;
                 @Move.canceled -= instance.OnMove;
+                @Crouch.started -= instance.OnCrouch;
+                @Crouch.performed -= instance.OnCrouch;
+                @Crouch.canceled -= instance.OnCrouch;
             }
 
             /// <summary>
@@ -465,6 +508,13 @@ namespace FulcrumGames.Possession
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnMove(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Crouch" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnCrouch(InputAction.CallbackContext context);
         }
     }
 }

@@ -15,6 +15,9 @@ namespace FulcrumGames.CharacterControl
         private Rigidbody _rigidbody;
 
         [SerializeField]
+        private Crouch _crouch;
+
+        [SerializeField]
         private GroundDetector _groundDetector;
 
         [SerializeField]
@@ -78,6 +81,9 @@ namespace FulcrumGames.CharacterControl
             _isJumping = _isJumping && !reachedInflection && !_groundDetector.IsGrounded;
 
             if (!_input)
+                return;
+
+            if (_crouch && _crouch.IsCrouching && !_crouch.AllowJumpingWhileCrouching)
                 return;
 
             var inputHasExpired = _framesSinceLastInput > _jumpMemoryFrames;

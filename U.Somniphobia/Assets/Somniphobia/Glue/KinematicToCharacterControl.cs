@@ -33,14 +33,5 @@ namespace FulcrumGames.Glue
                 }
             }
         }
-
-        public static void SetObjectGravityDirection(GameObject gameObject, Vector3 newDirection)
-        {
-            if (!gameObject.TryGetComponent<Gravity>(out var gravity))
-                return;
-
-            newDirection = newDirection.normalized;
-            gravity.SetDirection(newDirection);
-        }
     }
 }

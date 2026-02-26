@@ -19,6 +19,9 @@ namespace FulcrumGames.CharacterControl
         private GroundDetector _groundDetector;
 
         [SerializeField]
+        private Crouch _crouch;
+
+        [SerializeField]
         private float _groundSpeed = 5.0f;
 
         [SerializeField]
@@ -35,6 +38,15 @@ namespace FulcrumGames.CharacterControl
 
         [SerializeField]
         private float _airFriction = 20.0f;
+
+        [SerializeField]
+        private float _crouchSpeed = 2.5f;
+
+        [SerializeField]
+        private float _crouchAcceleration = 50.0f;
+
+        [SerializeField]
+        private float _crouchFriction = 20.0f;
 
         [SerializeField]
         [Tooltip("Extends airtime on touching the ground for a few seconds to enable b-hopping.")]
@@ -95,6 +107,21 @@ namespace FulcrumGames.CharacterControl
             var desiredSpeed = isGrounded ? _groundSpeed : _airSpeed;
             var friction = isGrounded ? _groundFriction : _airFriction;
             var acceleration = isGrounded ? _groundAcceleration : _airAcceleration;
+
+            // TECH DEBT: Provided that further conditions scale these values,
+            // we will want some sort of movement modifier stack that we can push
+            // to and pop from so it's easier to add modifiers without introducing
+            // new dependencies.
+            if (isGrounded && _crouch)
+            {
+                var isCrouching = _crouch.IsCrouching;
+                if (isCrouching)
+                {
+                    desiredSpeed = _crouchSpeed;
+                    friction = _crouchFriction;
+                    acceleration = _crouchAcceleration;
+                }
+            }
 
             // Apply friction if the character is on the ground.
             var useGroundMovement = isGrounded && groundedFrames >= _bhopWindowFrames;
