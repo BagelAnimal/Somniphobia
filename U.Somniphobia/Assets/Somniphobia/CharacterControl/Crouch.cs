@@ -33,6 +33,10 @@ namespace FulcrumGames.CharacterControl
         private float _crouchHeight = 0.6f;
 
         [SerializeField]
+        [Tooltip("Allows slight vertical intersections when uncrouching.")]
+        private float _crouchHeightForgiveness = 0.2f;
+
+        [SerializeField]
         private float _crouchTime = 0.3f;
 
         [SerializeField]
@@ -104,25 +108,23 @@ namespace FulcrumGames.CharacterControl
             {
                 // If we're uncrouching in mid-air, feet are trying to go down. Otherwise, head
                 // is trying to go up. We think of it this way to enable crouch-jumping.
-                var checkDirection = _groundDetector.IsGrounded ? transform.up : -transform.up;
-                var checkOrigin = transform.position + (_collider.size.y * 0.5f * transform.up);
-                var checkExtents = new Vector3(_collider.size.x,
-                    _defaultHeight * 0.5f, _collider.size.z) * 0.5f;
+                var checkOrigin = transform.position;
+                var originOffset = _groundDetector.IsGrounded ? _defaultHeight : _crouchHeight;
+                checkOrigin += 0.5f * originOffset * transform.up;
+                var checkExtents = new Vector3(_collider.size.x, _defaultHeight, _collider.size.z) * 0.49f;
+                checkExtents.y -= _crouchHeightForgiveness * 0.5f;
 
-                var overlaps = Physics.OverlapBox(checkOrigin, checkExtents,
-                    transform.rotation, _obstacleLayers);
-
-                if (_enableDebugDrawing)
-                {
-                    Debug.DrawLine(checkOrigin, checkOrigin + checkExtents.y
-                        * 2.0f * checkDirection, Color.green);
-                }
+                var overlaps = Physics.OverlapBox(checkOrigin,
+                    checkExtents, transform.rotation, _obstacleLayers);
 
                 // Only early return out of the method if the overlap is not our game object.
                 for (int i = 0; i < overlaps.Length; i++)
                 {
                     var overlap = overlaps[i];
                     if (overlap.gameObject == gameObject)
+                        continue;
+
+                    if (overlap.isTrigger)
                         continue;
 
                     return;
