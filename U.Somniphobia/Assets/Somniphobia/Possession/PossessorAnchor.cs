@@ -37,7 +37,7 @@ namespace FulcrumGames.Possession
             }
 
             var colliderHeight = _collider.size.y;
-            var currentHeight = transform.position.y - _collider.transform.position.y;
+            var currentHeight = Vector3.Distance(transform.position, _collider.transform.position);
             _distanceFromOrigin = currentHeight / colliderHeight;
         }
 
