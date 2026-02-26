@@ -26,36 +26,19 @@ namespace FulcrumGames.CharacterControl
         private LayerMask _obstacleLayers = 1;
 
         [SerializeField]
+        [Range(0.1f, 1.0f)]
         private float _crouchHeight = 0.6f;
 
         [SerializeField]
-        [Tooltip("Allows slight vertical intersections when uncrouching.")]
-        private float _crouchHeightForgiveness = 0.2f;
-
-        [SerializeField]
+        [Range(0.01f, 2.0f)]
         private float _crouchTime = 0.3f;
 
         [SerializeField]
         private AnimationCurve _crouchCurve = AnimationCurve.EaseInOut(0.0f, 0.0f, 1.0f, 1.0f);
 
         [SerializeField]
-        private float _speedScalar = 0.5f;
-        public float SpeedScalar => _speedScalar;
-
-        [SerializeField]
-        private float _accelerationScalar = 0.5f;
-        public float AccelerationScalar => _accelerationScalar;
-
-        [SerializeField]
-        private float _frictionScalar = 1.0f;
-        public float FrictionScalar => _frictionScalar;
-
-        [SerializeField]
         private bool _allowJumpingWhileCrouching = false;
         public bool AllowJumpingWhileCrouching => _allowJumpingWhileCrouching;
-
-        [SerializeField]
-        private bool _enableDebugDrawing = false;
 
         private float _defaultHeight = 0.0f;
         private float _crouchAmount = 0.0f;
@@ -94,6 +77,14 @@ namespace FulcrumGames.CharacterControl
                 return;
             }
 
+            if (_crouchTime <= 0)
+            {
+                Debug.LogError($"{name}'s {nameof(Crouch)}" +
+                    $" was given a crouch time of {_crouchTime}!", this);
+                enabled = false;
+                return;
+            }
+
             var isEnteringCrouch = _input && _crouchAmount < 1.0f;
             var isExitingCrouch = !_input && _crouchAmount > 0.0f;
             if (!isEnteringCrouch && !isExitingCrouch)
@@ -108,7 +99,6 @@ namespace FulcrumGames.CharacterControl
                 var originOffset = _groundDetector.IsGrounded ? _defaultHeight : _crouchHeight;
                 checkOrigin += 0.5f * originOffset * transform.up;
                 var checkExtents = new Vector3(_collider.size.x, _defaultHeight, _collider.size.z) * 0.49f;
-                checkExtents.y -= _crouchHeightForgiveness * 0.5f;
 
                 var overlaps = Physics.OverlapBox(checkOrigin,
                     checkExtents, transform.rotation, _obstacleLayers);
