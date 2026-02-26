@@ -104,7 +104,7 @@ namespace FulcrumGames.CharacterControl
                 // If we're uncrouching in mid-air, feet are trying to go down. Otherwise, head
                 // is trying to go up. We think of it this way to enable crouch-jumping.
                 var checkOrigin = transform.position;
-                var originOffset = _groundDetector.IsGrounded ? _defaultHeight : _crouchHeight;
+                var originOffset = _groundDetector.IsGrounded ? _defaultHeight : _defaultHeight * _crouchHeight;
                 checkOrigin += 0.5f * originOffset * transform.up;
                 var checkExtents = new Vector3(_collider.size.x, _defaultHeight, _collider.size.z) * 0.49f;
 
