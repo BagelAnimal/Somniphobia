@@ -1,5 +1,3 @@
-using FulcrumGames.CharacterControl;
-using NUnit.Framework.Interfaces;
 using UnityEngine;
 
 namespace FulcrumGames.Kinematics
