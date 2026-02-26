@@ -53,7 +53,7 @@ namespace FulcrumGames.Possession
 
             foreach (var kvp in _crouchHandlers)
             {
-                kvp.Key.Jump -= kvp.Value;
+                kvp.Key.Crouch -= kvp.Value;
             }
             _crouchHandlers.Clear();
 
@@ -101,7 +101,7 @@ namespace FulcrumGames.Possession
                 WireCrouch(inputProvider);
             }
             possessor.BoundBy += WireCrouch;
-            possessor.UnboundBy -= WireCrouch;
+            possessor.UnboundBy -= UnwireCrouch;
         }
 
         /// <summary>
