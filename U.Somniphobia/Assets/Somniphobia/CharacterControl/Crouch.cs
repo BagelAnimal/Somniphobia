@@ -151,7 +151,7 @@ namespace FulcrumGames.CharacterControl
                 // If we're transitioning in mid-air, move the origin upward to enable crouch-jumping.
                 var bumpHeight = _defaultHeight - sizeY;
                 bumpHeight = isExitingCrouch ? -(_defaultHeight - (_defaultHeight * _crouchHeight)) : bumpHeight;
-                var bumpAmount = new Vector3(0.0f, bumpHeight, 0.0f);
+                var bumpAmount = transform.up * bumpHeight;
                 var newPosition = transform.position + bumpAmount;
                 _rigidbody.MovePosition(newPosition);
             }
