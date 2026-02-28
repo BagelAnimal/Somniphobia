@@ -51,13 +51,11 @@ namespace FulcrumGames.Glue
             var instance = character.AddComponent<PossessionToCharacterControl>();
             instance._player = player;
 
+            player.InputProvided += instance.OnInput;
+
             instance._walk = character.GetComponent<Walk>();
             instance._look = character.GetComponent<Look>();
             instance._jump = character.GetComponent<Jump>();
-            if (instance._jump)
-            {
-                player.InputProvided += instance.OnInput;
-            }
             instance._crouch = character.GetComponent<Crouch>();
 
             var anchor = character.GetComponentInChildren<PossessorAnchor>();
@@ -83,6 +81,8 @@ namespace FulcrumGames.Glue
         {
             if (!character.TryGetComponent<PossessionToCharacterControl>(out var instance))
                 return;
+
+            player.InputProvided -= instance.OnInput;
 
             player.transform.parent = null;
             var rigidbody = player.GetComponent<Rigidbody>();
