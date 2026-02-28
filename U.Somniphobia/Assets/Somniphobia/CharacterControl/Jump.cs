@@ -118,17 +118,17 @@ namespace FulcrumGames.CharacterControl
             _groundDetector.ForceUngroundedForFrames(_forceUngroundedFrames);
         }
 
-        public void OnJumpPressed()
+        public void SetInput(bool enabled)
         {
-            _input = true;
-            _framesSinceLastInput = 0;
-        }
-
-        public void OnJumpReleased()
-        {
-            if (_autoBhop)
+            _input = enabled;
+            if (!enabled && _autoBhop)
             {
                 _input = false;
+            }
+
+            if (enabled)
+            {
+                _framesSinceLastInput = 0;
             }
         }
 

@@ -1,40 +1,62 @@
-﻿using UnityEngine;
-using InputContext = UnityEngine.InputSystem.InputAction.CallbackContext;
+﻿using System;
+using UnityEngine;
 
 namespace FulcrumGames.Possession
 {
     /// <summary>
-    ///     Represents a player in the game. A player delegates input actions
-    ///     to some number of possessors in the world.
+    ///     A player is used to represent the user of this application.
+    ///     It serves to receive and delegate their intent and their preferences.
     /// </summary>
-    [DisallowMultipleComponent]
-    public class Player : InputProvider
+    public class Player : MonoBehaviour
     {
-        private const float MouseLookSensitivity = 0.2f;
-        private const bool VerticalLookInverted = false;
-        private const bool HorizontalLookInverted = false;
-        private const float FieldOfView = 90.0f;
+        /// <summary>
+        ///     Raised when an input is provided. Subscribers can filter by
+        ///     input type and state to decide what they specifically want
+        ///     to respond to.
+        /// </summary>
+        public event Action<InputType, InputState> InputProvided;
+
+        [SerializeField]
+        private Camera _camera;
+
+        [SerializeField]
+        private float _mouseLookSensitivity = 0.2f;
+        public float MouseLookSensitivity => _mouseLookSensitivity;
+
+        [SerializeField]
+        private bool _verticalLookInverted = false;
+        public bool VerticalLookInverted => _verticalLookInverted;
+
+        [SerializeField]
+        private bool _horizontalLookInverted = false;
+        public bool HorizontalLookInverted => _horizontalLookInverted;
+
+        [SerializeField]
+        private float _fieldOfView = 90.0f;
+        public float FieldOfView => _fieldOfView;
 
         private InputActions _inputActions;
         public InputActions InputActions => _inputActions;
 
-        public void Initialize(string name)
+        private bool _isInitialized = false;
+
+        private void Awake()
         {
-            if (_inputActions != null)
-                return;
-
-            SetName(name);
-
-            _inputActions = new();
-            _inputActions.Enable();
-            _inputActions.World.Enable();
-            _inputActions.World.Jump.performed += OnJumpInputProvided;
-            _inputActions.World.Jump.canceled += OnJumpInputProvided;
-            _inputActions.World.Crouch.performed += OnCrouchInputProvided;
-            _inputActions.World.Crouch.canceled += OnCrouchInputProvided;
+            Initialize();
         }
 
-        public override Vector3 GetLookInput()
+        private void OnDestroy()
+        {
+            if (_inputActions == null)
+                return;
+
+            _inputActions.World.Disable();
+            _inputActions.Disable();
+            _inputActions.Dispose();
+            _inputActions = null;
+        }
+
+        public Vector3 GetLookInput()
         {
             if (_inputActions == null)
                 return default;
@@ -51,7 +73,7 @@ namespace FulcrumGames.Possession
             return processedInput;
         }
 
-        public override Vector3 GetMoveInput()
+        public Vector3 GetMoveInput()
         {
             if (_inputActions == null)
                 return default;
@@ -61,43 +83,42 @@ namespace FulcrumGames.Possession
             return inputVector3;
         }
 
-        protected override void OnPossessorBound(Possessor possessor)
+        public void EnableWorldControls()
         {
-            var cameras = possessor.GetComponentsInChildren<Camera>();
-            if (cameras.Length == 0)
+            if (!_isInitialized)
                 return;
 
-            foreach (var camera in cameras)
+            _inputActions.World.Enable();
+        }
+
+        private void Initialize()
+        {
+            if (_isInitialized)
+                return;
+
+            if (_camera)
             {
-                camera.fieldOfView = FieldOfView;
+                _camera.fieldOfView = _fieldOfView;
             }
-        }
 
-        private void OnJumpInputProvided(InputContext context)
-        {
-            InvokeJump(context);
-        }
+            _isInitialized = true;
 
-        private void OnCrouchInputProvided(InputContext context)
-        {
-            InvokeCrouch(context);
-        }
+            _inputActions = new InputActions();
 
-        public void Teardown()
-        {
-            if (_inputActions == null)
-                return;
+            _inputActions.World.Jump.performed += (_) 
+                => InputProvided?.Invoke(InputType.Jump, InputState.Pressed);
+            _inputActions.World.Jump.canceled += (_) 
+                => InputProvided?.Invoke(InputType.Jump, InputState.Released);
 
-            UnbindAll();
+            _inputActions.World.Crouch.performed += (_) 
+                => InputProvided?.Invoke(InputType.Crouch, InputState.Pressed);
+            _inputActions.World.Crouch.canceled += (_) 
+                => InputProvided?.Invoke(InputType.Crouch, InputState.Released);
 
-            _inputActions.World.Jump.performed -= OnJumpInputProvided;
-            _inputActions.World.Jump.canceled -= OnJumpInputProvided;
-            _inputActions.World.Crouch.performed -= OnCrouchInputProvided;
-            _inputActions.World.Crouch.canceled -= OnCrouchInputProvided;
-            _inputActions.World.Disable();
-            _inputActions.Disable();
-            _inputActions.Dispose();
-            _inputActions = null;
+            _inputActions.World.Possess.performed += (_)
+                => InputProvided?.Invoke(InputType.Possess, InputState.Pressed);
+            _inputActions.World.Possess.canceled += (_)
+                => InputProvided?.Invoke(InputType.Possess, InputState.Released);
         }
     }
 }

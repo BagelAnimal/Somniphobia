@@ -64,6 +64,18 @@ CODING STYLE GUIDELINES
     6
     Avoid using <see> and <seealso> in xml headers as they create additional references
     when debugging to sift through.
+-
+    7
+    While sealing is a small compiler optimization in C#, the goal is to keep the codebase
+    as extensible as possible. Sealed will only ever be added to classes if the idea of
+    extending it is objectively against the goals of the class.
+-
+    8
+    While the `[DisallowMultipleComponent]` attribute may be used to decrease the
+    probability of undefined behavior, this will only be included on components
+    if the presence of multiple instances on a single object would certainly result
+    in program-terminating consequences. The goal is to enable experimentation
+    and flexibility on the side of the API's user as much as possible.
 
 ---
 

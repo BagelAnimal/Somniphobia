@@ -28,9 +28,11 @@ namespace FulcrumGames.Glue
         private static Game s_instance;
         public static Game Instance => s_instance;
 
-        private readonly List<Player> _players = new();
-        public IReadOnlyList<Player> Players => _players;
-        public Player Player => _players.Count <= 0 ? null : _players[0];
+        private Player _player;
+        public Player Player => _player;
+
+        private GameObject _playerCharacter;
+        public GameObject PlayerCharacter => _playerCharacter;
 
         private bool _isQuitting = false;
         public static bool IsQuitting => s_instance ? s_instance._isQuitting : false;
@@ -39,10 +41,10 @@ namespace FulcrumGames.Glue
         private Level _levelPrefab;
 
         [SerializeField]
-        private GameObject _playerCharacterPrefab;
+        private Player _playerPrefab;
 
         [SerializeField]
-        private GameObject _playerSoulPrefab;
+        private GameObject _playerCharacterPrefab;
 
         [SerializeField]
         private LifetimeEvent _initializeOn;
@@ -51,8 +53,6 @@ namespace FulcrumGames.Glue
         private LifetimeEvent _teardownOn;
 
         private Level _levelInstance;
-        private Possessor _playerSoulInstance;
-        private Possessable _playerCharacterInstance;
         private bool _isInitialized = false;
 
         private void Awake()
@@ -106,57 +106,33 @@ namespace FulcrumGames.Glue
 
                 if (!_levelPrefab)
                 {
-                    Debug.LogWarning("Null level prefab in game!", this);
+                    Debug.LogError("Null level prefab in game!", this);
                     Teardown();
                     return;
                 }
 
-                if (!_playerSoulPrefab)
+                if (!_playerPrefab)
                 {
-                    Debug.LogWarning("Null player soul prefab in game!", this);
+                    Debug.LogError("Null player prefab in game!", this);
                     Teardown();
                     return;
                 }
 
                 if (!_playerCharacterPrefab)
                 {
-                    Debug.LogWarning("Null player character prefab in game!", this);
+                    Debug.LogError("Null player character prefab in game!", this);
                     Teardown();
                     return;
                 }
 
-                // Create the level.
                 _levelInstance = Instantiate(_levelPrefab);
 
-                // Create the player character within the level.
-                var playerCharacterObject = Instantiate(_playerCharacterPrefab);
-                if (!playerCharacterObject.TryGetComponent<Possessable>(out var possessable))
-                {
-                    Debug.LogWarning($"Player character instance has no possessable component!");
-                    Destroy(playerCharacterObject);
-                    Teardown();
-                    return;
-                }
-                _playerCharacterInstance = possessable;
+                _player = Instantiate(_playerPrefab);
+                _player.EnableWorldControls();
 
-                // Create the player soul, then possess the character in the level.
-                var playerSoulObject = Instantiate(_playerSoulPrefab);
-                if (!playerSoulObject.TryGetComponent<Possessor>(out var possessor))
-                {
-                    Debug.LogWarning($"Player soul prefab has no possessor component!");
-                    Destroy(playerSoulObject);
-                    Teardown();
-                    return;
-                }
-                _playerSoulInstance = possessor;
-                _playerSoulInstance.Possess(_playerCharacterInstance);
+                _playerCharacter = Instantiate(_playerCharacterPrefab);
 
-                // Initialize player, bind to the soul that possesses character in the level.
-                var hostPlayer = new Player();
-                var playerName = "Host";
-                hostPlayer.Initialize(name: playerName);
-                _players.Add(hostPlayer);
-                hostPlayer.BindToPossessor(_playerSoulInstance);
+                PossessionToCharacterControl.BindPlayerToCharacter(_player, _playerCharacter);
             }
             catch (Exception e)
             {
@@ -174,25 +150,19 @@ namespace FulcrumGames.Glue
 
                 _isInitialized = false;
 
-                foreach (var player in _players)
-                {
-                    player.Teardown();
-                }
-                _players.Clear();
-
                 if (_levelInstance)
                 {
                     Destroy(_levelInstance.gameObject);
                 }
 
-                if (_playerSoulInstance)
+                if (_player)
                 {
-                    Destroy(_playerSoulInstance.gameObject);
+                    Destroy(_player.gameObject);
                 }
 
-                if (_playerCharacterInstance)
+                if (_playerCharacter)
                 {
-                    Destroy(_playerCharacterInstance.gameObject);
+                    Destroy(_playerCharacter);
                 }
             }
             catch (Exception e)
