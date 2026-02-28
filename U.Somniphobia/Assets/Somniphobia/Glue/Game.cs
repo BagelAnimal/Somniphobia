@@ -113,7 +113,7 @@ namespace FulcrumGames.Glue
 
                 if (!_playerPrefab)
                 {
-                    Debug.LogError("Null player soul prefab in game!", this);
+                    Debug.LogError("Null player prefab in game!", this);
                     Teardown();
                     return;
                 }
