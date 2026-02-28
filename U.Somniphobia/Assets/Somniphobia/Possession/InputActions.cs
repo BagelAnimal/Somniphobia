@@ -129,6 +129,15 @@ namespace FulcrumGames.Possession
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Possess"",
+                    ""type"": ""Button"",
+                    ""id"": ""03c45584-7129-4924-9c08-e9dc85c12eae"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -263,6 +272,28 @@ namespace FulcrumGames.Possession
                     ""action"": ""Crouch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e33a518f-f5e5-4661-8b62-aa0269104511"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Possess"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""740152ae-dd9a-4097-824e-1a00d172ff60"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Possess"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -275,6 +306,7 @@ namespace FulcrumGames.Possession
             m_World_Look = m_World.FindAction("Look", throwIfNotFound: true);
             m_World_Move = m_World.FindAction("Move", throwIfNotFound: true);
             m_World_Crouch = m_World.FindAction("Crouch", throwIfNotFound: true);
+            m_World_Possess = m_World.FindAction("Possess", throwIfNotFound: true);
         }
 
         ~@InputActions()
@@ -359,6 +391,7 @@ namespace FulcrumGames.Possession
         private readonly InputAction m_World_Look;
         private readonly InputAction m_World_Move;
         private readonly InputAction m_World_Crouch;
+        private readonly InputAction m_World_Possess;
         /// <summary>
         /// Provides access to input actions defined in input action map "World".
         /// </summary>
@@ -386,6 +419,10 @@ namespace FulcrumGames.Possession
             /// Provides access to the underlying input action "World/Crouch".
             /// </summary>
             public InputAction @Crouch => m_Wrapper.m_World_Crouch;
+            /// <summary>
+            /// Provides access to the underlying input action "World/Possess".
+            /// </summary>
+            public InputAction @Possess => m_Wrapper.m_World_Possess;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -424,6 +461,9 @@ namespace FulcrumGames.Possession
                 @Crouch.started += instance.OnCrouch;
                 @Crouch.performed += instance.OnCrouch;
                 @Crouch.canceled += instance.OnCrouch;
+                @Possess.started += instance.OnPossess;
+                @Possess.performed += instance.OnPossess;
+                @Possess.canceled += instance.OnPossess;
             }
 
             /// <summary>
@@ -447,6 +487,9 @@ namespace FulcrumGames.Possession
                 @Crouch.started -= instance.OnCrouch;
                 @Crouch.performed -= instance.OnCrouch;
                 @Crouch.canceled -= instance.OnCrouch;
+                @Possess.started -= instance.OnPossess;
+                @Possess.performed -= instance.OnPossess;
+                @Possess.canceled -= instance.OnPossess;
             }
 
             /// <summary>
@@ -515,6 +558,13 @@ namespace FulcrumGames.Possession
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnCrouch(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Possess" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnPossess(InputAction.CallbackContext context);
         }
     }
 }
