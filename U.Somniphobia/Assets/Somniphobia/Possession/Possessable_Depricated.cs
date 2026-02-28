@@ -14,31 +14,31 @@ namespace FulcrumGames.Possession
     ///     Possessors are expected to be controlled by input providers.
     /// </summary>
     [DisallowMultipleComponent]
-    public class Possessable : MonoBehaviour
+    public class Possessable_Depricated : MonoBehaviour
     {
         /// <summary>
         ///     Invoked when a possessor possesses this.
         /// </summary>
-        public event Action<Possessor> PossessedBy;
+        public event Action<Possessor_Depricated> PossessedBy;
 
         /// <summary>
         ///     Invoked when a possessor unpossesses this.
         /// </summary>
-        public event Action<Possessor> UnpossessedBy;
+        public event Action<Possessor_Depricated> UnpossessedBy;
 
         public event Action<InputContext> Jump;
         public event Action<InputContext> Crouch;
 
-        private readonly List<Possessor> _possessors = new();
+        private readonly List<Possessor_Depricated> _possessors = new();
         /// <summary>
         ///     The possessors currently delegating inputs to this possessable.
         ///     Cannot contain duplicates.
         /// </summary>
-        public IReadOnlyList<Possessor> Possessors => _possessors;
+        public IReadOnlyList<Possessor_Depricated> Possessors => _possessors;
 
         // Used to keep track of input provider and action bindings.
-        private readonly Dictionary<InputProvider, Action<InputContext>> _jumpHandlers = new();
-        private readonly Dictionary<InputProvider, Action<InputContext>> _crouchHandlers = new();
+        private readonly Dictionary<InputProvider_Depricated, Action<InputContext>> _jumpHandlers = new();
+        private readonly Dictionary<InputProvider_Depricated, Action<InputContext>> _crouchHandlers = new();
 
         // Used to avoid reacting to unbinding when we're the one invoking it in loop.
         private bool _isBeingDestroyed = false;
@@ -70,7 +70,7 @@ namespace FulcrumGames.Possession
         ///     Lets the possessable track it, thus giving it the opportunity to let
         ///     the possessor know that it is being destroyed.
         /// </summary>
-        public void OnPossessedBy(Possessor possessor)
+        public void OnPossessedBy(Possessor_Depricated possessor)
         {
             _possessors.RemoveAll(p => !p);
             if (!possessor)
@@ -110,7 +110,7 @@ namespace FulcrumGames.Possession
         ///     tries to let an uncaring or null possessor know that
         ///     it is being destroyed.
         /// </summary>
-        public void OnUnpossessedBy(Possessor possessor)
+        public void OnUnpossessedBy(Possessor_Depricated possessor)
         {
             if (!possessor)
                 return;
@@ -183,7 +183,7 @@ namespace FulcrumGames.Possession
             return Vector3.ClampMagnitude(moveInput, 1.0f);
         }
 
-        private void WireJump(InputProvider provider)
+        private void WireJump(InputProvider_Depricated provider)
         {
             if (provider == null)
                 return;
@@ -196,7 +196,7 @@ namespace FulcrumGames.Possession
             provider.Jump += handler;
         }
 
-        private void UnwireJump(InputProvider provider)
+        private void UnwireJump(InputProvider_Depricated provider)
         {
             if (provider == null)
                 return;
@@ -213,7 +213,7 @@ namespace FulcrumGames.Possession
             Jump?.Invoke(inputContext);
         }
 
-        private void WireCrouch(InputProvider provider)
+        private void WireCrouch(InputProvider_Depricated provider)
         {
             if (provider == null)
                 return;
@@ -226,7 +226,7 @@ namespace FulcrumGames.Possession
             provider.Crouch += handler;
         }
 
-        private void UnwireCrouch(InputProvider provider)
+        private void UnwireCrouch(InputProvider_Depricated provider)
         {
             if (provider == null)
                 return;

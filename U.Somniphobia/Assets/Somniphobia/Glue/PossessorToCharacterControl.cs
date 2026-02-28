@@ -15,7 +15,7 @@ namespace FulcrumGames.Glue
     public class PossessorToCharacterControl : MonoBehaviour
     {
         [SerializeField]
-        private Possessable _possessable;
+        private Possessable_Depricated _possessable;
 
         [SerializeField]
         private Jump _jump;
@@ -52,7 +52,7 @@ namespace FulcrumGames.Glue
             if (!_possessable)
             {
                 Debug.LogError($"{name}'s {nameof(PossessorToCharacterControl)}" +
-                    $"is missing a {nameof(Possessable)}!", this);
+                    $"is missing a {nameof(Possessable_Depricated)}!", this);
                 enabled = false;
                 return;
             }

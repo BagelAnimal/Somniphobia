@@ -28,9 +28,9 @@ namespace FulcrumGames.Glue
         private static Game s_instance;
         public static Game Instance => s_instance;
 
-        private readonly List<Player> _players = new();
-        public IReadOnlyList<Player> Players => _players;
-        public Player Player => _players.Count <= 0 ? null : _players[0];
+        private readonly List<Player_Depricated> _players = new();
+        public IReadOnlyList<Player_Depricated> Players => _players;
+        public Player_Depricated Player => _players.Count <= 0 ? null : _players[0];
 
         private bool _isQuitting = false;
         public static bool IsQuitting => s_instance ? s_instance._isQuitting : false;
@@ -51,8 +51,8 @@ namespace FulcrumGames.Glue
         private LifetimeEvent _teardownOn;
 
         private Level _levelInstance;
-        private Possessor _playerSoulInstance;
-        private Possessable _playerCharacterInstance;
+        private Possessor_Depricated _playerSoulInstance;
+        private Possessable_Depricated _playerCharacterInstance;
         private bool _isInitialized = false;
 
         private void Awake()
@@ -130,7 +130,7 @@ namespace FulcrumGames.Glue
 
                 // Create the player character within the level.
                 var playerCharacterObject = Instantiate(_playerCharacterPrefab);
-                if (!playerCharacterObject.TryGetComponent<Possessable>(out var possessable))
+                if (!playerCharacterObject.TryGetComponent<Possessable_Depricated>(out var possessable))
                 {
                     Debug.LogWarning($"Player character instance has no possessable component!");
                     Destroy(playerCharacterObject);
@@ -141,7 +141,7 @@ namespace FulcrumGames.Glue
 
                 // Create the player soul, then possess the character in the level.
                 var playerSoulObject = Instantiate(_playerSoulPrefab);
-                if (!playerSoulObject.TryGetComponent<Possessor>(out var possessor))
+                if (!playerSoulObject.TryGetComponent<Possessor_Depricated>(out var possessor))
                 {
                     Debug.LogWarning($"Player soul prefab has no possessor component!");
                     Destroy(playerSoulObject);
@@ -152,7 +152,7 @@ namespace FulcrumGames.Glue
                 _playerSoulInstance.Possess(_playerCharacterInstance);
 
                 // Initialize player, bind to the soul that possesses character in the level.
-                var hostPlayer = new Player();
+                var hostPlayer = new Player_Depricated();
                 var playerName = "Host";
                 hostPlayer.Initialize(name: playerName);
                 _players.Add(hostPlayer);

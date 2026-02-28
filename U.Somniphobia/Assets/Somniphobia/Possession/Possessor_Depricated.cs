@@ -16,49 +16,49 @@ namespace FulcrumGames.Possession
     ///     inputs into game actions.
     /// </summary>
     [DisallowMultipleComponent]
-    public class Possessor : MonoBehaviour
+    public class Possessor_Depricated : MonoBehaviour
     {
         /// <summary>
         ///     Invoked when this possesses a target possessable.
         /// </summary>
-        public event Action<Possessable> PossessedTarget;
+        public event Action<Possessable_Depricated> PossessedTarget;
 
         /// <summary>
         ///     Invoked when this unpossesses a target possessable.
         /// </summary>
-        public event Action<Possessable> UnpossessedTarget;
+        public event Action<Possessable_Depricated> UnpossessedTarget;
 
         /// <summary>
         ///     Invoked when this is bound to an input provider.
         /// </summary>
-        public event Action<InputProvider> BoundBy;
+        public event Action<InputProvider_Depricated> BoundBy;
 
         /// <summary>
         ///     Invoked when this is unbound from an input provider.
         /// </summary>
-        public event Action<InputProvider> UnboundBy;
+        public event Action<InputProvider_Depricated> UnboundBy;
 
-        private readonly List<InputProvider> _boundInputProviders = new();
+        private readonly List<InputProvider_Depricated> _boundInputProviders = new();
         /// <summary>
         ///     The providers currently delegating inputs to this possessor.
         ///     Cannot contain duplicates.
         /// </summary>
-        public IReadOnlyList<InputProvider> BoundInputProviders => _boundInputProviders;
+        public IReadOnlyList<InputProvider_Depricated> BoundInputProviders => _boundInputProviders;
 
-        private readonly List<Possessable> _possessables = new();
+        private readonly List<Possessable_Depricated> _possessables = new();
         /// <summary>
         ///     The possessables currently receiving inputs delegated to this possessor.
         ///     Cannot contain duplicates.
         /// </summary>
-        public IReadOnlyList<Possessable> Possessables => _possessables;
+        public IReadOnlyList<Possessable_Depricated> Possessables => _possessables;
 
-        private Possessable _perspectivePossessable;
+        private Possessable_Depricated _perspectivePossessable;
         /// <summary>
         ///     The first possessable used as a parent. Useful when this
         ///     possessor is an inworld object like a soul and it needs a place to live.
         ///     Will always be set as long as at least one possessable is bound.
         /// </summary>
-        public Possessable PerspectivePossessable => _perspectivePossessable;
+        public Possessable_Depricated PerspectivePossessable => _perspectivePossessable;
 
         // used to avoid modifying collections while unhooking input providers on destroy
         private bool _isBeingDestroyed = false;
@@ -76,7 +76,7 @@ namespace FulcrumGames.Possession
         /// <summary>
         ///     Begin routing inputs to the provided possessable.
         /// </summary>
-        public void Possess(Possessable possessable)
+        public void Possess(Possessable_Depricated possessable)
         {
             PruneNulls();
             if (!possessable)
@@ -105,7 +105,7 @@ namespace FulcrumGames.Possession
         /// <summary>
         ///     Cease routing inputs to the provided possessable.
         /// </summary>
-        public void Unpossess(Possessable possessable)
+        public void Unpossess(Possessable_Depricated possessable)
         {
             PruneNulls();
             if (!possessable)
@@ -146,7 +146,7 @@ namespace FulcrumGames.Possession
         /// <summary>
         ///     Track an input provider so this can let it know when it is being destroyed.
         /// </summary>
-        public void OnBoundToInputProvider(InputProvider inputProvider)
+        public void OnBoundToInputProvider(InputProvider_Depricated inputProvider)
         {
             if (_isBeingDestroyed)
                 return;
@@ -172,7 +172,7 @@ namespace FulcrumGames.Possession
         ///     Track when an input provider stops caring about this so we don't tell them
         ///     when we are being destroyed.
         /// </summary>
-        public void OnUnboundFromInputProvider(InputProvider inputProvider)
+        public void OnUnboundFromInputProvider(InputProvider_Depricated inputProvider)
         {
             if (_isBeingDestroyed)
                 return;
@@ -200,7 +200,7 @@ namespace FulcrumGames.Possession
             _possessables.RemoveAll(p => !p);
         }
 
-        private void SetPerspective(Possessable newPerspective)
+        private void SetPerspective(Possessable_Depricated newPerspective)
         {
             var rigidbody = GetComponent<Rigidbody>();
             var collider = GetComponent<Collider>();

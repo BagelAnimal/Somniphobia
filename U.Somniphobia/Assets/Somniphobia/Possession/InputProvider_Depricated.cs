@@ -13,7 +13,7 @@ namespace FulcrumGames.Possession
     ///     those possessors so that they can mutate state on their
     ///     corresponding possessables.
     /// </summary>
-    public abstract class InputProvider
+    public abstract class InputProvider_Depricated
     {
         public event Action<InputContext> Jump;
         public event Action<InputContext> Crouch;
@@ -21,12 +21,12 @@ namespace FulcrumGames.Possession
         private string _name = "CPU";
         public string Name => _name;
 
-        protected readonly List<Possessor> _possessors = new();
+        protected readonly List<Possessor_Depricated> _possessors = new();
         /// <summary>
         ///     The possessors currently receiving inputs from this provider.
         ///     Cannot contain duplicates.
         /// </summary>
-        public IReadOnlyList<Possessor> Possessors => _possessors;
+        public IReadOnlyList<Possessor_Depricated> Possessors => _possessors;
 
         /// <summary>
         ///     Give this guy a name.
@@ -40,7 +40,7 @@ namespace FulcrumGames.Possession
         ///     Begin routing all inputs associated with this provider to the
         ///     possessor.
         /// </summary>
-        public void BindToPossessor(Possessor possessor)
+        public void BindToPossessor(Possessor_Depricated possessor)
         {
             _possessors.RemoveAll(p => !p);
             if (!possessor)
@@ -65,7 +65,7 @@ namespace FulcrumGames.Possession
         ///     Cease routing all inputs associated with this provider to the
         ///     possessor.
         /// </summary>
-        public void UnbindFromPossessor(Possessor possessor)
+        public void UnbindFromPossessor(Possessor_Depricated possessor)
         {
             _possessors.RemoveAll(p => !p);
             if (!possessor)
@@ -111,7 +111,7 @@ namespace FulcrumGames.Possession
         /// </summary>
         public abstract Vector3 GetMoveInput();
 
-        protected virtual void OnPossessorBound(Possessor possessor) { }
+        protected virtual void OnPossessorBound(Possessor_Depricated possessor) { }
 
         internal void InvokeJump(InputContext inputContext)
         {

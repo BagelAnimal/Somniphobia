@@ -8,7 +8,7 @@ namespace FulcrumGames.Possession
     ///     to some number of possessors in the world.
     /// </summary>
     [DisallowMultipleComponent]
-    public class Player : InputProvider
+    public class Player_Depricated : InputProvider_Depricated
     {
         private const float MouseLookSensitivity = 0.2f;
         private const bool VerticalLookInverted = false;
@@ -61,7 +61,7 @@ namespace FulcrumGames.Possession
             return inputVector3;
         }
 
-        protected override void OnPossessorBound(Possessor possessor)
+        protected override void OnPossessorBound(Possessor_Depricated possessor)
         {
             var cameras = possessor.GetComponentsInChildren<Camera>();
             if (cameras.Length == 0)
