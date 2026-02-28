@@ -66,7 +66,7 @@ CODING STYLE GUIDELINES
     when debugging to sift through.
 -
     7
-    While sealing is a small compiler optimization in c#, the goal is to keep the codebase
+    While sealing is a small compiler optimization in C#, the goal is to keep the codebase
     as extensible as possible. Sealed will only ever be added to classes if the idea of
     extending it is objectively against the goals of the class.
 -
