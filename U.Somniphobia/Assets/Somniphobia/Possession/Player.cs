@@ -45,6 +45,17 @@ namespace FulcrumGames.Possession
             Initialize();
         }
 
+        private void OnDestroy()
+        {
+            if (_inputActions == null)
+                return;
+
+            _inputActions.World.Disable();
+            _inputActions.Disable();
+            _inputActions.Dispose();
+            _inputActions = null;
+        }
+
         public Vector3 GetLookInput()
         {
             if (_inputActions == null)
