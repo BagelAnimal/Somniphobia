@@ -47,6 +47,11 @@ namespace FulcrumGames.Glue
             _crouch = player.GetComponent<Crouch>();
 
             player.transform.parent = null;
+
+            // Make sure that local rotation applied by the parent is resolved.
+            player.gameObject.transform.rotation = Quaternion.identity;
+
+
             var rigidbody = player.GetComponent<Rigidbody>();
             if (rigidbody)
             {
@@ -99,7 +104,9 @@ namespace FulcrumGames.Glue
             if (!player.TryGetComponent<PossessionToCharacterControl>(out var instance))
                 return;
 
+            var prevForward = instance._look.Forward;
             instance.BindToPlayer(player);
+            instance._look.SetForward(prevForward);
         }
 
         private void OnInput(InputType type, InputState state)
