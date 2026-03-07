@@ -69,8 +69,7 @@ namespace FulcrumGames.Glue
             if (rigidbody)
             {
                 rigidbody.isKinematic = false;
-                rigidbody.MoveRotation(Quaternion.identity);
-                rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+                //rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             }
 
             var collider = player.GetComponent<Collider>();
@@ -133,9 +132,12 @@ namespace FulcrumGames.Glue
             if (!player.TryGetComponent<PossessionToCharacterControl>(out var instance))
                 return;
 
-            var prevForward = instance._look.Forward;
+            var prevLook = instance._look;
             instance.BindToPlayer(player);
-            instance._look.SetForward(prevForward);
+            if (prevLook && instance._look)
+            {
+                instance._look.CopyRotationFrom(prevLook);
+            }
         }
 
         private void OnInput(InputType type, InputState state)

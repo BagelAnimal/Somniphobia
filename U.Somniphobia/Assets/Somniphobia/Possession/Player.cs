@@ -56,6 +56,14 @@ namespace FulcrumGames.Possession
             _inputActions = null;
         }
 
+        private void FixedUpdate()
+        {
+            // BUGBUG: For whatever reason, modifying this as a parent
+            // is cleared does not consistently maintain a zero local
+            // rotation. This is a bandaid solution for unexpected behavior.
+            transform.localRotation = Quaternion.identity;
+        }
+
         public Vector3 GetLookInput()
         {
             if (_inputActions == null)

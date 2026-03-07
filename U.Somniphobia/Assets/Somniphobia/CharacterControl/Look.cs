@@ -34,7 +34,6 @@ namespace FulcrumGames.CharacterControl
         private float _yaw = 0.0f;
         private float _roll = 0.0f;
 
-        public Quaternion Rotation => Quaternion.LookRotation(Forward);
         public Vector3 Forward => _rollPivot.transform.forward;
 
         private void Update()
@@ -116,6 +115,22 @@ namespace FulcrumGames.CharacterControl
         {
             var rotationEuler = rotation.eulerAngles;
             SetRotation(rotationEuler, clearSmoothing);
+        }
+
+        /// <summary>
+        ///     Copy the direction from another look instance to this instance.
+        /// </summary>
+        public void CopyRotationFrom(Look otherLook)
+        {
+            _pitch = otherLook._pitch;
+            _yaw = otherLook._yaw;
+            _roll = otherLook._roll;
+
+            _targetRotationEuler = new Vector3(_pitch, _yaw, _roll);
+
+            _pitchPivot.transform.localRotation = Quaternion.Euler(Vector3.right * _pitch);
+            _yawPivot.transform.localRotation = Quaternion.Euler(Vector3.up * _yaw);
+            _rollPivot.transform.localRotation = Quaternion.Euler(Vector3.forward * _roll);
         }
 
         /// <summary>
