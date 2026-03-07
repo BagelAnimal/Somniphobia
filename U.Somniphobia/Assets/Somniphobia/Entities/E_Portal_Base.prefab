@@ -343,7 +343,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1197170318537969382}
   - component: {fileID: 7708787862039037101}
-  - component: {fileID: 5506322738485656526}
+  - component: {fileID: 5407664356428611690}
   m_Layer: 0
   m_Name: TeleportTrigger
   m_TagString: Untagged
@@ -387,7 +387,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5506322738485656526
+--- !u!114 &5407664356428611690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -396,9 +396,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4863786744173840091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00d5a0957798ed746ad4c02074050f6b, type: 3}
+  m_Script: {fileID: 11500000, guid: 05c7c0326acbc9c4ea0c498080654412, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Somniphobia.TeleportTrigger
+  m_EditorClassIdentifier: Assembly-CSharp::FulcrumGames.Teleportation.TeleportTrigger
   _teleportToAnchor: {fileID: 132984215990655236}
   _preserveMomentum: 1
   _setRotation: 1
@@ -2033,7 +2033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1188363729983613746, guid: dc6b5437678eaa641b0c0530c53990d7, type: 3}
       propertyPath: m_Name
-      value: Entity_Portal_Base
+      value: E_Portal_Base
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
