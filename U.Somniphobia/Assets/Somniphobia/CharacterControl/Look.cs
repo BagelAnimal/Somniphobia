@@ -126,6 +126,7 @@ namespace FulcrumGames.CharacterControl
             _yaw = otherLook._yaw;
             _roll = otherLook._roll;
 
+            _rotationVelocity = Vector3.zero;
             _targetRotationEuler = new Vector3(_pitch, _yaw, _roll);
 
             _pitchPivot.transform.localRotation = Quaternion.Euler(Vector3.right * _pitch);
