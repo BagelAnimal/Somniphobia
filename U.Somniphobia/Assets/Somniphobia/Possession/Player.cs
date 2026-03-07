@@ -101,6 +101,9 @@ namespace FulcrumGames.Possession
                 return;
 
             _inputActions.World.Enable();
+
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void Initialize()
