@@ -33,6 +33,7 @@ namespace FulcrumGames.CharacterControl
 
         [SerializeField]
         private float _maxGroundAngle = 35.0f;
+        public float MaxGroundAngle => _maxGroundAngle;
 
         [SerializeField]
         private float _groundCheckDistance = 0.05f;

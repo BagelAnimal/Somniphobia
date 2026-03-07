@@ -52,6 +52,12 @@ namespace FulcrumGames.CharacterControl
         [Tooltip("Extends airtime on touching the ground for a few seconds to enable b-hopping.")]
         private int _bhopWindowFrames = 4;
 
+        [SerializeField]
+        private float _minStepHeight = 0.05f;
+
+        [SerializeField]
+        private float _maxStepHeight = 0.4f;
+
         private bool _isWalking = false;
         public bool IsWalking => _isWalking;
 
@@ -59,6 +65,11 @@ namespace FulcrumGames.CharacterControl
         public float CurrentSpeed => _currentSpeed;
 
         private Vector3 _input = Vector3.zero;
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            HandleStepHeight(collision);
+        }
 
         private void FixedUpdate()
         {
@@ -186,6 +197,45 @@ namespace FulcrumGames.CharacterControl
         public void SetInput(Vector3 input)
         {
             _input = input;
+        }
+
+        private void HandleStepHeight(Collision collision)
+        {
+            if (!_groundDetector)
+                return;
+
+            if (!_groundDetector.IsGrounded)
+                return;
+
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                var contact = collision.contacts[0];
+
+                var contactAngle = Vector3.Angle(transform.up, contact.normal);
+                if (contactAngle <= _groundDetector.MaxGroundAngle)
+                    continue;
+
+                var contactPosition = contact.point;
+                var contactRelativePosition = contactPosition - transform.position;
+
+                var checkOrigin = transform.position + contactRelativePosition + (transform.up * _maxStepHeight);
+                var checkDistance = _maxStepHeight;
+                var checkDirection = -transform.up;
+                var foundStep = Physics.Raycast(checkOrigin, checkDirection, out RaycastHit stepHit, checkDistance);
+                if (!foundStep)
+                    continue;
+
+                if (stepHit.distance <= 0.0f)
+                    return;
+
+                var stepPosition = stepHit.point;
+                var stepHeight = stepPosition.y - transform.position.y;
+                var offsetToApply = transform.up * (stepHeight + float.Epsilon);
+                var newPosition = _rigidbody.position + offsetToApply;
+                _rigidbody.MovePosition(newPosition);
+
+                return;
+            }
         }
     }
 }
