@@ -17,7 +17,10 @@ namespace FulcrumGames.Glue
         private Jump _jump;
         private Crouch _crouch;
 
+        private GameObject _playerCharacter;
         private Player _player;
+
+        public bool IsControllingCharacter => _playerCharacter != null;
 
         private void Update()
         {
@@ -35,24 +38,38 @@ namespace FulcrumGames.Glue
             }
         }
 
-        private void OnDestroy()
+        public void BindToPlayer(Player player)
         {
-            if (!_player)
-                return;
+            _playerCharacter = null;
+            _walk = player.GetComponent<Walk>();
+            _look = player.GetComponent<Look>();
+            _jump = player.GetComponent<Jump>();
+            _crouch = player.GetComponent<Crouch>();
 
-            UnbindPlayerFromCharacter(_player, gameObject);
+            player.transform.parent = null;
+            var rigidbody = player.GetComponent<Rigidbody>();
+            if (rigidbody)
+            {
+                rigidbody.isKinematic = false;
+            }
+
+            var collider = player.GetComponent<Collider>();
+            if (collider)
+            {
+                collider.enabled = true;
+            }
         }
 
         public static void BindPlayerToCharacter(Player player, GameObject character)
         {
-            if (character.TryGetComponent<PossessionToCharacterControl>(out _))
-                return;
+            if (!player.TryGetComponent<PossessionToCharacterControl>(out var instance))
+            {
+                instance = player.gameObject.AddComponent<PossessionToCharacterControl>();
+                instance._player = player;
+                player.InputProvided += instance.OnInput;
+            }
 
-            var instance = character.AddComponent<PossessionToCharacterControl>();
-            instance._player = player;
-
-            player.InputProvided += instance.OnInput;
-
+            instance._playerCharacter = character;
             instance._walk = character.GetComponent<Walk>();
             instance._look = character.GetComponent<Look>();
             instance._jump = character.GetComponent<Jump>();
@@ -79,25 +96,10 @@ namespace FulcrumGames.Glue
 
         public static void UnbindPlayerFromCharacter(Player player, GameObject character)
         {
-            if (!character.TryGetComponent<PossessionToCharacterControl>(out var instance))
+            if (!player.TryGetComponent<PossessionToCharacterControl>(out var instance))
                 return;
 
-            player.InputProvided -= instance.OnInput;
-
-            player.transform.parent = null;
-            var rigidbody = player.GetComponent<Rigidbody>();
-            if (rigidbody)
-            {
-                rigidbody.isKinematic = false;
-            }
-
-            var collider = player.GetComponent<Collider>();
-            if (collider)
-            {
-                collider.enabled = true;
-            }
-
-            Destroy(instance);
+            instance.BindToPlayer(player);
         }
 
         private void OnInput(InputType type, InputState state)
@@ -123,6 +125,37 @@ namespace FulcrumGames.Glue
                 else if (state == InputState.Released)
                 {
                     _crouch.SetInput(false);
+                }
+            }
+
+            if (type == InputType.Possess)
+            {
+                if (state != InputState.Pressed)
+                    return;
+
+                if (IsControllingCharacter)
+                {
+                    UnbindPlayerFromCharacter(_player, _playerCharacter);
+                }
+                else
+                {
+                    var forward = _player.transform.forward;
+                    var distance = 5.0f;
+                    var layerMask = -1;
+
+                    var hits = Physics.RaycastAll(_player.transform.position, forward, distance, layerMask);
+                    if (hits.Length <= 0)
+                        return;
+
+                    for (int i = 0; i < hits.Length; i++)
+                    {
+                        var hitObject = hits[i].collider.gameObject;
+                        if (!hitObject.TryGetComponent<Possessable>(out _))
+                            continue;
+
+                        BindPlayerToCharacter(_player, hitObject);
+                        return;
+                    }
                 }
             }
         }

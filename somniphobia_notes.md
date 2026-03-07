@@ -11,6 +11,14 @@ gravity manipulation, dynamic possession systems, and spellcasting.
 The goal is to make the player feel the mystery, exploration, and experimentation of Noita,
 the action of ULTRAKILL, and the skill expression of a source-engine game like Half-Life 2.
 
+A magic system like Noita's, action like ULTRAKILL's, and skill expression like the Source
+Engine's is a game that I would like to play, but it does not yet exist.
+
+A secondary goal is to enable player-developer tools, like Garry's mod, where they can
+easily access all spawnable entities in the game, and they can experience with various
+developer tools. This should enable runtime balancing and encounter experimentation without
+requiring new builds.
+
 ---
 
 MECHANICS OVERVIEW
@@ -76,7 +84,12 @@ CODING STYLE GUIDELINES
     if the presence of multiple instances on a single object would certainly result
     in program-terminating consequences. The goal is to enable experimentation
     and flexibility on the side of the API's user as much as possible.
-
+-
+    9
+    Prioritize composition over inheritance. When possible, whether writing a component
+    to contain state, to define behavior, or both, it should be named and written
+    to describe an aspect of the object that it composes rather than the object itself.
+    If a soul can fly, the component should be flight, and not soul.
 ---
 
 AUTHORING GUIDELINES
