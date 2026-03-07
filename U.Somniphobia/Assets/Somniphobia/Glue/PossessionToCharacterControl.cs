@@ -52,6 +52,14 @@ namespace FulcrumGames.Glue
             }
         }
 
+        private void OnDestroy()
+        {
+            if (_player)
+            {
+                _player.InputProvided -= OnInput;
+            }
+        }
+
         public void BindToPlayer(Player player)
         {
             // Clear any lingering state.
@@ -180,6 +188,7 @@ namespace FulcrumGames.Glue
                     var forward = _look ? _look.Forward : _player.transform.forward;
 
                     var hits = Physics.RaycastAll(_player.transform.position, forward, _possessionDistance, _possessableLayers);
+                    System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
                     if (hits.Length <= 0)
                         return;
 
