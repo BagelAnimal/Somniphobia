@@ -69,7 +69,7 @@ namespace FulcrumGames.Glue
             if (rigidbody)
             {
                 rigidbody.isKinematic = false;
-                //rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+                rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             }
 
             var collider = player.GetComponent<Collider>();
