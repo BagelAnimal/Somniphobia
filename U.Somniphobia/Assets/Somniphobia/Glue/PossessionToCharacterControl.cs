@@ -69,7 +69,7 @@ namespace FulcrumGames.Glue
             if (rigidbody)
             {
                 rigidbody.isKinematic = false;
-                rigidbody.rotation = Quaternion.identity;
+                rigidbody.MoveRotation(Quaternion.identity);
                 rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             }
 

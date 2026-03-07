@@ -34,8 +34,8 @@ namespace FulcrumGames.CharacterControl
         private float _yaw = 0.0f;
         private float _roll = 0.0f;
 
-        public Quaternion Rotation => Quaternion.Euler(_pitch, _yaw, _roll);
-        public Vector3 Forward => Rotation * _rollPivot.transform.forward;
+        public Quaternion Rotation => Quaternion.LookRotation(Forward);
+        public Vector3 Forward => _rollPivot.transform.forward;
 
         private void Update()
         {
