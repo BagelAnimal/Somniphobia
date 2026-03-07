@@ -56,6 +56,14 @@ namespace FulcrumGames.Possession
             _inputActions = null;
         }
 
+        private void FixedUpdate()
+        {
+            // BUGBUG: For whatever reason, modifying this as a parent
+            // is cleared does not consistently maintain a zero local
+            // rotation. This is a bandaid solution for unexpected behavior.
+            transform.localRotation = Quaternion.identity;
+        }
+
         public Vector3 GetLookInput()
         {
             if (_inputActions == null)
@@ -79,7 +87,11 @@ namespace FulcrumGames.Possession
                 return default;
 
             var rawInput = _inputActions.World.Move.ReadValue<Vector2>();
-            var inputVector3 = new Vector3(rawInput.x, 0.0f, rawInput.y);
+            var verticalInput = 0.0f;
+            verticalInput = _inputActions.World.Jump.IsPressed() ? verticalInput + 1.0f : verticalInput;
+            verticalInput = _inputActions.World.Crouch.IsPressed() ? verticalInput - 1.0f : verticalInput;
+
+            var inputVector3 = new Vector3(rawInput.x, verticalInput, rawInput.y);
             return inputVector3;
         }
 
@@ -89,6 +101,9 @@ namespace FulcrumGames.Possession
                 return;
 
             _inputActions.World.Enable();
+
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private void Initialize()

@@ -132,7 +132,7 @@ namespace FulcrumGames.Glue
 
                 _playerCharacter = Instantiate(_playerCharacterPrefab);
 
-                PossessionToCharacterControl.BindPlayerToCharacter(_player, _playerCharacter);
+                PossessionToCharacterControl.PossessCharacter(_player, _playerCharacter);
             }
             catch (Exception e)
             {
