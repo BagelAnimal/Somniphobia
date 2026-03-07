@@ -12,8 +12,17 @@ namespace FulcrumGames.Glue
     /// </summary>
     public class PossessionToCharacterControl : MonoBehaviour
     {
+        [SerializeField]
+        [Tooltip("The query distance for potential possessables in meters.")]
+        private float _possessionDistance = 5.0f;
+
+        [SerializeField]
+        [Tooltip("Layers which will be checked for potential targets for possession.")]
+        private LayerMask _possessableLayers = -1;
+
         private Look _look;
         private Walk _walk;
+        private Fly _fly;
         private Jump _jump;
         private Crouch _crouch;
 
@@ -27,35 +36,41 @@ namespace FulcrumGames.Glue
             if (!_player)
                 return;
 
+            if (_look)
+            {
+                _look.SetInput(_player.GetLookInput());
+            }
+
             if (_walk)
             {
                 _walk.SetInput(_player.GetMoveInput());
             }
 
-            if (_look)
+            if (_fly)
             {
-                _look.SetInput(_player.GetLookInput());
+                _fly.SetInput(_player.GetMoveInput());
             }
         }
 
         public void BindToPlayer(Player player)
         {
+            // Clear any lingering state.
             _playerCharacter = null;
+            player.transform.parent = null;
+
+            // Query relevant components from player object.
             _walk = player.GetComponent<Walk>();
+            _fly = player.GetComponent<Fly>();
             _look = player.GetComponent<Look>();
             _jump = player.GetComponent<Jump>();
             _crouch = player.GetComponent<Crouch>();
-
-            player.transform.parent = null;
-
-            // Make sure that local rotation applied by the parent is resolved.
-            player.gameObject.transform.rotation = Quaternion.identity;
-
 
             var rigidbody = player.GetComponent<Rigidbody>();
             if (rigidbody)
             {
                 rigidbody.isKinematic = false;
+                rigidbody.rotation = Quaternion.identity;
+                rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
             }
 
             var collider = player.GetComponent<Collider>();
@@ -65,7 +80,7 @@ namespace FulcrumGames.Glue
             }
         }
 
-        public static void BindPlayerToCharacter(Player player, GameObject character)
+        public static void PossessCharacter(Player player, GameObject character)
         {
             if (!player.TryGetComponent<PossessionToCharacterControl>(out var instance))
             {
@@ -74,15 +89,25 @@ namespace FulcrumGames.Glue
                 player.InputProvided += instance.OnInput;
             }
 
-            instance._playerCharacter = character;
-            instance._walk = character.GetComponent<Walk>();
-            instance._look = character.GetComponent<Look>();
-            instance._jump = character.GetComponent<Jump>();
-            instance._crouch = character.GetComponent<Crouch>();
 
             var anchor = character.GetComponentInChildren<PossessorAnchor>();
             var parent = anchor ? anchor.transform : character.transform;
             player.transform.parent = parent;
+
+            // If the player's soul object has some forward stored in a look component,
+            // clear state to avoid weird rotation offsets.
+            if (instance._look)
+            {
+                instance._look.SetForward(Vector3.forward);
+                instance._look.SetInput(Vector3.zero);
+            }
+
+            instance._playerCharacter = character;
+            instance._walk = character.GetComponent<Walk>();
+            instance._fly = character.GetComponent<Fly>();
+            instance._look = character.GetComponent<Look>();
+            instance._jump = character.GetComponent<Jump>();
+            instance._crouch = character.GetComponent<Crouch>();
 
             player.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
@@ -90,6 +115,10 @@ namespace FulcrumGames.Glue
             if (rigidbody)
             {
                 rigidbody.isKinematic = true;
+                // We remove interpolation, because interpolated rigidbodies
+                // do not function as expected when they are the children of other objects,
+                // even when kinematic.
+                rigidbody.interpolation = RigidbodyInterpolation.None;
             }
 
             var collider = player.GetComponent<Collider>();
@@ -99,7 +128,7 @@ namespace FulcrumGames.Glue
             }
         }
 
-        public static void UnbindPlayerFromCharacter(Player player, GameObject character)
+        public static void UnpossessCharacter(Player player, GameObject character)
         {
             if (!player.TryGetComponent<PossessionToCharacterControl>(out var instance))
                 return;
@@ -142,26 +171,27 @@ namespace FulcrumGames.Glue
 
                 if (IsControllingCharacter)
                 {
-                    UnbindPlayerFromCharacter(_player, _playerCharacter);
+                    UnpossessCharacter(_player, _playerCharacter);
                 }
                 else
                 {
-                    var forward = _player.transform.forward;
-                    var distance = 5.0f;
-                    var layerMask = -1;
+                    var forward = _look ? _look.Forward : _player.transform.forward;
 
-                    var hits = Physics.RaycastAll(_player.transform.position, forward, distance, layerMask);
+                    var hits = Physics.RaycastAll(_player.transform.position, forward, _possessionDistance, _possessableLayers);
                     if (hits.Length <= 0)
                         return;
 
                     for (int i = 0; i < hits.Length; i++)
                     {
                         var hitObject = hits[i].collider.gameObject;
+                        if (hitObject == gameObject)
+                            continue;
+
                         if (!hitObject.TryGetComponent<Possessable>(out _))
                             continue;
 
-                        BindPlayerToCharacter(_player, hitObject);
-                        return;
+                        PossessCharacter(_player, hitObject);
+                        break;
                     }
                 }
             }

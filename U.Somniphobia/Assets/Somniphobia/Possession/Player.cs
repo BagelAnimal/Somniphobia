@@ -79,7 +79,11 @@ namespace FulcrumGames.Possession
                 return default;
 
             var rawInput = _inputActions.World.Move.ReadValue<Vector2>();
-            var inputVector3 = new Vector3(rawInput.x, 0.0f, rawInput.y);
+            var verticalInput = 0.0f;
+            verticalInput = _inputActions.World.Jump.IsPressed() ? verticalInput + 1.0f : verticalInput;
+            verticalInput = _inputActions.World.Crouch.IsPressed() ? verticalInput - 1.0f : verticalInput;
+
+            var inputVector3 = new Vector3(rawInput.x, verticalInput, rawInput.y);
             return inputVector3;
         }
 

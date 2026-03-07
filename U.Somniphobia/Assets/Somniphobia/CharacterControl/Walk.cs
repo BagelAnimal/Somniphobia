@@ -86,6 +86,7 @@ namespace FulcrumGames.CharacterControl
                 return;
             }
 
+            _rigidbody.angularVelocity = Vector3.zero;
             var currentVelocity = _rigidbody.linearVelocity;
             var desiredVelocity = currentVelocity;
 
