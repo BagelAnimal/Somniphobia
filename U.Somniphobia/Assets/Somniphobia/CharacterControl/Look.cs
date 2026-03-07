@@ -34,7 +34,7 @@ namespace FulcrumGames.CharacterControl
         private float _yaw = 0.0f;
         private float _roll = 0.0f;
 
-        public Vector3 Forward => _rollPivot.transform.forward;
+        public Vector3 Forward => _rollPivot ? _rollPivot.transform.forward : transform.forward;
 
         private void Update()
         {
