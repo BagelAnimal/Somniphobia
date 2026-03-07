@@ -93,7 +93,7 @@ namespace FulcrumGames.CharacterControl
             var forward = _directionAnchor.forward;
             var right = _directionAnchor.right;
 
-            _isWalking = _input != Vector3.zero;
+            _isWalking = _input.x != 0.0f || _input.z != 0.0f;
             var desiredDirection = forward * _input.z + right * _input.x;
 
             var isGrounded = _groundDetector.IsGrounded;
