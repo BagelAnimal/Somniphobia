@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace FulcrumGames.Somniphobia
+namespace FulcrumGames.Teleportation
 {
     /// <summary>
     ///     A series of common game operations that might be shared across multiple

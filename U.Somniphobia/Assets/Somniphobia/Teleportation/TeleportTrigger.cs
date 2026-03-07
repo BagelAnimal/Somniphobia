@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FulcrumGames.Somniphobia
+namespace FulcrumGames.Teleportation
 {
     /// <summary>
     ///     Teleports entering objects to a serialized target position.
