@@ -50,6 +50,7 @@ namespace FulcrumGames.CharacterControl
             var up = _directionAnchor.up;
 
             var desiredDirection = forward * _input.z + right * _input.x + up * _input.y;
+            desiredDirection = Vector3.ClampMagnitude(desiredDirection, 1.0f);
             var desiredSpeed = _speed;
             var desiredVelocity = desiredDirection * desiredSpeed;
 
