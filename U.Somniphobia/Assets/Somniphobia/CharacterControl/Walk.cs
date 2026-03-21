@@ -217,8 +217,11 @@ namespace FulcrumGames.CharacterControl
 
                 var contactPosition = contact.point;
                 var contactRelativePosition = contactPosition - transform.position;
+                var contactDirection = contactRelativePosition.normalized;
+                var contactDistance = contactRelativePosition.magnitude;
+                var stepCheckBump = contactDirection * (contactDistance + 0.1f);
 
-                var checkOrigin = transform.position + contactRelativePosition + (transform.up * _maxStepHeight);
+                var checkOrigin = transform.position + stepCheckBump + (transform.up * _maxStepHeight);
                 var checkDistance = _maxStepHeight;
                 var checkDirection = -transform.up;
                 var foundStep = Physics.Raycast(checkOrigin, checkDirection, out var stepHit, checkDistance);
@@ -227,8 +230,6 @@ namespace FulcrumGames.CharacterControl
 
                 if (stepHit.distance <= 0.0f)
                     return;
-
-                var contactDirection = contactRelativePosition.normalized;
 
                 var stepPosition = stepHit.point;
                 var stepHeight = stepPosition.y - transform.position.y;
