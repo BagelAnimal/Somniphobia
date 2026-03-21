@@ -58,6 +58,10 @@ namespace FulcrumGames.CharacterControl
         [SerializeField]
         private float _maxStepHeight = 0.4f;
 
+        [SerializeField]
+        [Tooltip("The distance in meters at which step checks is bumped forward to avoid floating point errors.")]
+        private float _stepBumpDistance = 0.1f;
+
         private bool _isWalking = false;
         public bool IsWalking => _isWalking;
 
@@ -219,7 +223,7 @@ namespace FulcrumGames.CharacterControl
                 var contactRelativePosition = contactPosition - transform.position;
                 var contactDirection = contactRelativePosition.normalized;
                 var contactDistance = contactRelativePosition.magnitude;
-                var stepCheckBump = contactDirection * (contactDistance + 0.1f);
+                var stepCheckBump = contactDirection * (contactDistance + _stepBumpDistance);
 
                 var checkOrigin = transform.position + stepCheckBump + (transform.up * _maxStepHeight);
                 var checkDistance = _maxStepHeight;
