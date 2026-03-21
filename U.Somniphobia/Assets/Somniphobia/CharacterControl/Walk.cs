@@ -221,6 +221,11 @@ namespace FulcrumGames.CharacterControl
 
                 var contactPosition = contact.point;
                 var contactRelativePosition = contactPosition - transform.position;
+
+                // We flatten out the y-position of the offset, thus ensuring that contacts that
+                // are above the character's feet don't result in steps that are too high.
+                contactRelativePosition = new(contactRelativePosition.x, 0.0f, contactRelativePosition.z);
+
                 var contactDirection = contactRelativePosition.normalized;
                 var contactDistance = contactRelativePosition.magnitude;
                 var stepCheckBump = contactDirection * (contactDistance + _stepBumpDistance);
