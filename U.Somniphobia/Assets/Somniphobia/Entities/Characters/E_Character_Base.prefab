@@ -430,7 +430,10 @@ MonoBehaviour:
   _crouchSpeed: 2
   _crouchAcceleration: 50
   _crouchFriction: 20
-  _bhopWindowFrames: 1
+  _bhopWindowFrames: 3
+  _minStepHeight: 0.05
+  _maxStepHeight: 0.6
+  _stepBumpDistance: 0.1
 --- !u!114 &2528969883515055279
 MonoBehaviour:
   m_ObjectHideFlags: 0
